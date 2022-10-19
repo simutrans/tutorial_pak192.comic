@@ -544,7 +544,7 @@ function string_analyzer()
 	local result = {pak= false , st = false}
 
 	//Check version and pakset name
-	current_pak = get_pakset_name()
+	current_pak = get_set_name(get_pakset_name())
 	current_st = get_version_number()
 
 	local p_siz = {a = current_pak.len(), b = pak_name.len()}
@@ -623,6 +623,15 @@ function string_analyzer()
 	}
 	//gui.add_message("result st: "+result.st+"  result pak:" +result.pak)
 	return result
+}
+
+//returns pakset name (lower case)
+function get_set_name(name)
+{
+	local s = name.find(" ")
+	name = name.slice(0, s)
+	name = name.tolower()
+	return name
 }
 
 // END OF FILE
