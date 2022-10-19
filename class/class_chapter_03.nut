@@ -2564,8 +2564,7 @@ class tutorial.chapter_03 extends basic_chapter
 							local t = tile_x(t.x, t.y, t.z)
 							clean_track_segment(t, siz, opt)
 						}
-						local err = t_tun.work(player_x(1), t_start, t, sc_tunn_name)
-						gui.add_message(""+err)			
+						t_tun.work(player_x(1), t_start, t, sc_tunn_name)
 						command_x.set_slope(player_x(1), t, slope.all_down_slope)
 					}
 					local c_start = c_tunn1.a 

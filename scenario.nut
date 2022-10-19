@@ -269,7 +269,6 @@ function start()
 
 function is_scenario_completed(pl)
 {
-
 	//gui.add_message(""+glsw[0]+"")
 	//gui.add_message("Persis Step:"+persistent.step+" Status Step:"+persistent.status.step+"  Step:"+chapter.step+"")				
 	if (pl != 0) return 0			// other player get only 0%
@@ -281,24 +280,18 @@ function is_scenario_completed(pl)
 			currt_pos = null
 		}
 	}
-
 	if(fail_count == null){
 		if (fail_num <= 0){
-
 			gui.open_info_win_at("goal")
-
 			fail_count = 1
 			fail_num = 20
 		}
 		else fail_num--
 	}
-	
 	if(gui_delay){
 		//gui.open_info_win_at("goal")
 		gui_delay = false
 	}
-
-
 	//gui.add_message(""+current_cov+"  "+gall_cov+"")
 	//Para los convoys ---------------------
 	if (gall_cov != current_cov) chapter.checks_convoy_removed(pl)
@@ -378,7 +371,7 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 function fail_count_message(result, tool_id)
 {
-	gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
+	//gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
 	if (fail_count && result != null){
 		fail_count++
 		if (fail_count >= fail_num){
