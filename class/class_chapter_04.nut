@@ -72,7 +72,7 @@ class tutorial.chapter_04 extends basic_chapter
 	sch_list2 = [coord(93,42), coord(80,33)]
 
 	//Step 6 =====================================================================================
-	sch_list3 = [coord(98,47), coord(92,63), coord(88,71), coord(92,63)]
+	sch_list3 = [coord(98,46), coord(91,63), coord(88,70), coord(91,63)]
 	dock_list2 = [coord(98,46), coord(91,63), coord(88,70)]
 
 	//Step 7 =====================================================================================
@@ -603,7 +603,8 @@ class tutorial.chapter_04 extends basic_chapter
 				local time = ship2_wait
 				local c_list = sch_list3
 				local siz = c_list.len()
-				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+				local line = true
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 				if(result == null){
 					local line_name = line1_name
 					update_convoy_schedule(pl, gl_wt, line_name, schedule)
@@ -647,9 +648,8 @@ class tutorial.chapter_04 extends basic_chapter
 				result = is_convoy_correct(depot,cov,veh,good_list,name,st_tile)
 
 				if (result!=null){
-					local name = translate(ship1_name_obj)
 					local good = translate(f1_good)
-	 				return ship_result_message(result, name, good, veh, cov)
+	 				return ship_result_message(result, translate(name), good, veh, cov)
 				}
 
 				if (current_cov>ch4_cov_lim1.a && current_cov<ch4_cov_lim1.b){
@@ -690,9 +690,8 @@ class tutorial.chapter_04 extends basic_chapter
 
 				result = is_convoy_correct(depot,cov,veh,good_list,name,st_tile)
 				if (result!=null){
-					local name = translate(ship1_name_obj)
 					local good = translate(f2_good)
-	 				return ship_result_message(result, name, good, veh, cov)
+	 				return ship_result_message(result, translate(name), good, veh, cov)
 				}
 				if (current_cov>ch4_cov_lim2.a && current_cov<ch4_cov_lim2.b){
 					local selc = 0
@@ -715,9 +714,8 @@ class tutorial.chapter_04 extends basic_chapter
 				result = is_convoy_correct(depot,cov,veh,good_list,name,st_tile)
 
 				if (result!=null){
-					local name = translate(ship2_name_obj)
-					local good = translate("Passengers")
-	 				return ship_result_message(result, name, good, veh, cov)
+					local good = translate(good_alias.passa)
+	 				return ship_result_message(result, translate(name), good, veh, cov)
 				}
 				if (current_cov>ch4_cov_lim3.a && current_cov<ch4_cov_lim3.b){
 					local selc = 0
@@ -780,11 +778,11 @@ class tutorial.chapter_04 extends basic_chapter
 				local good_nr = good_desc_x(f1_good).get_catg_index()  //Fuels
 				local name = ship1_name_obj
 
-				comm_script = true 
 				if (current_cov> ch4_cov_lim1.a && current_cov< ch4_cov_lim1.b){
+					comm_script = true 
 					local cov_nr = d1_cnr  //Max convoys nr in depot
 					local sched1 = schedule_x(gl_wt, [])
-					local c_list1 = sch_list1
+					local c_list1 = is_water_entry(sch_list1)
 					for(local j =0;j<c_list1.len();j++){
 						if(j == 0)
 							sched1.entries.append(schedule_entry_x(my_tile(c_list1[j]), ship1_load, ship1_wait))
@@ -856,7 +854,6 @@ class tutorial.chapter_04 extends basic_chapter
 					if (label){
 						t1.remove_object(player_x(0), mo_label)
 					}
-					
 					local tool = command_x(tool_build_depot)			
 					local err = tool.work(player_x(0), t1, sc_dep_name)
 
@@ -876,7 +873,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 					comm_script = true 
 					local sched = schedule_x(gl_wt, [])
-					local c_list = sch_list2
+					local c_list = is_water_entry(sch_list2)
 					sched.entries.append(schedule_entry_x(my_tile(c_list[0]), ship1_load, ship1_wait))
 					sched.entries.append(schedule_entry_x(my_tile(c_list[1]), 0, 0))
 					local hold_cov = current_cov
@@ -904,10 +901,11 @@ class tutorial.chapter_04 extends basic_chapter
 				local c_list = dock_list2
 				local name = sc_dock_name3
 				for(local j =0;j<c_list.len();j++){
-					local tile = my_tile(c_list[j])
-					tile.remove_object(player_x(0), mo_label)
+					local t = my_tile(c_list[j])
+					t.unmark()
+					t.remove_object(player_x(0), mo_label)
 					local tool = command_x(tool_build_station)			
-					local err = tool.work(player_x(0), tile, name)
+					tool.work(player_x(0), t, name)
 					glsw[j]=1
 				}
 				return null
@@ -927,7 +925,7 @@ class tutorial.chapter_04 extends basic_chapter
 				local cov_nr = 1  //Max convoys nr in depot
 
 				local sched = schedule_x(gl_wt, [])
-				local c_list = sch_list3
+				local c_list = is_water_entry(sch_list3)
 				for(local j =0;j<c_list.len();j++){
 					if(j == 0)
 						sched.entries.append(schedule_entry_x(my_tile(c_list[j]), ship2_load, ship2_wait))
@@ -946,7 +944,7 @@ class tutorial.chapter_04 extends basic_chapter
 		}
 		return null
 	}
-	
+
 	function set_all_rules(pl) 
 	{
 		local forbid =	[	4129,tool_build_way,tool_build_bridge,tool_build_tunnel,tool_build_station,

@@ -586,7 +586,7 @@ class basic_chapter
 		//return square_x(coord.x,coord.y).get_tile_at_height(coord.z)
 	}
 
-	function is_waystop_correct(player,schedule,nr,load,wait,coord, c_all = false)
+	function is_waystop_correct(player,schedule,nr,load,wait,coord, line = false)
 	{
 		local result = 0
 		// coord = x,y,z place to compare the waystop
@@ -600,15 +600,16 @@ class basic_chapter
 		local entrie
 
 		try {
-
 			 entrie = schedule.entries[nr]
 		}
 		catch(ev) {
-			reset_tmpsw()   //reinicia las paradas seleccionadas
+			if(!line)
+				reset_tmpsw()   //reinicia las paradas seleccionadas
 			return translate("The schedule list must not be empty.")
 		}
 		if(schedule.entries.len()<=1) {
-			reset_tmpsw()   //reinicia las paradas seleccionadas
+			if(!line)
+				reset_tmpsw()   //reinicia las paradas seleccionadas
 			return translate("The schedule list must not be empty.")
 		}
 		local halt   = entrie.get_halt( player_x(player) )
@@ -847,18 +848,18 @@ class basic_chapter
 		return 6
 	}
 
-	function set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+	function set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line = false)
 	{
 		if (nr > siz)
 			return format(translate("The schedule needs to have %d waystops, but there are %d ."),siz, nr)
 
 		for(local j=0;j<siz;j++){
 			if (j==selc){
-				result = is_waystop_correct(pl, schedule, j, load, time, c_list[j])
+				result = is_waystop_correct(pl, schedule, j, load, time, c_list[j]), line
 			}
 
 			else if (result==null){
-				result = is_waystop_correct(pl, schedule, j, 0, 0, c_list[j])
+				result = is_waystop_correct(pl, schedule, j, 0, 0, c_list[j], line)
 				
 				}
 			else
@@ -1817,7 +1818,7 @@ class basic_chapter
 	}
 
 	function all_control(result, wt, way, ribi, tool_id, pos, coor){
-
+		if(coorbord==0) return "Err"
 		if ((tool_id==tool_remove_way)||(tool_id==tool_remover)){
 
 			if (way && way.get_waytype() != wt)
@@ -2352,8 +2353,9 @@ class basic_chapter
 		return 0
 	}
 
-	function is_stop_allowed_ex(result, siz, c_list, pos, wt)
+	function is_stop_allowed_ex(result, siz, list, pos, wt)
 	{
+		local c_list = is_water_entry(list)
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local buil = t.find_object(mo_building)
 		local is_wt = buil ? buil.get_waytype():null
@@ -3039,6 +3041,55 @@ class basic_chapter
 			default:
 				return translate("The convoy is not correct.")
 				break
+		}
+	}
+
+	function is_water_entry(list)
+	{
+		local siz = list.len()
+		local nw_list = array(siz)
+
+		for (local j = 0;j<siz;j++){
+			local tile = my_tile(list[j])
+			local buil = tile.find_object(mo_building)
+			local way = tile.find_object(mo_way)
+			if (buil && !way) {
+				local t_list = buil.get_tile_list();
+
+				local area = get_tiles_near_stations(t_list)
+				for(local i=0;i<area.len();i++){
+					local t_water = my_tile(area[i])
+
+					if(t_water.is_water()){
+						local buil = t_water.find_object(mo_building)
+						nw_list[j] = coord(t_water.x , t_water.y)
+						if(buil)		
+							break
+					}
+				}
+			}
+			else
+				nw_list[j] = list[j];
+		}
+
+		return nw_list
+	}
+
+	function clean_track_segment(t, siz, opt) {
+		local tool = command_x(tool_remover)
+
+		if (opt==1) {
+			for (local j = 0; j<siz;j++){
+				tool.work(player_x(1), t, "")
+				t.x++
+
+			}
+		}
+		else if (opt==2) {
+			for (local j = 0; j<siz;j++){
+				tool.work(player_x(1), t, "")
+				t.y++
+			}
 		}
 	}
 }

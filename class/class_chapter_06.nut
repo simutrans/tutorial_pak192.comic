@@ -612,7 +612,8 @@ class tutorial.chapter_06 extends basic_chapter
 				local time = veh1_wait
 				local c_list = sch_list2
 				local siz = c_list.len()
-				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+				local line = true
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 				if(result == null){
 					local line_name = line1_name
 					update_convoy_schedule(pl, wt_road, line_name, schedule)
@@ -627,7 +628,8 @@ class tutorial.chapter_06 extends basic_chapter
 				local time = veh1_wait
 				local c_list = sch_list3
 				local siz = c_list.len()
-				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+				local line = true
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 				if(result == null){
 					local line_name = line2_name
 					update_convoy_schedule(pl, wt_road, line_name, schedule)
@@ -648,14 +650,14 @@ class tutorial.chapter_06 extends basic_chapter
 					return translate("You must select the deposit located in")+" ("+c_dep1.tostring()+")."
 				local cov = d1_cnr
 				local veh = 1
-				local good_list = [good_desc_x(good_alias.passa).get_catg_index()] //Passengers
+				local good_list = [good_desc_x().get_catg_index()] //Passengers
 				local name = plane1_obj
 				local st_tile = 1
 
 				result = is_convoy_correct(depot, cov, veh,good_list, name, st_tile)
 				if (result!=null){
 					local name = translate(plane1_obj)
-					local load = translate("Passengers")
+					local load = translate(good_alias.passa)
 					if (result==0)
 						return format(translate("You must select a [%s]."),name)
 
@@ -703,7 +705,7 @@ class tutorial.chapter_06 extends basic_chapter
 				result = is_convoy_correct(depot, cov, veh, good_list, name, st_tile)
 				if (result!=null){
 					reset_glsw()
-					return bus_result_message(result, name, veh, cov)
+					return bus_result_message(result, translate(name), veh, cov)
 				}
 				if (current_cov>ch6_cov_lim2.a && current_cov<ch6_cov_lim2.b){
 					local selc = 0
@@ -735,7 +737,7 @@ class tutorial.chapter_06 extends basic_chapter
 
 				if (result!=null){
 					reset_glsw()
-					return bus_result_message(result, name, veh, cov)
+					return bus_result_message(result, translate(name), veh, cov)
 				}
 				if (current_cov>ch6_cov_lim3.a && current_cov<ch6_cov_lim3.b){
 					local line = true

@@ -740,7 +740,9 @@ class tutorial.chapter_05 extends basic_chapter
 					local time = veh2_wait
 					local c_list = sch_list2
 					local siz = c_list.len()
-					result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+					local line = true
+					result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
+
 					if(result == null){
 						local line_name = line1_name
 						update_convoy_schedule(pl, wt_road, line_name, schedule)
@@ -804,6 +806,15 @@ class tutorial.chapter_05 extends basic_chapter
 				}
 			break
 			case 4:
+				if(comm_script) {
+					cov_save[current_cov]=convoy
+					id_save[current_cov]=convoy.id
+					gcov_nr++
+					persistent.gcov_nr = gcov_nr
+					current_cov++
+					gall_cov++
+					return null
+				}
 				if (current_cov> ch5_cov_lim2.a && current_cov< ch5_cov_lim2.b){
 					local cov = d2_cnr
 					local veh = 1
@@ -836,15 +847,17 @@ class tutorial.chapter_05 extends basic_chapter
 				else if (current_cov> ch5_cov_lim3.a && current_cov< ch5_cov_lim3.b){
 					local cov = 1
 					local veh = 2
-					local good_list = [good_desc_x(good_alias.mail).get_catg_index(),good_desc_x(good_alias.passa).get_catg_index()]	 //Mail, pass
+					local good_list = 	[	//Mail, pass
+											good_desc_x(good_alias.mail).get_catg_index(), 
+											good_desc_x(good_alias.passa).get_catg_index()
+										]	 
 					local name = veh3_obj
 					local st_tile = 1
 					result = is_convoy_correct(depot, cov, veh, good_list, name, st_tile)
 
 					if (result!=null){
-						local name = translate(veh3_obj)
 						local good = ""+translate(good_alias.passa)+","+translate(good_alias.mail)+""
-						return ship_result_message(result, name, good, veh, cov)
+						return ship_result_message(result, translate(name), good, veh, cov)
 					}
 					local selc = 0
 					local load = veh3_load
@@ -903,7 +916,12 @@ class tutorial.chapter_05 extends basic_chapter
 					local pl = player_x(0)
 					local c_depot = my_tile(c_dep1)
 
-					comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+					try {
+						comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+					}
+					catch(ev) {
+						return null
+					}
 
 					local depot = c_depot.find_object(mo_depot_road)
 					local good_nr = good_desc_x(f1_good).get_catg_index()  //Coal
@@ -1046,13 +1064,13 @@ class tutorial.chapter_05 extends basic_chapter
 					comm_script = false
 				}
 
-				else if (current_cov> ch5_cov_lim3.a && current_cov< ch5_cov_lim3.b){
+				if (current_cov> ch5_cov_lim3.a && current_cov< ch5_cov_lim3.b){
 					local pl = player_x(0)
 					local c_depot = my_tile(c_dep3)
 					comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
 
 					local sched = schedule_x(wt_water, [])
-					local c_list = sch_list3
+					local c_list = is_water_entry(sch_list3)
 					local siz = c_list.len()
 					for(local j = 0;j<siz;j++){
 						if(j==0)

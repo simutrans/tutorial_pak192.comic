@@ -941,10 +941,11 @@ class tutorial.chapter_02 extends basic_chapter
 			case 4:
 				local selc = 0
 				local load = veh1_load
-				local wait = veh1_wait
+				local time = veh1_wait
 				local c_list = sch_list1
-				local sch_siz = c_list.len()
-				result = set_schedule_list(result, pl, schedule, nr, selc, load, wait, c_list, sch_siz)
+				local siz = c_list.len()
+				local line = true
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 				if(result == null){
 					local line_name = line1_name //"Test 1"
 					update_convoy_schedule(pl, gl_wt, line_name, schedule)
@@ -959,11 +960,12 @@ class tutorial.chapter_02 extends basic_chapter
 				if (result==null){
 					local load = veh1_load
 					local wait = veh1_wait
+					local line = true
 					for(local j=0;j<sch_siz;j++){
 						if (j==0)
-							result = is_waystop_correct(pl,schedule,j,load,wait,sch_list2[j])
+							result = is_waystop_correct(pl,schedule,j,load,wait,sch_list2[j],line)
 						else if (result==null)
-							result = is_waystop_correct(pl,schedule,j,0,0,sch_list2[j])
+							result = is_waystop_correct(pl,schedule,j,0,0,sch_list2[j],line)
 						else
 							return result
 					}
@@ -971,7 +973,7 @@ class tutorial.chapter_02 extends basic_chapter
 					local sch_nr = sch_siz
 					for(local j=sch_siz-2;j>0;j--){
 						if (result==null){
-							result = is_waystop_correct(pl,schedule,sch_nr,0,0,sch_list2[j])
+							result = is_waystop_correct(pl,schedule,sch_nr,0,0,sch_list2[j],line)
 							if (result!=null)
 								result = translate("You must press the [Copy backward] button to complete the route.")
 						}
@@ -989,11 +991,12 @@ class tutorial.chapter_02 extends basic_chapter
 			break
 			case 7:
 				local load = veh1_load
-				local wait = veh1_wait
+				local time = veh1_wait
 				local c_list = sch_list3
-				local sch_siz = c_list.len()
-				local selc = sch_siz-1
-				result = set_schedule_list(result, pl, schedule, nr, selc, load, wait, c_list, sch_siz)
+				local siz = c_list.len()
+				local selc = siz-1
+				local line = true
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 				if(result == null){
 					local line_name = line3_name
 					update_convoy_schedule(pl, gl_wt, line_name, schedule)
@@ -1026,8 +1029,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 					if (result!=null){
 						reset_tmpsw()
-						local name = translate(veh1_obj)
-						return bus_result_message(result, name, veh, cov)
+						return bus_result_message(result, translate(name), veh, cov)
 					}
 					local selc = 0
 					local load = veh1_load
@@ -1058,8 +1060,7 @@ class tutorial.chapter_02 extends basic_chapter
 					result = is_convoy_correct(depot,cov,veh,good_list,name, st_tile)
 					if (result!=null){
 						reset_tmpsw()
-						local name = translate(veh1_obj)
-						return bus_result_message(result, name, veh, cov)
+						return bus_result_message(result, translate(name), veh, cov)
 					}
 
 					local selc = 0
@@ -1091,8 +1092,7 @@ class tutorial.chapter_02 extends basic_chapter
 					result = is_convoy_correct(depot,cov,veh,good_list,name, st_tile)
 					if (result!=null){
 						reset_tmpsw()
-						local name = translate(veh1_obj)
-						return bus_result_message(result, name, veh, cov)
+						return bus_result_message(result, translate(name), veh, cov)
 					}
 
 					local load = veh1_load

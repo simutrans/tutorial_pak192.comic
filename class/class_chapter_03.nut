@@ -2082,7 +2082,8 @@ class tutorial.chapter_03 extends basic_chapter
 				local time = loc3_wait
 				local c_list = sch_list
 				local siz = c_list.len()
-				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+				local line = true
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 				if(result == null){
 					local line_name = line_name1
 					update_convoy_schedule(pl, gl_wt, line_name, schedule)
@@ -2119,9 +2120,8 @@ class tutorial.chapter_03 extends basic_chapter
 
 				if (result!=null){
 					backward_pot(0)
-					local name = translate(loc1_name_obj)
 					local good = translate(f1_good)
-					return train_result_message(result, name, good, veh, cov, st_tile)
+					return train_result_message(result, translate(name), good, veh, cov, st_tile)
 				}
 
 				if (current_cov>ch3_cov_lim1.a && current_cov<ch3_cov_lim1.b){
@@ -2155,9 +2155,8 @@ class tutorial.chapter_03 extends basic_chapter
 				result = is_convoy_correct(depot,cov,veh,good_list,name, st_tile, is_st_tile)
 
 				if (result!=null){
-					local name = translate(loc2_name_obj)
 					local good = translate(f3_good)
-					return train_result_message(result, name, good, veh, cov, st_tile)
+					return train_result_message(result, translate(name), good, veh, cov, st_tile)
 				}
 				if (current_cov>ch3_cov_lim2.a && current_cov<ch3_cov_lim2.b){
 					local selc = 0
@@ -2199,9 +2198,8 @@ class tutorial.chapter_03 extends basic_chapter
 				result = is_convoy_correct(depot, cov, veh, good_list, name, st_tile, is_st_tile)
 
 				if (result!=null){
-					local name = translate(loc3_name_obj)
-					local good = translate("Passengers")
-					return train_result_message(result, name, good, veh, cov, st_tile)
+					local good = translate(good_alias.passa)
+					return train_result_message(result, translate(name), good, veh, cov, st_tile)
 				}
 
 			if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
@@ -2271,16 +2269,23 @@ class tutorial.chapter_03 extends basic_chapter
 					if (t_slope2.find_object(mo_label))
 						t_slope2.remove_object(player_x(1), mo_label)
 
-					local er_slpe = command_x.set_slope(player_x(1), t_slope1, 72)
-					er_slpe = command_x.set_slope(player_x(1), t_slope2, slope.all_up_slope)					
+
+					command_x.set_slope(player_x(1), t_slope1, 72)
+					if(t_slope2.z <= (t_slope1.z+1))
+						command_x.set_slope(player_x(1), t_slope2, slope.all_up_slope)					
 				}
 				//Para el tunel
 				if (pot3==0){
-					local t_start = my_tile(coord(c_way2.a.x, c_way2.a.y))
+					local t_start = my_tile(c_way2.a)
 					t_start.remove_object(player_x(0), mo_label)
-					local t = command_x(tool_build_tunnel)		
-					local err = t.work(player_x(1), t_start, sc_tunn_name)
-					//pot3=1
+
+					local t = command_x(tool_build_tunnel)
+					try {
+						t.work(player_x(1), t_start, sc_tunn_name)
+					}
+					catch(ev) {
+						return null
+					}
 				}
 				//Segundo tramo de rieles
 				if (pot4==0){
