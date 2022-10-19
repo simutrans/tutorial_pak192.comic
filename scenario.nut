@@ -78,10 +78,8 @@ tile_delay <- 2						//delay for mark tiles
 tile_delay_list <- 2
 gui_delay <- true					//delay for open win
 
-fail_num <- 5						//numr for the count of try
-fail_num2 <- 20						//numr for the count of try
-fail_count <- fail_num              //if tool fail more of 10 try
-fail_count2 <- 0
+fail_num <- 20						//numr for the count of try
+fail_count <- 1            			//if tool fail more of 10 try
 
 //Schedule activate
 active_sch_check <- false
@@ -283,17 +281,20 @@ function is_scenario_completed(pl)
 			currt_pos = null
 		}
 	}
-	if(fail_count==0){
-		if (fail_count2 == fail_num2){
+
+	if(fail_count == null){
+		if (fail_num <= 0){
+
 			gui.open_info_win_at("goal")
-			fail_count2 = 0
-			fail_count = fail_num
+
+			fail_count = 1
+			fail_num = 20
 		}
-		else
-			fail_count2++
+		else fail_num--
 	}
+	
 	if(gui_delay){
-		gui.open_info_win_at("goal")
+		//gui.open_info_win_at("goal")
 		gui_delay = false
 	}
 
@@ -365,31 +366,30 @@ function is_work_allowed_here(pl, tool_id, pos)
 	if (pl != 0) return null
 	if (correct_cov){
 		local result = chapter.is_work_allowed_here(pl, tool_id, pos)
-		if (result != null && fail_count > 0){
-			fail_count--
-			if (fail_count == 0){
-				return translate("Are you lost ?, see the instructions shown below.")
-			}
-		}
-        else if (result == null)
-            fail_count = fail_num
-		return result
+		return fail_count_message(result, tool_id)
 	}
 	else {
 		local result = translate("Action not allowed")
 		if (tool_id==4108 || tool_id==4096)
 			result = null
-
-		if (result != null && fail_count > 0){
-			fail_count--
-			if (fail_count == 0){
-				return translate("Are you lost ?, see the instructions shown below.")
-			}
-		}
-        else if (result == null)
-            fail_count = fail_num
-		return result
 	}
+	return fail_count_message(result, tool_id)
+}
+
+function fail_count_message(result, tool_id)
+{
+	gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
+	if (fail_count && result != null){
+		fail_count++
+		if (fail_count >= fail_num){
+			fail_count = null
+			return translate("Are you lost ?, see the instructions shown below.")
+		}
+	}
+    else if (result == null)
+        fail_count = 1
+
+	return result
 }
 
 function is_schedule_allowed(pl, schedule)

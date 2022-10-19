@@ -443,7 +443,7 @@ class basic_chapter
 		this.step++
 		persistent.step = this.step
 		persistent.status.step = this.step
-		fail_count = fail_num //reinicia el contador de fallos en uso de herramientas
+		fail_count = 1 //reinicia el contador de fallos en uso de herramientas
 
 		//------------------------------------------------------ Test
 		reset_pot() //reset all pot test
