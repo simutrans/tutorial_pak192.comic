@@ -3091,6 +3091,18 @@ class basic_chapter
 				t.y++
 			}
 		}
+		else if (opt==3) {
+			for (local j = 0; j<siz;j++){
+				tool.work(player_x(1), t, "")
+				t.x--
+			}
+		}
+		else if (opt==4) {
+			for (local j = 0; j<siz;j++){
+				tool.work(player_x(1), t, "")
+				t.y--
+			}
+		}
 	}
 }
 

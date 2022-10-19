@@ -1879,7 +1879,7 @@ class tutorial.chapter_03 extends basic_chapter
 					}
 					if (tool_id==tool_build_tunnel || tool_id==tool_build_way || tool_id== 4099){
 						if (pos.x>=c_tunn2_lim.a.x && pos.y<=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y>=c_tunn2_lim.b.y){
-							gui.add_message(""+ slope)
+							//gui.add_message(""+ slope)
 							if (way && (slope != 72 && slope != 4) && slope != 0)
 								return translate("You must lower the ground first")+" ("+coorbord.tostring()+".)"
 							if (coorbord!=0){
@@ -2550,13 +2550,23 @@ class tutorial.chapter_03 extends basic_chapter
 					pot0=1					
 				}
 				if (pot0==1 && pot1==0){
+					local t_rem = command_x(tool_remover)
 					local t_tun = command_x(tool_build_tunnel)
 					local c_list =	c_tun_list
 					local t_start = my_tile(start_tunn)
 					for(local j = 0; j<(c_list.len()-1);j++){
-						local c = coord3d(c_list[j].x, c_list[j].y, (t_start.z-j))
-						t_tun.work(player_x(1), t_start, c, sc_tunn_name)
-						command_x.set_slope(player_x(1), c, slope.all_down_slope)
+						local t = tile_x(c_list[j].x, c_list[j].y, (t_start.z-j))
+						local way = t.find_object(mo_way)
+						local ribi = way? way.get_dirs() : 0
+						if(ribi && ribi !=4 ){
+							local siz = 5
+							local opt = 4 //Decrementa y
+							local t = tile_x(t.x, t.y, t.z)
+							clean_track_segment(t, siz, opt)
+						}
+						local err = t_tun.work(player_x(1), t_start, t, sc_tunn_name)
+						gui.add_message(""+err)			
+						command_x.set_slope(player_x(1), t, slope.all_down_slope)
 					}
 					local c_start = c_tunn1.a 
 					local c_end = c_tunn1.b 
