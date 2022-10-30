@@ -53,7 +53,7 @@ class tutorial.chapter_04 extends basic_chapter
 	ship1_load = 100
 	ship1_wait = 0
 
-	sch_list1 = [coord(113,57), coord(93,42)]
+	sch_list1 = [coord(113,57), coord(94,42)]
 
 	//Step 5 =====================================================================================
 	//Para el canal acuatico
@@ -69,7 +69,7 @@ class tutorial.chapter_04 extends basic_chapter
 	f3_good = good_alias.gas
 	d2_cnr = 5
 
-	sch_list2 = [coord(93,42), coord(80,33)]
+	sch_list2 = [coord(94,42), coord(80,33)]
 
 	//Step 6 =====================================================================================
 	sch_list3 = [coord(98,46), coord(91,63), coord(88,70), coord(91,63)]

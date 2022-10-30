@@ -2212,32 +2212,40 @@ class basic_chapter
 	}
 
     function start_sch_tmpsw(pl,coord, c_list){
-		local depot = depot_x(coord.x, coord.y, coord.z)  // Deposito /Garaje
-		local cov_list = depot.get_convoy_list() // Lista de vehiculos en el deposito
-		local d_nr = cov_list.len()   //Numero de vehiculos en el deposito
-		if (d_nr > 0){
-            local cov_line = cov_list[0].get_line()
-			if(cov_line){
-				local sch = cov_line.get_schedule()
-				local sch_nr = sch.entries.len()
-				if(sch_nr>0){
-	       			for(local j=0;j<c_list.len();j++){
-						try {
-							 sch.entries[j]
-						}
-						catch(ev) {
-							continue
-						}
-						local halt1   = sch.entries[j].get_halt( player_x(pl) )
-						local tile_c = my_tile(c_list[j])
-						local halt2 = tile_c.get_halt()
-						local t1_list = halt1.get_tile_list()
-						local t2_list = halt2.get_tile_list()
-						local c_buld1 = t1_list[0].find_object(mo_building).get_pos()
-						local c_buld2 = t2_list[0].find_object(mo_building).get_pos()
-						if(c_buld1.x == c_buld2.x && c_buld1.y == c_buld2.y){
-							tmpsw[j]=1
-							tmpcoor[j]=c_list[j]
+		local depot = null
+		try {
+			depot = depot_x(coord.x, coord.y, coord.z)  // Deposito /Garaje
+		}
+		catch(ev) {
+			return null
+		}
+		if(depot){
+			local cov_list = depot.get_convoy_list() // Lista de vehiculos en el deposito
+			local d_nr = cov_list.len()   //Numero de vehiculos en el deposito
+			if (d_nr > 0){
+		        local cov_line = cov_list[0].get_line()
+				if(cov_line){
+					local sch = cov_line.get_schedule()
+					local sch_nr = sch.entries.len()
+					if(sch_nr>0){
+			   			for(local j=0;j<c_list.len();j++){
+							try {
+								 sch.entries[j]
+							}
+							catch(ev) {
+								continue
+							}
+							local halt1   = sch.entries[j].get_halt( player_x(pl) )
+							local tile_c = my_tile(c_list[j])
+							local halt2 = tile_c.get_halt()
+							local t1_list = halt1.get_tile_list()
+							local t2_list = halt2.get_tile_list()
+							local c_buld1 = t1_list[0].find_object(mo_building).get_pos()
+							local c_buld2 = t2_list[0].find_object(mo_building).get_pos()
+							if(c_buld1.x == c_buld2.x && c_buld1.y == c_buld2.y){
+								tmpsw[j]=1
+								tmpcoor[j]=c_list[j]
+							}
 						}
 					}
 				}

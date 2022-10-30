@@ -79,7 +79,7 @@ class tutorial.chapter_05 extends basic_chapter
 	d2_cnr = 3
 
 	//Para el barco
-	sch_list3 = [coord(98,47), coord(113,57)]
+	sch_list3 = [coord(98,46), coord(113,57)]
 	veh3_obj = "MV_Balmoral"
 	vhe3_ext = "Ferry_Mail_Extension_(small)"
 	veh3_load = 100
