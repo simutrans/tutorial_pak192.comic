@@ -1879,32 +1879,6 @@ class tutorial.chapter_03 extends basic_chapter
 							}
 							if (pos.z == end_z)
 								return translate("The tunnel is already at the correct level")+" ("+end_z+")."
-
-							/*
-							if (count_tunn || slope!= 0){
-								if (pos.z == (end_lvl_z))
-									return translate("The tunnel is already at the correct level")+" ("+end_lvl_z+")."
-								if (slope==0)
-									return null
-								else if (slope_rotate(slope))
-									return translate("The slope is ready.")
-								else if (coorbord!=0){
-
-										if (!label && slopebord == 4)
-											return translate("The slope is ready.")
-										if (slopebord==0)
-											return translate("Raise ground here")+" ("+coorbord.tostring()+".)"
-										else if (slope_rotate(slopebord))
-											return translate("First you must build a tunnel section.")
-										else
-											return null
-								}
-							}
-							else if (slope==0){
-								if (pos.z == (end_lvl_z))
-									return translate("The tunnel is already at the correct level")+" (-"+end_lvl_z+")."
-								return translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)" 
-							}*/
 						}
 						else return coorbord!=0 && slope==0? translate("Modify the terrain here")+" ("+coorbord.tostring()+")." : result
 					}
@@ -1957,39 +1931,6 @@ class tutorial.chapter_03 extends basic_chapter
 							}	
 
 							return ""
-
-
-							/*
-							//gui.add_message(""+ slope)
-							if (way && (slope != 72 && slope != 4) && slope != 0)
-								return translate("You must lower the ground first")+" ("+coorbord.tostring()+".)"
-							if (coorbord!=0){
-								local slopebord = tile_x(coorbord.x, coorbord.y, coorbord.z).get_slope()
-								if((count_tunn && (slopebord==72 || slopebord==4))||(pos.z== start_lvl_z && (slopebord==72 || slopebord==4)))
-									return all_control(result, gl_wt, way, ribi, tool_id, pos, coorbord, slope)
-								if (pos.z > end_lvl_z){
-									if (slopebord!=0){
-										//gui.add_message(""+count_tunn+" "+pos.tostring())
-										local is_mark = way? way.is_marked():false 
-										local cursor = t.find_object(mo_pointer)
-										local max = 2
-										local lock = cursor_tile_count(cursor, is_mark, max)
-										if(is_mark || label || lock) return all_control(result, gl_wt, way, ribi, tool_id, pos, coorbord)
-										else if (!count_tunn)
-											return translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)"
-
-										else return translate("First you must lower the layer level.")
-									}
-									else if (slopebord==0){
-										if (!count_tunn) return translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)" 
-										return translate("You must lower the ground first")+" ("+coorbord.tostring()+".)"
-									}
-								}
-								else if (pos.z == end_lvl_z)
-									return all_control(result, gl_wt, way, ribi, tool_id, pos, coorbord)
-							}
-							return translate("First you must lower the layer level.") */
-
 						}
 						else return coorbord!=0? translate("Build a tunnel here")+" ("+coorbord.tostring()+")." : result		
 					}
