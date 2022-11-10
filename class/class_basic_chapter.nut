@@ -49,33 +49,37 @@ class basic_chapter
 	way_mark3 = false
 
 	//Compare good list
-    good_check = ["Post", "Passagiere", "goods_"]
+	good_check = ["Post", "Passagiere", "goods_"]
 
-     constructor(pl)
-     {
-     	scenario.short_description = scenario_name + " - " + translate(this.chapter_name)
+	under_lv = settings.get_underground_view_level()
+	unde_view = -128
+	norm_view = 127
+
+	constructor(pl)
+	 {
+	 	scenario.short_description = scenario_name + " - " + translate(this.chapter_name)
 		this.set_all_rules(pl)
 		this.step = 1
-     }
+	 }
 
 	// FUNCTIONS TO REWRITE
-     function set_goal_text(text)
-     {
-             return text
-     }
+	 function set_goal_text(text)
+	 {
+		     return text
+	 }
 
-     function get_rule_text(pl,path)
-     {
-        local text = ttextfile( path + "rule.txt" )
-             return text.tostring()
-     }
+	 function get_rule_text(pl,path)
+	 {
+		local text = ttextfile( path + "rule.txt" )
+		     return text.tostring()
+	 }
 
 
-     function is_chapter_completed(pl)
-     {
+	 function is_chapter_completed(pl)
+	 {
 		local percentage = 0
 		return percentage
-     }
+	 }
 
 	// BASIC FUNCTIONS, NO REWRITE
 
@@ -1817,7 +1821,7 @@ class basic_chapter
 		
 	}
 
-	function all_control(result, wt, way, ribi, tool_id, pos, coor){
+	function all_control(result, wt, way, ribi, tool_id, pos, coor, slope = 0){
 		if(coorbord==0) return "Err"
 		if ((tool_id==tool_remove_way)||(tool_id==tool_remover)){
 
@@ -1843,14 +1847,20 @@ class basic_chapter
 				if ((ribi==0) || (ribi==1) || (ribi==2) || (ribi==4) || (ribi==8)){
 					return null
 				}
-				else
-					return translate("No intersections allowed")+" ("+pos.tostring()+")."
+				else {
+						if (under_lv == unde_view){
+							if(slope != 0 || pos.z != coorbord.z)
+								return null
+						}
+						
+						return translate("No intersections allowed")+" ("+pos.tostring()+")."
+					}
 			}
 			else
 				return translate("Action not allowed")+" ("+pos.tostring()+")."
 		}
 		else{
-			return translate("Connect the Track here")+" ("+coord(coor.x, coor.y).tostring()+")."
+			return translate("Connect the Track here")+" ("+coord3d(coor.x, coor.y, coor.z).tostring()+")."
 		}
 
 		return ""
@@ -3110,6 +3120,78 @@ class basic_chapter
 				tool.work(player_x(1), t, "")
 				t.y--
 			}
+		}
+	}
+	function tunnel_build_check(start, under,  max, dir){
+		local result =  translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)"
+		if(coorbord==0) return "Err"
+		if(coorbord.x == start.x && coorbord.y == start.y)
+			return null
+
+		local count = 0
+		local t = tile_x(coorbord.x, coorbord.y, coorbord.z)
+
+		if (dir == 8) {
+			for (local j = start.x; j<t.x ;j++){
+				count++
+			}
+		}
+		else if (dir == 1) {
+			for (local j = start.y; j<t.y ;j++){
+				count++
+			}
+		}
+		else if (dir == 2) {
+			for (local j = start.x; j>t.x ;j--){
+				count++
+			}
+		}
+		else if (dir == 4) {
+			for (local j = start.y; j>t.y ;j--){
+				count++
+			}
+		}
+
+		if(count <= max) {
+			return under_way_check(under, dir)
+		}
+
+		return result
+	}
+
+	function under_way_check(under, dir){
+		local result =  translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)"
+		if(coorbord==0) return "Err"
+		local t = tile_x(coorbord.x, coorbord.y, coorbord.z)
+		local way = t.find_object(mo_way)
+		local ribi = way? way.get_dirs() : 0
+	
+		//gui.add_message(""+ribi)
+		if(ribi != dir)
+			return result
+
+		local z = square_x(t.x, t.y).get_ground_tile().z
+		for (local j = z; j>=under;j--){
+			if (j == coorbord.z)
+				continue
+			t.z = j
+			if (t.find_object(mo_way))
+				return result
+
+			//gui.add_message(""+t.x +","+t.y+","+t.z)
+		}
+		return null
+	}
+	function underground_message(){
+		if(coorbord==0) return "Err"
+		under_lv = settings.get_underground_view_level()
+		if(under_lv == norm_view)
+			return translate("First you need to activate the underground view / sliced map view.")
+
+		else if(under_lv != unde_view){
+			if(under_lv != coorbord.z)
+				return format(translate("Layer level in sliced map view should be: %d"), coorbord.z)
+				
 		}
 	}
 }

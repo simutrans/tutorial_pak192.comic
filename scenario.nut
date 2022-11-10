@@ -376,6 +376,7 @@ function fail_count_message(result, tool_id)
 		fail_count++
 		if (fail_count >= fail_num){
 			fail_count = null
+			//gui.add_message(result)
 			return translate("Are you lost ?, see the instructions shown below.")
 		}
 	}
