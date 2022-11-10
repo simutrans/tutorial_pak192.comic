@@ -371,18 +371,19 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 function fail_count_message(result, tool_id)
 {
-	//gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
-	if (fail_count && result != null){
-		fail_count++
-		if (fail_count >= fail_num){
-			fail_count = null
-			//gui.add_message(result)
-			return translate("Are you lost ?, see the instructions shown below.")
+	if(tool_id != tool_build_tunnel){
+		//gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
+		if (fail_count && result != null){
+			fail_count++
+			if (fail_count >= fail_num){
+				fail_count = null
+				//gui.add_message(result)
+				return translate("Are you lost ?, see the instructions shown below.")
+			}
 		}
+		else if (result == null)
+		    fail_count = 1
 	}
-    else if (result == null)
-        fail_count = 1
-
 	return result
 }
 
