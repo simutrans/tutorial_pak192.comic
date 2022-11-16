@@ -19,8 +19,6 @@ class tutorial.chapter_05 extends basic_chapter
 	chapter_coord = coord(60,7)
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 
-	wayend = 0
-	coorbord = 0
 	cov_cir = 0
 
 	comm_script = false
@@ -327,21 +325,18 @@ class tutorial.chapter_05 extends basic_chapter
 					}
 					else t_end.remove_object(player_x(0), mo_label)
 
-					if (coorbord != 0){
-						//Creea un cuadro label
-						local opt = 0
-						local del = false
-						local text = "X"
-						label_bord(c_way_lim1.a, c_way_lim1.b, opt, del, text)		
-					}
+					//Creea un cuadro label
+					local opt = 0
+					local del = false
+					local text = "X"
+					label_bord(c_way_lim1.a, c_way_lim1.b, opt, del, text)
 
 					//Comprueba la conexion de la via
 					local obj = false
 					local dir = 2		
-					local fullway = get_fullway(coora, coorb, dir, obj)
+					r_way = get_fullway(coora, coorb, dir, obj)
 
-					if (fullway==0){
-						coorbord = 0
+					if (r_way.r){
 						//elimina el cuadro label
 						local opt = 0
 						local del = true
@@ -350,9 +345,6 @@ class tutorial.chapter_05 extends basic_chapter
 
 						pot0=1
 						return 10
-					}
-					else {
-						coorbord = fullway
 					}
 				}
 				else if (pot0==1 && pot1==0){
@@ -572,12 +564,12 @@ class tutorial.chapter_05 extends basic_chapter
 						if (!way && label && label.get_text()=="X"){
 							return translate("Indicates the limits for using construction tools")+" ( "+pos.tostring()+")."	
 						}
-						local label = coorbord!=0 ? tile_x(coorbord.x, coorbord.y, coorbord.z).find_object(mo_label) : false
+						local label =  tile_x(r_way.c.x, r_way.c.y, r_way.c.z).find_object(mo_label)
 						if(label){
 							if(tool_id==tool_build_way || tool_id==4113 || tool_id==tool_remover)
 								return null	
 						}
-						else return all_control(result, wt_road, way, ribi, tool_id, pos, coorbord)
+						else return all_control(result, wt_road, way, ribi, tool_id, pos, r_way.c)
 					}
 				}
 				else if(pot0==1 && pot1==0){

@@ -8,6 +8,13 @@
 //Global coordinate for mark build tile
 currt_pos <- null
 
+// Results for fullway, c = coord3d, p = plus, r = result, m = marked, l = look, s = slope
+r_way <- { c = coord3d(0, 0, 0), p = 0, r = false, m = false, l = false, s = 0}
+r_way_list <- {}
+wayend <- coord3d(0, 0, 0)
+reached <- 0
+cursor_count <- coord3d(0, 0, 0)
+
 class basic_chapter
 {        // chapter description : this is a placeholder class
 
@@ -34,12 +41,8 @@ class basic_chapter
 //--------------------way scan ------------------------------------
 	cursor_sw = false
 	bridge_sw = false
-	mark_sw  = true
-	lock_way = false
 	sch_sw = false
-
 	stop_sw = false
-
 	bridge_count = 0
 
 //--------------------waypoint mark in ground ------------------------------------
@@ -1304,16 +1307,18 @@ class basic_chapter
 		local tilea = tile_x(coora.x,coora.y,coora.z)
 		local tileb = tile_x(coorb.x,coorb.y,coorb.z)
 		local way = tilea.find_object(mo_way)
-		local c_save = coora
+		local res = r_way
+		res.c = coora
+		res.r = false
 		if (!way)
-			return coora
+			return res
 		if (obj){
 			if (obj == mo_wayobj){
 				if(!way.is_electrified()){
 					way.mark()
 					if (!tun)
 						label_x.create(coora, player_x(1), translate("Here"))
-					return coora
+					return res
 				}
 				else{
 					tilea.remove_object(player_x(1), mo_label)
@@ -1325,7 +1330,6 @@ class basic_chapter
 		local r_dir = way_x(coora.x, coora.y, coora.z).get_dirs()
 		if (dir == 0) dir = c_dir(coora, coorb, r_dir)
 		local c_way = coora
-		local c_z = false
 		local ribi = 0
 		local vl = array(10)
 		vl[3]=3
@@ -1333,7 +1337,6 @@ class basic_chapter
 		vl[2]=2
 		vl[6]=6
 		if (dir==1){
-
 			if (r_dir==2 || r_dir==10)
 				dir=6
 			else if (r_dir==4 || r_dir==5)
@@ -1350,17 +1353,14 @@ class basic_chapter
 			}
 		}
 		else if (dir==2){
-
 			if (r_dir==1)
 				coora.y--
 		}
 		else if (dir==3){
-
 			if (r_dir==4)
 				coora.y++
 		}
 		else if (dir==4){
-
 			if (r_dir==1 || r_dir==5)
 				dir=3
 			else if (r_dir==8 || r_dir==10)
@@ -1377,41 +1377,34 @@ class basic_chapter
 			}
 		}
 		else if (dir==5){
-
 			if (r_dir==2)
 				coora.x++
 		}
 		else if (dir==6){
-
 			if (r_dir==8)
 				coora.x--
 		}
 		local count = 0
-		lock_way = false
+		res.l = false
+		res.p = 0
 		while(true){
-			local til = tile_x(coora.x,coora.y,coora.z)
-			local tunnel = til.find_object(mo_tunnel)
-			local bridge = til.find_object(mo_bridge)
-			local way_hold = til.find_object(mo_way)
-			local slope = til.get_slope()
+			local tile = tile_x(coora.x,coora.y,coora.z)
+			local tunnel = tile.find_object(mo_tunnel)
+			local bridge = tile.find_object(mo_bridge)
+			local way_hold = tile.find_object(mo_way)
+			local slp = tile.get_slope()
 			local type = false
 			local t_type = false
 			local way = false
 			local ribi = false
-
+			local squ = square_x(coora.x,coora.y)
+			local sq_z = squ.get_ground_tile().z
 			local c_z = coora.z -1
 			for(local j = c_z;j<=(c_z+2);j++){
-				local c_test = square_x(coora.x,coora.y).get_tile_at_height(j)
-				local is_tile = true
+				local c_test = squ.get_tile_at_height(j)
 				local brig_height = false
 				local brig_height_z = null
-				try {
-					 c_test.is_valid()
-				}
-				catch(ev) {
-					is_tile = false
-					//gui.add_message("This faill")
-				}
+
 				try {
 					brig_height_z = c_test.z+1
 					brig_height = tile_x(coora.x, coora.y, brig_height_z).is_bridge()				
@@ -1419,10 +1412,9 @@ class basic_chapter
 				catch(ev) {
 				}
 
-				if(is_tile && c_test.is_valid()){
-					local t = tile_x(coora.x, coora.y, coora.z)
+				if(c_test && c_test.is_valid()){
 					local way = c_test.find_object(mo_way)
-					if(t.is_bridge()){
+					if(tile.is_bridge()){
 						//c_test.z = coora.z
 						//local brig_way = c_test.find_object(mo_way)
 						//gui.add_message("brig "+coora.x+","+c_test.z+"  - "+brig_height+"  "+brig_way.get_dirs()+"")
@@ -1432,52 +1424,50 @@ class basic_chapter
 							break
 						}
 					}
-					if(way && way_hold){
-						if(way.get_dirs() == way_hold.get_dirs())
+					if(way){
+						if(!tun && sq_z != c_test.z)
+							continue
+
+						//gui.add_message("way "+coora.x+" :: "+coora.z+","+c_test.z+"  -p "+res.p+" :: slp "+ slope.to_dir(c_test.get_slope()) +" - "+slope.to_dir(res.s))
+						if(sq_z != c_test.z && ( slp != 0 && slope.to_dir(c_test.get_slope()) == res.s)&&(c_test.z == coora.z || res.p == 1 )){
+							res.p = 1
+						}
+						else res.p = 0
+						if(way_hold && way.get_dirs() == way_hold.get_dirs()) {
+							coora.z = c_test.z
+							break
+						}
+						//gui.add_message("way2 "+coora.x+" :: "+coora.z+","+c_test.z+"  - "+brig_height+" :: slp "+ slp)
 						coora.z = c_test.z
-					//gui.add_message("way "+coora.x+","+c_test.z+"  - "+brig_height+"")
-						break
-					}
-					else if (way){
-						coora.z = c_test.z
-					//gui.add_message("way "+coora.x+","+c_test.z+"  - "+brig_height+"")
 						break
 					}
 				}
 			}
-
-			/*if (tun && false){
-				type = mo_tunnel
-				local height_min = -3
-				local height_max = my_tile(coord(coora.x, coora.y)).z
-				for(;height_max>=height_min;height_max--){
-					local tile = tile_x(coora.x, coora.y, height_max)
-					if (tile.is_tunnel()){
-						coora.z = height_max	
-						break
-					}
-				}
-			} */
+			r_way_list[coord3d_to_key(coora)] <- coora
+			res.c = coora
 			local t = tile_x(coora.x, coora.y, coora.z)
 			way = t.find_object(mo_way)
+			
+			local nw_slp = slope.to_dir(t.get_slope())
+			if( nw_slp == 0) res.p = 0
+			
+			res.s = nw_slp
+
 			if(way){
-				if (mark_sw && t.is_marked() || !mark_sw && !t.is_marked()){
+				if (res.m && t.is_marked() || !res.m && !t.is_marked()){
 					if (count>1){
-						lock_way = true
-						if (mark_sw)
-							mark_sw = false
-						else
-							mark_sw = true
-						return coora
+						res.l = true
+						res.m = !res.m
+
+						return res
 					}
 					else
 						count ++
 				}
-				if (mark_sw){
+				if (res.m){
 					if(!t.is_marked())
 						t.mark()
 				}
-
 				else {
 					if(t.is_marked())
 						t.unmark()
@@ -1485,7 +1475,7 @@ class basic_chapter
 				ribi = t.find_object(mo_way).get_dirs()
 			}
 			else{
-				return c_save
+				return res
 			}
 			if (obj){
 				if (obj == mo_wayobj){
@@ -1494,7 +1484,7 @@ class basic_chapter
 						if (!tun)
 							label_x.create(coora, player_x(1), translate("Here"))
 
-						return coora
+						return res
 					}
 					else{
 						t.remove_object(player_x(1), mo_label)
@@ -1505,10 +1495,14 @@ class basic_chapter
 			if(coora.x==coorb.x && coora.y==coorb.y && coora.z==coorb.z){
 				if (t_type)
 					way.unmark()
-				if (mark_sw)
-					return coora
-				else
-					return 0
+				if (res.m){
+					return res
+				}
+				else{
+					r_way_list = {}
+					res.r = true
+					return res
+				}
 			}
 
 			if ((ribi==1)||(ribi==2)||(ribi==4)||(ribi==8)){
@@ -1519,10 +1513,8 @@ class basic_chapter
 				}
 				//Detecta la pocision del cursor	
 				cursor_control(coora)
-				if(mark_sw) mark_sw = false	
-				else mark_sw = true	
-
-				return coora
+				res.m = !res.m
+				return res
 			}
 			else{
 				foreach(obj in t.get_objects()){
@@ -1532,28 +1524,20 @@ class basic_chapter
 			}
 
 			if (dir==2){
-				if (t.is_bridge()){
-					//coora.y -= way_is_bridge(coora, 5)
-					//coora.z = square_x(coora.x,coora.y).get_ground_tile().z	
-					//continue
-				}
 
 				if (ribi==5){
-					
 					coora.y--
 					continue
 				}
 
 				else if (ribi==6){
 					dir = vl[5]
-					
 					coora.x++
 					continue
 				}
 				else if (ribi==12){
 					dir = vl[6]
 					coora.x--
-					
 					continue
 				}
 
@@ -1567,32 +1551,23 @@ class basic_chapter
 					coora.y--
 					continue
 				}
-								
 			}
 			
 			else if (dir==3){
-				if (t.is_bridge()){
-					//coora.y += way_is_bridge(coora, 5)
-					//coora.z = square_x(coora.x,coora.y).get_ground_tile().z	
-					//continue
-				}
 
 				if (ribi==5){
-					
 					coora.y++
 					continue
 				}
 
 				else if (ribi==3){
 					dir = vl[5]
-					
 					coora.x++
 					continue
 				}
 
 				else if (ribi==9){
 					dir = vl[6]
-					
 					coora.x--
 					continue
 				}
@@ -1609,20 +1584,13 @@ class basic_chapter
 				}				
 			}
 			else if (dir==5){
-				if (t.is_bridge()){
-					//coora.x += way_is_bridge(coora, 10)
-					//coora.z = square_x(coora.x,coora.y).get_ground_tile().z	
-					//continue
-				}
 
 				if (ribi==10){
 					coora.x++
-					
 					continue
 				}
 				else if (ribi==12){
 					dir = vl[3]
-					
 					coora.y++
 					continue
 				}
@@ -1642,27 +1610,19 @@ class basic_chapter
 				}				
 			}
 			else if (dir==6){
-				if (t.is_bridge()){
-					//coora.x -= way_is_bridge(coora, 10)
-					//coora.z = square_x(coora.x,coora.y).get_ground_tile().z	
-					//continue
-				}
 
 				if (ribi==10){
 					coora.x--
-					
 					continue
 				}
 
 				else if (ribi==3){
 					dir = vl[2]
 					coora.y--
-					
 					continue
 				}
 				else if (ribi==6){
 					dir = vl[3]
-					
 					coora.y++
 					continue
 				}
@@ -1678,7 +1638,7 @@ class basic_chapter
 					continue
 				}			
 			}
-			return coora
+			return res
 		}
 	}
 
@@ -1821,40 +1781,47 @@ class basic_chapter
 		
 	}
 
-	function all_control(result, wt, way, ribi, tool_id, pos, coor, slope = 0){
-		if(coorbord==0) return "Err"
+	function all_control(result, wt, way, ribi, tool_id, pos, coor, plus = 0){
 		if ((tool_id==tool_remove_way)||(tool_id==tool_remover)){
-
 			if (way && way.get_waytype() != wt)
 				return result
-			else
-				return null	
-		}
+			else {
 
-		else if (lock_way)
+				local cur_key = coord3d_to_key(pos)
+				result = translate("Action not allowed")+" ("+pos.tostring()+")."
+				foreach(key, c in r_way_list){
+					if(key == cur_key){
+						//delete r_way_list[key] //Delate objt example
+						//gui.add_message("key: "+key+" ckey: "+cur_key)
+						return null
+						break
+					}
+				}
+				return result
+			}
+		}
+		else if (r_way.l)
 			return translate("The track is stuck, use the [Remove] tool here!")+" ("+coor.tostring()+")."
 
 		//Control para que los puentes funcionen bien
 		bridge_control(way, tool_id)
-
 		if (bridge_sw){
 			return null
 		}
-
 		else if ((pos.x == coor.x && pos.y == coor.y && pos.z == coor.z)||(cursor_sw)){
-
 			if (tool_id==tool_build_way || tool_id==tool_build_tunnel){
 				if ((ribi==0) || (ribi==1) || (ribi==2) || (ribi==4) || (ribi==8)){
 					return null
 				}
-				else {
-						if (under_lv == unde_view){
-							if(slope != 0 || pos.z != coorbord.z)
-								return null
-						}
-						
-						return translate("No intersections allowed")+" ("+pos.tostring()+")."
+				else{
+					if (under_lv == unde_view){
+						local slope = tile_x(pos.x, pos.y, pos.z).get_slope()
+						if(slope != 0 || pos.z != (coor.z + plus))
+							return null
 					}
+					
+					return translate("No intersections allowed")+" ("+pos.tostring()+")."
+				}
 			}
 			else
 				return translate("Action not allowed")+" ("+pos.tostring()+")."
@@ -1863,7 +1830,7 @@ class basic_chapter
 			return translate("Connect the Track here")+" ("+coord3d(coor.x, coor.y, coor.z).tostring()+")."
 		}
 
-		return ""
+		return "ll"
 	}
 
 	function cursor_control(coord)
@@ -3122,14 +3089,14 @@ class basic_chapter
 			}
 		}
 	}
+
 	function tunnel_build_check(start, under,  max, dir){
-		local result =  translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)"
-		if(coorbord==0) return "Err"
-		if(coorbord.x == start.x && coorbord.y == start.y)
+		local result =  translate("The tunnel is not correct, use the [Remove] tool here")+" ("+r_way.c.tostring()+".)"
+		if(r_way.c.x == start.x && r_way.c.y == start.y)
 			return null
 
 		local count = 0
-		local t = tile_x(coorbord.x, coorbord.y, coorbord.z)
+		local t = tile_x(r_way.c.x, r_way.c.y, r_way.c.z)
 
 		if (dir == 8) {
 			for (local j = start.x; j<t.x ;j++){
@@ -3151,7 +3118,7 @@ class basic_chapter
 				count++
 			}
 		}
-
+		//gui.add_message(""+ribi)
 		if(count <= max) {
 			return under_way_check(under, dir)
 		}
@@ -3160,9 +3127,8 @@ class basic_chapter
 	}
 
 	function under_way_check(under, dir){
-		local result =  translate("The tunnel is not correct, use the [Remove] tool here")+" ("+coorbord.tostring()+".)"
-		if(coorbord==0) return "Err"
-		local t = tile_x(coorbord.x, coorbord.y, coorbord.z)
+		local result =  translate("The tunnel is not correct, use the [Remove] tool here")+" ("+r_way.c.tostring()+".)"
+		local t = tile_x(r_way.c.x, r_way.c.y, r_way.c.z)
 		local way = t.find_object(mo_way)
 		local ribi = way? way.get_dirs() : 0
 	
@@ -3172,7 +3138,7 @@ class basic_chapter
 
 		local z = square_x(t.x, t.y).get_ground_tile().z
 		for (local j = z; j>=under;j--){
-			if (j == coorbord.z)
+			if (j == r_way.c.z)
 				continue
 			t.z = j
 			if (t.find_object(mo_way))
@@ -3182,15 +3148,15 @@ class basic_chapter
 		}
 		return null
 	}
-	function underground_message(){
-		if(coorbord==0) return "Err"
+
+	function underground_message(plus = 0){
 		under_lv = settings.get_underground_view_level()
 		if(under_lv == norm_view)
 			return translate("First you need to activate the underground view / sliced map view.")
 
 		else if(under_lv != unde_view){
-			if(under_lv != coorbord.z)
-				return format(translate("Layer level in sliced map view should be: %d"), coorbord.z)
+			if(under_lv != r_way.c.z + plus)
+				return format(translate("Layer level in sliced map view should be: %d"), r_way.c.z + plus)
 				
 		}
 	}

@@ -23,7 +23,7 @@ class tutorial.chapter_06 extends basic_chapter
 
 	gl_wt = wt_air
 
-	coorbord = coord(0,0)
+	c_way = coord(0,0)
 
 	cty1 = {c = coord(87,30), name = ""}
 	cty2 = {c = coord(70,409), name = ""}
@@ -221,11 +221,11 @@ class tutorial.chapter_06 extends basic_chapter
 					local dir = 4
 					local fullway = check_way(coora, coorb, wt, name_list, dir)
 					if (fullway.result){
-						coorbord =  coord(0,0)
+						c_way =  coord(0,0)
 						pot0=1
 					}
 					else 
-						coorbord = fullway.c
+						c_way = fullway.c
 				
 					return 5					
 				}
@@ -243,11 +243,11 @@ class tutorial.chapter_06 extends basic_chapter
 					local dir = 2
 					local fullway = check_way(coora, coorb, wt, name_list, dir)
 					if (fullway.result){
-						coorbord = coord(0,0)
+						c_way = coord(0,0)
 						pot1=1
 					}
 					else 
-						coorbord = fullway.c
+						c_way = fullway.c
 				
 					return 10					
 				}
@@ -415,14 +415,14 @@ class tutorial.chapter_06 extends basic_chapter
 							if(way && way.get_name() != obj1_way_name)
 								return format(translate("The track is not correct it must be: %s, use the 'Remove' tool"),translate(obj1_way_name)) + " ("+c1_start.tostring()+")."
 							else if(tool_id == tool_build_way)									
-								return all_control(result, gl_wt, way, ribi, tool_id, pos, coorbord)
+								return all_control(result, gl_wt, way, ribi, tool_id, pos, c_way)
 						
 							if (way && way.get_name() == obj1_way_name){
 								return translate("The track is correct.")
 							}
 						}*/
 					}
-					else return translate("Build here") + ": ("+coorbord.tostring()+")!."
+					else return translate("Build here") + ": ("+c_way.tostring()+")!."
 				}
 				else if (pot0==1 && pot1==0){	
 					if (pos.x == c2_track.b.x && pos.y == c2_track.b.y){
@@ -461,14 +461,14 @@ class tutorial.chapter_06 extends basic_chapter
 								return format(translate("The track is not correct it must be: %s, use the 'Remove' tool"),translate(obj2_way_name)) + " ("+c2_start.tostring()+")!."
 							}
 							else if(tool_id == tool_build_way)									
-								return all_control(result, gl_wt, way, ribi, tool_id, pos, coorbord)
+								return all_control(result, gl_wt, way, ribi, tool_id, pos, c_way)
 						}
 						
 						if (way && way.get_name() == obj2_way_name){
 							return translate("The track is correct.")
 						}*/
 					}
-					else return translate("Build here") + ": ("+coorbord.tostring()+")!."
+					else return translate("Build here") + ": ("+c_way.tostring()+")!."
 				}
 
 				else if (pot1==1 && pot2==0){

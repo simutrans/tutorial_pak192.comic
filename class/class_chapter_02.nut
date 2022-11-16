@@ -23,7 +23,6 @@ class tutorial.chapter_02 extends basic_chapter
 	comm_script = false
 	stop_mark = false 
 
-	coorbord = coord(0,0)
 	gltool = null
 	gl_wt = wt_road
 
@@ -291,10 +290,10 @@ class tutorial.chapter_02 extends basic_chapter
 					text = ttextfile("chapter_02/07_"+a+"-"+b+".txt")
 					text.tx = ttext("<em>["+a+"/"+b+"]</em>")
 
-					if (coorbord==0)
+					if (r_way.r)
 						text.cbor = "<em>"+translate("Ok")+"</em>"
 					else
-						text.cbor = coord(coorbord.x, coorbord.y).href("("+coorbord.tostring()+")")
+						text.cbor = coord(r_way.c.x, r_way.c.y).href("("+r_way.c.tostring()+")")
 				}
 				else if (pot3==0){
 					local a = 3
@@ -528,8 +527,8 @@ class tutorial.chapter_02 extends basic_chapter
 					local coorb = coord3d(c_brdg1.b.x, c_brdg1.b.y, c_brdg1.b.z)
 					local dir = 6
 					local obj = false		
-					local fullway = get_fullway(coora, coorb, dir, obj)
-					if (fullway==0){
+					r_way = get_fullway(coora, coorb, dir, obj)
+					if (r_way.r){
 						t_label.remove_object(player_x(0), mo_label)
 						this.next_step()
 						//Crear cuadro label
@@ -538,8 +537,6 @@ class tutorial.chapter_02 extends basic_chapter
 						//Elimina cuadro label
 						label_bord(del_lim2.a, del_lim2.b, opt, true, "X")	
 					}
-					else 
-						coorbord = fullway
 				}
 				return 65
 				break
@@ -625,7 +622,7 @@ class tutorial.chapter_02 extends basic_chapter
 						local coorb=coord3d(c_way1.b.x,c_way1.b.y,c_way1.b.z)
 						local dir = 3
 						local obj = false		
-						local fullway = get_fullway(coora, coorb, dir, obj)
+						r_way = get_fullway(coora, coorb, dir, obj)
 
 						//Para marcar inicio y fin de la via
 						local waya = tile_x(coora.x,coora.y,coora.z).find_object(mo_way)
@@ -633,7 +630,7 @@ class tutorial.chapter_02 extends basic_chapter
 						if (waya) waya.mark()	
 						if (wayb) wayb.mark()
 
-						if (fullway==0){
+						if (r_way.r){
 							//Para desmarcar inicio y fin de la carretera
 							waya.unmark()
 							wayb.unmark()
@@ -651,9 +648,6 @@ class tutorial.chapter_02 extends basic_chapter
 							label_bord(city2_lim.a, city2_lim.b, opt, false, "X")
 
 							pot2=1
-						}
-						else {
-							coorbord = fullway
 						}
 					}
 
@@ -878,7 +872,7 @@ class tutorial.chapter_02 extends basic_chapter
 								return null
 						}
 						else
-							return all_control(result, gl_wt, way, ribi, tool_id, pos, coorbord)
+							return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
 					}
 				
 				}
@@ -1254,7 +1248,7 @@ class tutorial.chapter_02 extends basic_chapter
 						}
 					}
 				}
-				if (pot3==0){
+				if (pot2==0){
 					local t = command_x(tool_build_way)			
 					local err = t.work(player_x(1), my_tile(c_label1.a), my_tile(c_label1.b), sc_way_name)
 				}
