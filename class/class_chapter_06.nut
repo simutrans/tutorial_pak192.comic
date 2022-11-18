@@ -25,7 +25,7 @@ class tutorial.chapter_06 extends basic_chapter
 
 	c_way = coord(0,0)
 
-	cty1 = {c = coord(87,30), name = ""}
+	cty1 = {c = coord(92,33), name = ""}
 	cty2 = {c = coord(70,409), name = ""}
 
 	cty1_lim = {a = null, b = null}

@@ -31,10 +31,6 @@ signal <-	[	{coor=coord3d(74,20,0), ribi=8}, {coor=coord3d(74,21,0), ribi=2}, {c
 			]
 //----------------------------------------------------------------
 
-reached <- 0
-
-cursor_count <- 0
-
 class tutorial.chapter_03 extends basic_chapter
 {
 	chapter_name  = "Riding the Rails"
@@ -2937,15 +2933,6 @@ class tutorial.chapter_03 extends basic_chapter
 				return translate("The convoy is not correct.")
 				break
 		}
-	}
-	function cursor_tile_count(cursor, is_mark, max){
-		if(!cursor && cursor_count>0)cursor_count++
-		if(cursor && is_mark) cursor_count = 1
-		if(cursor_count>max){
-			cursor_count = 0
-			return false
-		}
-		return true
 	}
 }        // END of class
 

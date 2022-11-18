@@ -32,8 +32,6 @@ gl_percentage <- 0
 persistent.gl_percentage <- 0
 
 //----------------------------------------------------------------
-gl_tool_delay <- 0
-gl_time <- 10
 
 cov_save <- array(100)						//Guarda los convoys en lista
 id_save <- array(100)						//Guarda id de los convoys en lista
@@ -276,7 +274,11 @@ function is_scenario_completed(pl)
 		local t = tile_x(currt_pos.x,currt_pos.y,currt_pos.z)
 		local build = t.find_object(mo_building)
 		if (!t.is_marked() && build){
-			build.unmark()
+			local t_list = gl_buil_list
+			foreach(t in t_list){
+				t.find_object(mo_building).unmark()
+			}
+			gl_buil_list = {}
 			currt_pos = null
 		}
 	}
@@ -354,7 +356,6 @@ function is_work_allowed_here(pl, tool_id, pos)
 	local pause = debug.is_paused()
 	if (pause) return translate("Advance is not allowed with the game paused.")
 
-	gl_tool_delay = gl_time
 	//return tile_x(pos.x,pos.y,pos.z).find_object(mo_way).get_dirs()
 	if (pl != 0) return null
 	if (correct_cov){
