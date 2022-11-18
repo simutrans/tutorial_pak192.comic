@@ -48,8 +48,6 @@ class basic_chapter
 	stop_sw = false
 	bridge_count = 0
 
-//--------------------waypoint mark in ground ------------------------------------
-
 	//Compare good list
 	good_check = ["Post", "Passagiere", "goods_"]
 
@@ -1792,8 +1790,8 @@ class basic_chapter
 		if ((tool_id==tool_remove_way)||(tool_id==tool_remover)){
 			if (way && way.get_waytype() != wt)
 				return result
-			else {
 
+			else {
 				local cur_key = coord3d_to_key(pos)
 				result = translate("Action not allowed")+" ("+pos.tostring()+")."
 				foreach(key, c in r_way_list){
