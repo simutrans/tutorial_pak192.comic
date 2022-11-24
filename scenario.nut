@@ -102,6 +102,114 @@ select_option      <- { x = 0, y = 0, z = 1 }	// place of station to control nam
 select_option_halt <- null			// placeholder for halt_x
 tutorial		  <- {}				// placeholder for all chapter CLASS
 
+//returns pakset name (lower case)
+function get_set_name(name)
+{
+	local s = name.find(" ")
+	name = name.slice(0, s)
+	name = name.tolower()
+	return name
+}
+
+simu_version <- "122.0.1"
+pak_name <- "pak128"
+current_st <- "0"
+current_pak <- "pak"
+gl_correct <- false
+
+function string_analyzer()
+{
+	local result = {pak= false , st = false}
+
+	//Check version and pakset name
+	current_pak = get_set_name(get_pakset_name())
+	current_st = get_version_number()
+
+	local p_siz = {a = current_pak.len(), b = pak_name.len()}
+
+
+	//Pak name analyzer
+	local siz_a = max(p_siz.a, p_siz.a)
+	local count_a = 0
+	local tx_a = ""
+	for(local j=0;j<siz_a;j++){
+		try {
+			pak_name[count_a]
+		}
+		catch(ev) {
+			break
+		}
+		if(count_a>0 && current_pak[j]!=pak_name[count_a]){
+			break
+		}
+		if(current_pak[j]==pak_name[count_a]){
+			tx_a += format("%c",current_pak[j])
+			count_a++
+			continue
+		}
+	}
+	if(pak_name == tx_a) result.pak = true
+	//gui.add_message("Current: "+current_pak+"  Tx: "+tx_a+"  Pak: "+pak_name+" result: "+result.pak)
+
+	local s_siz = {a = current_st.len(), b = simu_version.len()}
+	local siz_b = max(s_siz.a, s_siz.a)
+
+	local nr_a = 0
+	local nr_b = 0
+
+	while(nr_a<s_siz.a || nr_b<s_siz.b){
+		local value_a = ""
+		for(local j=nr_a;j<s_siz.a;j++){
+			local tx = format("%c",current_st[j])
+			try {
+				tx.tointeger()
+			}
+			catch(ev) {
+				if(tx=="."){
+					nr_a = j+1
+					break
+				}
+				nr_a++
+				continue
+			}
+			value_a+=tx
+		}
+
+		local value_b = ""
+		for(local j=nr_b;j<s_siz.b;j++){
+			local tx = format("%c",simu_version[j])
+			if(tx=="."){
+				nr_b = j+1
+				break
+			}
+			value_b+=tx
+			if(j == s_siz.b-1)nr_b = s_siz.b
+		}
+		try {
+			value_a.tointeger()
+			value_b.tointeger()
+		}
+		catch(ev) {
+			continue
+		}
+		//gui.add_message("value_a "+value_a.tointeger()+"  value_b "+value_b.tointeger()+"")
+		if(value_a.tointeger()<value_b.tointeger()){
+			result.st = false
+			break
+		}
+		result.st = true
+	}
+	//gui.add_message("result st: "+result.st+"  result pak:" +result.pak)
+	return result
+}
+
+{
+	//Check version and pakset name
+	resul_version = string_analyzer()
+	include(nut_path+"class_basic_chapter") 		// include class for basic chapter structure
+
+}
+
 include(nut_path+"class_basic_chapter") 		// include class for basic chapter structure
 for (local i = 0; i <= chapter_max; i++)		// include amount of chapter classes
 	include(nut_path+"class_chapter_"+(i < 10 ? "0"+i:i) )
@@ -541,101 +649,6 @@ function get_line_name(halt)
 		return "<em>"+line.get_name()+"</em>"
 	}
 	return "<s>not line</s>"
-}
-
-function string_analyzer()
-{
-	local result = {pak= false , st = false}
-
-	//Check version and pakset name
-	current_pak = get_set_name(get_pakset_name())
-	current_st = get_version_number()
-
-	local p_siz = {a = current_pak.len(), b = pak_name.len()}
-
-
-	//Pak name analyzer
-	local siz_a = max(p_siz.a, p_siz.a)
-	local count_a = 0
-	local tx_a = ""
-	for(local j=0;j<siz_a;j++){
-		try {
-			pak_name[count_a]
-		}
-		catch(ev) {
-			break
-		}
-		if(count_a>0 && current_pak[j]!=pak_name[count_a]){
-			break
-		}
-		if(current_pak[j]==pak_name[count_a]){
-			tx_a += format("%c",current_pak[j])
-			count_a++
-			continue
-		}
-	}
-	if(pak_name == tx_a) result.pak = true
-	//gui.add_message("Current: "+current_pak+"  Tx: "+tx_a+"  Pak: "+pak_name+" result: "+result.pak)
-
-	local s_siz = {a = current_st.len(), b = simu_version.len()}
-	local siz_b = max(s_siz.a, s_siz.a)
-
-	local nr_a = 0
-	local nr_b = 0
-
-	while(nr_a<s_siz.a || nr_b<s_siz.b){
-		local value_a = ""
-		for(local j=nr_a;j<s_siz.a;j++){
-			local tx = format("%c",current_st[j])
-			try {
-				tx.tointeger()
-			}
-			catch(ev) {
-				if(tx=="."){
-					nr_a = j+1
-					break
-				}
-				nr_a++
-				continue
-			}
-			value_a+=tx
-		}
-
-		local value_b = ""
-		for(local j=nr_b;j<s_siz.b;j++){
-			local tx = format("%c",simu_version[j])
-			if(tx=="."){
-				nr_b = j+1
-				break
-			}
-			value_b+=tx
-			if(j == s_siz.b-1)nr_b = s_siz.b
-		}
-		try {
-			value_a.tointeger()
-			value_b.tointeger()
-		}
-		catch(ev) {
-			continue
-		}
-		//gui.add_message("value_a "+value_a.tointeger()+"  value_b "+value_b.tointeger()+"")
-		if(value_a.tointeger()<value_b.tointeger()){
-			result.st = false
-			break
-		}
-		result.st = true
-	}
-	//gui.add_message("result st: "+result.st+"  result pak:" +result.pak)
-	return result
-}
-
-//returns pakset name (lower case)
-function get_set_name(name)
-{
-	local s = name.find(" ")
-	name = name.slice(0, s)
-	name = name.tolower()
-	return name
 }
 
 function coord3d_to_key(c)

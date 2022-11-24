@@ -51,7 +51,7 @@ class basic_chapter
 	//Compare good list
 	good_check = ["Post", "Passagiere", "goods_"]
 
-	under_lv = settings.get_underground_view_level()
+	under_lv = resul_version.st? settings.get_underground_view_level() : 127
 	unde_view = -128
 	norm_view = 127
 
