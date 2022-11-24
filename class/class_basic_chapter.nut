@@ -1449,6 +1449,7 @@ class basic_chapter
 				}
 			}
 			r_way_list[coord3d_to_key(coora)] <- coora
+			persistent.r_way_list = r_way_list
 			res.c = coora
 			local t = tile_x(coora.x, coora.y, coora.z)
 			way = t.find_object(mo_way)
@@ -1505,6 +1506,7 @@ class basic_chapter
 				}
 				else{
 					r_way_list = {}
+					persistent.r_way_list = r_way_list
 					res.r = true
 					return res
 				}

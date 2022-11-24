@@ -999,6 +999,7 @@ class tutorial.chapter_03 extends basic_chapter
 						label_bord(bord3_lim.a, bord3_lim.b, opt, del, text)
 					}
 					if (tile_x(r_way.c.x, r_way.c.y, r_way.c.z).find_object(mo_way) && r_way.c.x>=limi.x){
+
 						tile2.remove_object(player_x(0), mo_label)
 						if (!tile_x(wayend.x, wayend.y, wayend.z).find_object(mo_way))
 							label_x.create(wayend, player_x(0), translate("Build Rails form here"))
@@ -1489,10 +1490,14 @@ class tutorial.chapter_03 extends basic_chapter
 				break;
 			//Conectando los rieles con la segunda fabrica
 			case 2:
-				if (tool_id == 4096) return result = null
-				
 				//Primer tramo de rieles
 				if (pot0==0){
+					local lab_t = my_tile(label1_lim)
+					local lab = lab_t.find_object(mo_label)
+					if(pos.x > lab_t.x && lab && lab.get_owner().nr == 0){
+						if(tool_id==tool_build_way)
+							return ""
+					}
 					if (pos.x>=st1_way_lim.a.x && pos.y>=st1_way_lim.a.y && pos.x<=st1_way_lim.b.x && pos.y<=st1_way_lim.b.y){
 						if(tool_id==tool_build_way || tool_id==4113 || tool_id==tool_remover)
 							return null						
@@ -1651,6 +1656,12 @@ class tutorial.chapter_03 extends basic_chapter
 			case 6:				
 				//Primer tramo de rieles
 				if (pot0==0){
+					local lab_t = my_tile(label3_lim)
+					local lab = lab_t.find_object(mo_label)
+					if(pos.y > lab_t.y && lab && lab.get_owner().nr == 0){
+						if(tool_id==tool_build_way)
+							return ""
+					}
 					if (pos.x>=st3_way_lim.a.x && pos.y>=st3_way_lim.a.y && pos.x<=st3_way_lim.b.x && pos.y<=st3_way_lim.b.y){			
 						if(tool_id==tool_build_way || tool_id==4113 || tool_id==tool_remover)
 							return null						
