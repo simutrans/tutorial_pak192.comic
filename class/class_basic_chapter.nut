@@ -1432,9 +1432,8 @@ class basic_chapter
 					if(way){
 						if(!tun && sq_z != c_test.z)
 							continue
-
 						//gui.add_message("way "+coora.x+" :: "+coora.z+","+c_test.z+"  -p "+res.p+" :: slp "+ slope.to_dir(c_test.get_slope()) +" - "+slope.to_dir(res.s))
-						if(sq_z != c_test.z && ( slp != 0 && slope.to_dir(c_test.get_slope()) == res.s)&&(c_test.z == coora.z || res.p == 1 )){
+						if(sq_z != c_test.z && ( slp != 0 && (slope.to_dir(c_test.get_slope()) == res.s || res.s == 0)) && (c_test.z == coora.z || res.p == 1 )){
 							res.p = 1
 						}
 						else res.p = 0
