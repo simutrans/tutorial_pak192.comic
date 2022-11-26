@@ -4,8 +4,8 @@
  
  *  Can NOT be used in network game !
  */
-const version = 1642
-map.file = "tutorial128.sve"
+const version = 0100
+map.file = "tutorial192.sve"
 scenario_name             <- "Tutorial Scenario"
 scenario.short_description = scenario_name
 scenario.author            = "Yona-TYT"
@@ -112,7 +112,7 @@ function get_set_name(name)
 }
 
 simu_version <- "122.0.1"
-pak_name <- "pak128"
+pak_name <- "pak192.comic"
 current_st <- "0"
 current_pak <- "pak"
 gl_correct <- false
