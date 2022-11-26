@@ -17,7 +17,7 @@ ch2_cov_lim3 <- {a = 3, b = 5}
 class tutorial.chapter_02 extends basic_chapter
 {
 	chapter_name  = "Ruling the Roads"
-	chapter_coord = coord(98,33)
+	chapter_coord = coord(92,65)
 
 	startcash     = 800000	   				// pl=0 startcash; 0=no reset
 	comm_script = false
@@ -27,78 +27,76 @@ class tutorial.chapter_02 extends basic_chapter
 	gl_wt = wt_road
 
 	//Limites para las ciudades
-	city1_lim = {a = coord(83,21), b = coord(103,42)} 
-	city2_lim = {a = coord(87,1), b = coord(99,11)} 
-	cty1 = {c = coord(92,33), name = ""}
+	city1_lim = {a = coord(84,48), b = coord(105,76)}
+	city2_lim = {a = coord(102,28), b = coord(120,44)} 
+	cty1 = {c = coord(94,69), name = ""}
+
+	sch_cov_correct = false
 
 	// Step 1 =====================================================================================
 	//Carretera para el deposito
-	dep_lim1 = {a = null, b = null}
-	dep_lim2 = {a = null, b = null}
-	coorda = coord(98,32)
-	c_dep = coord(98,33)  // depot
-	coordb = coord(97,33)
+	dep_lim1 = {a = null, b = null} //auto started
+	dep_lim2 = {a = null, b = null} //auto started
+	coorda = coord(92,64)
+	c_dep = coord(92,65)  // depot
+	coordb = coord(93,65)
 	cursor_a = false
 	cursor_b = false
 
 	// Step 3 =====================================================================================
 	//Paradas de Autobus
-	c_lock = [coord(99,28), coord(98,32), coord(99,32), coord(97,27), coord(97,26)]
-	sch_cov_correct = false
-	sch_list1 =	[coord(87,27), coord(88,32), coord(91,37), coord(96,38), coord(93,32), coord(92,27), coord(98,28)]
+	sch_list1 =	[coord(96,66), coord(96,71), coord(101,75), coord(94,75), coord(90,74), coord(91,69), coord(91,64)]
 
 	// Step 4 =====================================================================================
 	// El primer Autobus
 	line1_name = "Test 1"
-	veh1_obj = "S_Kroytor_LiAZ-677"
+	veh1_obj = "road_bus_1972_ikarus260"
 	veh1_load = 100
 	veh1_wait = 10571
 	dep_cnr1 = null //auto started
 
 	// Step 5 =====================================================================================
 	// Primer puente
-	brdg_lim = {a = coord(73,23), b = coord(83,34)}
-	del_lim1 = {a = coord(83,24), b = coord(83,33)}
-	brdg1 = coord(87,29)
-	brdg2 = coord(84,29)
+	brdg_lim = {a = coord(93,64), b = coord(93,58)}
+	brdg1 = coord(93,62)
+	brdg2 = coord(93,59)
 
-	c_brdg1 = {a = coord3d(87,29,-1), b = coord3d(83,29,0)}
-	c_brdg_limi1 = {a = coord(83,29), b = coord(88,29)}
+	c_brdg1 = {a = coord3d(93,64,0), b = coord3d(93,58,0)}
+	c_brdg_limi1 = {b = coord(93,63), a = coord(93,59)}
 
 	// Step 6 =====================================================================================
 	// Conectando el muelle
 	dock_lim = {a = coord(95,42), b = coord(101,48)}
 	del_lim2 = {a = coord(96,42), b = coord(100,42)}
 
-	sch_list2 = [coord(98,45), coord(96,38), coord(92,27), coord(81,31), coord(76,29), coord(81,26)]
+	sch_list2 = [coord(96,48), coord(101,52), coord(99,57), coord(96,54), coord(92,56), coord(91,64)]
 	line2_name = "Test 2"
 	dep_cnr2 = null //auto started
 	cov_nr = 0
 
 	// Step 7 =====================================================================================
 	// Conectando las ciudades
-	c_label1 = {a = coord(97,7), b = coord(97,26)}
+	c_label1 = {a = coord(106,54), b = coord(106,40)}
 
-	cty2 = {c = coord(93,5), name = ""}
-	c_way_limi1 = {a = coord(94,7), b = coord(100,27)}
-	c_way1 = {a = coord3d(97,7,0), b = coord3d(97,26,0)}
-	c_st0 = coord(93,32)
+	cty2 = {c = coord(107,33), name = ""}
+	c_way_limi1 = {a = coord(104,39), b = coord(108,56)}
+	c_way1 = {a = coord3d(106,54,2), b = coord3d(106,40,2)}
 
-	sch_list3 = [coord(93,32), coord(88,4), coord(89,9), coord(94,4), coord(94,9)]
+	sch_list3 = [coord(116,38), coord(115,33), coord(110,32), coord(110,38), coord(105,32), coord(105,38)]
 	line3_name = "Test 3"
 	dep_cnr3 = null //auto started
 	
 
 	// Step 8 =====================================================================================
-	pub_st1 = coord(92,27)
+	pub_st1 = coord(94,75)
 	pub_st2 = coord(88,4)
 
 	//Script
 	//----------------------------------------------------------------------------------
-	sc_way_name = "Road_050"
-	sc_bridge_name = "Road_070_Bridge"
-	sc_station_name = "medium_classic_bus_stop"
-	sc_dep_name = "CarDepot"
+	sc_way_name = "asphalt_road"
+	sc_bridge_name = "road_bridge_city"
+	sc_station_name = "road_busstop1947medium"
+	sc_dep_name = "depot_road"
 
 	function start_chapter()  //Inicia solo una vez por capitulo
 	{
@@ -109,7 +107,7 @@ class tutorial.chapter_02 extends basic_chapter
 		cty2.name = get_city_name(cty2.c)
 
 		dep_lim1 = {b = c_dep, a = coorda}
-		dep_lim2 = {b = c_dep, a = coordb}
+		dep_lim2 = {a = c_dep, b = coordb}
 
 		dep_cnr1 = get_dep_cov_nr(ch2_cov_lim1.a,ch2_cov_lim1.b)
 		dep_cnr2 = get_dep_cov_nr(ch2_cov_lim2.a,ch2_cov_lim2.b)
@@ -335,9 +333,9 @@ class tutorial.chapter_02 extends basic_chapter
 
 			case 8:
 				local st_halt1 = my_tile(pub_st1).get_halt()
-				local st_halt2 = my_tile(pub_st2).get_halt()
+				//local st_halt2 = my_tile(pub_st2).get_halt()
 				text.st1 = pub_st1.href(st_halt1.get_name()+" ("+pub_st1.tostring()+")")
-				text.st2 = pub_st2.href(st_halt2.get_name()+" ("+pub_st2.tostring()+")")
+				//text.st2 = pub_st2.href(st_halt2.get_name()+" ("+pub_st2.tostring()+")")
 				break
 		}
 		text.load = veh1_load
@@ -363,10 +361,10 @@ class tutorial.chapter_02 extends basic_chapter
 		switch (this.step) {
 			case 1:
 				local next_mark = true
-				local c_list = [coordb, coorda, c_dep]
-				local siz = c_list.len()
+				local c_list = [my_tile(coordb), my_tile(coorda), my_tile(c_dep)]
+				local m_buil = true
 				try {
-					 next_mark = delay_mark_tile_list(c_list, siz,0)
+					 next_mark = delay_mark_tile_list(c_list, m_buil)
 				}
 				catch(ev) {
 					return 0
@@ -417,11 +415,6 @@ class tutorial.chapter_02 extends basic_chapter
 				break;
 			case 3:
 				if (pot0==0){
-					//Marca tiles para evitar construccion de objetos
-					local del = false
-					local pl_nr = 1
-					local text = "X"
-                    lock_tile_list(c_lock, c_lock.len(), del, pl_nr, text)
 					pot0=1
 				}
 				local siz = sch_list1.len()
@@ -482,14 +475,6 @@ class tutorial.chapter_02 extends basic_chapter
 					if (conv || comm_script) {						
 						comm_script = false
 						this.next_step()
-						//Crear cuadro label
-						local opt = 0
-						label_bord(brdg_lim.a, brdg_lim.b, opt, false, "X")
-						//Elimina cuadro label
-						label_bord(del_lim1.a, del_lim1.b, opt, true, "X")
-						//label_bord(c_lock.a, c_lock.b, opt, true, "X")
-                        lock_tile_list(c_lock, c_lock.len(), true, 1)
-
 					}
 				}
 
@@ -499,13 +484,13 @@ class tutorial.chapter_02 extends basic_chapter
 				local t_label = my_tile(brdg1)
 				local label = t_label.find_object(mo_label)
 
-				local c_lim = {a = coord(c_brdg1.a.x, c_brdg1.a.y), b = coord(c_brdg1.b.x, c_brdg1.b.y)} 
+				local c_lim = {a = c_brdg_limi1.a, b = c_brdg_limi1.b} 
 				local next_mark = true
 				if (pot0 == 0){
 					if (!label)
 						label_x.create(brdg1, player_x(0), translate("Build a Bridge here!."))
 					try {
-						 next_mark = delay_mark_tile(c_lim.a, c_lim.a, 0, stop_mark)
+						 next_mark = delay_mark_tile(c_lim.a, c_lim.b, 0, stop_mark)
 					}
 					catch(ev) {
 						return 0
@@ -514,7 +499,7 @@ class tutorial.chapter_02 extends basic_chapter
 				else if (pot0 == 1 && pot1 ==0){
 					stop_mark = true
 					try {
-						 next_mark = delay_mark_tile(c_lim.a, c_lim.a, 0, stop_mark)
+						 next_mark = delay_mark_tile(c_lim.a, c_lim.b, 0, stop_mark)
 					}
 					catch(ev) {
 						return 0
@@ -525,17 +510,12 @@ class tutorial.chapter_02 extends basic_chapter
 					//Comprueba la conexion de la via
 					local coora = coord3d(c_brdg1.a.x, c_brdg1.a.y, c_brdg1.a.z)
 					local coorb = coord3d(c_brdg1.b.x, c_brdg1.b.y, c_brdg1.b.z)
-					local dir = 6
+					local dir = 2
 					local obj = false		
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
-						t_label.remove_object(player_x(0), mo_label)
+						t_label.remove_object(player_x(1), mo_label)
 						this.next_step()
-						//Crear cuadro label
-						local opt = 0
-						label_bord(dock_lim.a, dock_lim.b, opt, false, "X")
-						//Elimina cuadro label
-						label_bord(del_lim2.a, del_lim2.b, opt, true, "X")	
 					}
 				}
 				return 65
@@ -565,8 +545,8 @@ class tutorial.chapter_02 extends basic_chapter
 					//Elimina cuadro label
 					local opt = 0
 					label_bord(city1_lim.a, city1_lim.b, opt, true, "X")
-					label_bord(brdg_lim.a, brdg_lim.b, opt, true, "X")
-					label_bord(dock_lim.a, dock_lim.b, opt, true, "X")
+
+
 					//Creea un cuadro label
 					label_bord(city2_lim.a, city2_lim.b, opt, false, "X")
 				}
@@ -620,7 +600,7 @@ class tutorial.chapter_02 extends basic_chapter
 						//Comprueba la conexion de la via
 						local coora=coord3d(c_way1.a.x,c_way1.a.y,c_way1.a.z)
 						local coorb=coord3d(c_way1.b.x,c_way1.b.y,c_way1.b.z)
-						local dir = 3
+						local dir = 2
 						local obj = false		
 						r_way = get_fullway(coora, coorb, dir, obj)
 
@@ -666,10 +646,6 @@ class tutorial.chapter_02 extends basic_chapter
 						sch_cov_correct = all_result.res == null ? true : false
 
 						if (current_cov == ch2_cov_lim3.b){
-							//Desmarca la via en la parada
-							local way_mark = my_tile(c_st0).find_object(mo_way)
-							way_mark.unmark()
-
 							//Elimina cuadro label
 							local opt = 0
 							//label_bord(city1_lim.a, city1_lim.b, opt, true, "X")
@@ -683,13 +659,13 @@ class tutorial.chapter_02 extends basic_chapter
 			case 8:
 				if (pot0==0){
 					local halt1 = my_tile(pub_st1).get_halt()
-					local halt2 = my_tile(pub_st2).get_halt()
+					//local halt2 = my_tile(pub_st2).get_halt()
 					if (pl != halt1.get_owner().nr)
 						glsw[0]=1
-					if (pl != halt2.get_owner().nr)
-						glsw[1]=1
+					//if (pl != halt2.get_owner().nr)
+						//glsw[1]=1
 
-					if (glsw[0]==1 && glsw[1]==1){
+					if (glsw[0]==1){
 						local opt = 0 
 						label_bord(city1_lim.a, city1_lim.b, opt, true, "X")
 						label_bord(city2_lim.a, city2_lim.b, opt, true, "X")
@@ -719,12 +695,20 @@ class tutorial.chapter_02 extends basic_chapter
 		local build = t.find_object(mo_building)
 		local label = t.find_object(mo_label)
 		local car = t.find_object(mo_car)
+		local depot = t.find_object(mo_depot_road)
+
+		//gui.add_message(""+way? way.get_desc().get_name() :"no existe")
+		//gui.add_message(""+build? build.get_desc().get_name() :"no existe")
+		//gui.add_message(""+car? car.get_desc().get_name() :"no existe")
+		//gui.add_message(""+depot? depot.get_desc().get_name() :"no existe")
+
 		if (way){
 			if (tool_id!=tool_build_bridge)
 				ribi = way.get_dirs()
 			if (!t.has_way(gl_wt))
 				ribi = 0
 		}
+		//return ribi
 		local st_c = coord(pos.x,pos.y)
 		local result=null	// null is equivalent to 'allowed'
 		result = translate("Action not allowed")+" ("+pos.tostring()+")."
@@ -895,19 +879,14 @@ class tutorial.chapter_02 extends basic_chapter
 					if (pos.x==pub_st1.x && pos.y==pub_st1.y){
 						if (glsw[0]==0)
 							return null
-						else
-							return format(translate("Select station No.%d"),2)+" ("+pub_st2.tostring()+")."
+						//else
+							//return format(translate("Select station No.%d"),2)+" ("+pub_st2.tostring()+")."
 					}
-					if (pos.x==pub_st2.x && pos.y==pub_st2.y){
-						if (glsw[1]==0)
-							return null
-					}
+
 					else {
 						if (glsw[0]==0)
 							return format(translate("Select station No.%d"),1)+" ("+pub_st1.tostring()+")."
-						else if (glsw[1]==0)
-							return format(translate("Select station No.%d"),2)+" ("+pub_st2.tostring()+")."
-						}
+					}
 				}
 				break;
 		}
@@ -1184,10 +1163,11 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				if (pot0 == 1){
 					local tile = my_tile(brdg1)
-					tile.remove_object(player_x(0), mo_label)
+					tile.remove_object(player_x(1), mo_label)
 					local t = command_x(tool_build_bridge)
 					t.set_flags(2)
 					local err = t.work(player_x(0), my_tile(brdg1), my_tile(brdg2), sc_bridge_name)
+					gui.add_message(""+err)
 				}
 	
 				return null

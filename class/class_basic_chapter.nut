@@ -1395,7 +1395,7 @@ class basic_chapter
 		while(true){
 			local tile = tile_x(coora.x,coora.y,coora.z)
 			local tunnel = tile.find_object(mo_tunnel)
-			local bridge = tile.find_object(mo_bridge)
+			local pill = tile.find_object(mo_pillar)
 			local way_hold = tile.find_object(mo_way)
 			local slp = tile.get_slope()
 			local type = false
@@ -1405,7 +1405,40 @@ class basic_chapter
 			local squ = square_x(coora.x,coora.y)
 			local sq_z = squ.get_ground_tile().z
 			local c_z = coora.z -1
-			for(local j = c_z;j<=(c_z+2);j++){
+			if(pill){
+
+
+				for(local j = 0;j<2;j++){
+					
+
+					local t_test = squ.get_tile_at_height(tile.z + j)
+					if(t_test){
+						local test_brid = t_test.find_object(mo_bridge)
+
+
+						if(test_brid){
+							//gui.add_message("Brid "+t_test.x+","+t_test.y+","+t_test.z+"  - "+t_test.is_bridge()+"")
+							coora.z = t_test.z
+							local desc = test_brid.get_desc()
+							local brid_h = desc.get_name()
+							break
+						}
+					}
+				}
+
+				if(way_hold) {
+				 	local ribi = way_hold.get_dirs()
+
+					//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+brid_h+"")
+				}
+			}
+			else {
+				if(squ.get_tile_at_height(coora.z)== null){
+					coora.z = sq_z
+				}
+			}
+
+			/*for(local j = c_z;j<=(c_z+2);j++){
 				local c_test = squ.get_tile_at_height(j)
 				local brig_height = false
 				local brig_height_z = null
@@ -1425,9 +1458,17 @@ class basic_chapter
 						//gui.add_message("brig "+coora.x+","+c_test.z+"  - "+brig_height+"  "+brig_way.get_dirs()+"")
 						if(brig_height){
 							coora.z = brig_height_z
-							//gui.add_message("way "+coora.x+","+c_test.z+"  - "+brig_height+"")
+
+    						//local list = bridge_desc_x.get_available_bridges(way.get_waytype())
+							//if(list[0].has_double_ramp())
+								//coora.z++
+
+
 							break
 						}
+					}
+					else {
+						coora.z = sq_z
 					}
 					if(way){
 						if(!tun && sq_z != c_test.z)
@@ -1446,7 +1487,14 @@ class basic_chapter
 						break
 					}
 				}
-			}
+				//else{
+					//if(!tun && !bridge)
+						//coora.z = squ.get_ground_tile().z
+					//gui.add_message("way "+coora.x+","+coora.y+"  - "+bridge+"")
+				//}
+			}*/
+
+
 			r_way_list[coord3d_to_key(coora)] <- coora
 			persistent.r_way_list = r_way_list
 			res.c = coora
@@ -1457,7 +1505,7 @@ class basic_chapter
 			if( nw_slp == 0) res.p = 0
 			
 			res.s = nw_slp
-
+					//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+squ.get_tile_at_height(coora.z)+"")
 			if(way){
 				if (res.m && t.is_marked() || !res.m && !t.is_marked()){
 					if (count>1){
@@ -1482,6 +1530,8 @@ class basic_chapter
 			else{
 				return res
 			}
+
+			gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+ribi+"")
 			if (obj){
 				if (obj == mo_wayobj){
 					if(!way.is_electrified()){

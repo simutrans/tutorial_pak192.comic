@@ -220,8 +220,7 @@ class tutorial.chapter_01 extends basic_chapter
 							return null
 						}
 					}
-				}
-					
+				}	
 				break
 		}
 		if (tool_id == 4096){	
