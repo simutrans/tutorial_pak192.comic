@@ -9,7 +9,7 @@ In this chapter the trains are the protagonists, as we are going to learn how to
 {step_01}
 </p>
 <p>
-{txtst_02}Step B</em> - Building a Tunnel<br/>
+{txtst_02}Step B</em> - Connecting the Supplier<br/>
 {step_02}
 </p>
 <p>

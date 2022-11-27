@@ -100,7 +100,7 @@ class basic_chapter
 		local veh_list = vehicle_desc_x.get_available_vehicles(wt)  //Lista de todos los vehiculos
 		for(local j = 0;j<veh_list.len();j++){
 			local veh_name = veh_list[j].get_name()
-					//gui.add_message(""+veh_name+" --> "+name+"")
+			//gui.add_message(""+veh_name+" --> "+name+"")
 			if (veh_name == name) {
 				if (veh_nr){
 					if (!cov_list)
@@ -753,8 +753,8 @@ class basic_chapter
 		local good = cov_list[cov-1].get_goods_catg_index()	
 		local good_count=0		
 		for(local j=0;j<good.len();j++){
-			//gui.add_message("a = "+good[j]+", b = "+good_nr+"")
 			for(local i=0;i<good_list.len();i++){
+				gui.add_message("a = "+good[j]+", b = "+good_list[i]+"")
 				if(good[j]==good_list[i])
 					good_count++
 			}
@@ -1404,95 +1404,80 @@ class basic_chapter
 			local ribi = false
 			local squ = square_x(coora.x,coora.y)
 			local sq_z = squ.get_ground_tile().z
-			local c_z = coora.z -1
-			if(pill){
 
+			if(tun){
+				//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+sq_z+"")
+				if(tile.z != sq_z) {
 
-				for(local j = 0;j<2;j++){
-					
+					local c_z = coora.z -1
+					for(local j = c_z;j<=(c_z+2);j++){
+						local c_test = squ.get_tile_at_height(j)
+						local brig_height = false
+						local brig_height_z = null
 
-					local t_test = squ.get_tile_at_height(tile.z + j)
-					if(t_test){
-						local test_brid = t_test.find_object(mo_bridge)
-
-
-						if(test_brid){
-							//gui.add_message("Brid "+t_test.x+","+t_test.y+","+t_test.z+"  - "+t_test.is_bridge()+"")
-							coora.z = t_test.z
-							local desc = test_brid.get_desc()
-							local brid_h = desc.get_name()
-							break
+						try {
+							brig_height_z = c_test.z+1
+							brig_height = tile_x(coora.x, coora.y, brig_height_z).is_bridge()				
 						}
+						catch(ev) {
+						}
+
+						if(c_test && c_test.is_valid()){
+							local way = c_test.find_object(mo_way)
+							if(way){
+								if(!tun && sq_z != c_test.z)
+									continue
+								//gui.add_message("way "+coora.x+" :: "+coora.z+","+c_test.z+"  -p "+res.p+" :: slp "+ slope.to_dir(c_test.get_slope()) +" - "+slope.to_dir(res.s))
+								if(sq_z != c_test.z && ( slp != 0 && (slope.to_dir(c_test.get_slope()) == res.s || res.s == 0)) && (c_test.z == coora.z || res.p == 1 )){
+									res.p = 1
+								}
+								else res.p = 0
+								if(way_hold && way.get_dirs() == way_hold.get_dirs()) {
+									coora.z = c_test.z
+									break
+
+								}
+								//gui.add_message("way2 "+coora.x+" :: "+coora.z+","+c_test.z+"  - "+brig_height+" :: slp "+ slp)
+								coora.z = c_test.z
+								break
+							}
+						}
+						//else{
+							//if(!tun && !bridge)
+								//coora.z = squ.get_ground_tile().z
+							//gui.add_message("way "+coora.x+","+coora.y+"  - "+bridge+"")
+						//}
 					}
 				}
-
-				if(way_hold) {
-				 	local ribi = way_hold.get_dirs()
-
-					//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+brid_h+"")
-				}
 			}
-			else {
-				if(squ.get_tile_at_height(coora.z)== null){
-					coora.z = sq_z
-				}
-			}
-
-			/*for(local j = c_z;j<=(c_z+2);j++){
-				local c_test = squ.get_tile_at_height(j)
-				local brig_height = false
-				local brig_height_z = null
-
-				try {
-					brig_height_z = c_test.z+1
-					brig_height = tile_x(coora.x, coora.y, brig_height_z).is_bridge()				
-				}
-				catch(ev) {
-				}
-
-				if(c_test && c_test.is_valid()){
-					local way = c_test.find_object(mo_way)
-					if(tile.is_bridge()){
-						//c_test.z = coora.z
-						//local brig_way = c_test.find_object(mo_way)
-						//gui.add_message("brig "+coora.x+","+c_test.z+"  - "+brig_height+"  "+brig_way.get_dirs()+"")
-						if(brig_height){
-							coora.z = brig_height_z
-
-    						//local list = bridge_desc_x.get_available_bridges(way.get_waytype())
-							//if(list[0].has_double_ramp())
-								//coora.z++
-
-
-							break
+			else{
+				if(pill){
+					for(local j = 0;j<3;j++){
+						local t_test = squ.get_tile_at_height(tile.z + j)
+						if(t_test){
+							local test_brid = t_test.find_object(mo_bridge)
+							if(test_brid){
+								//gui.add_message("Brid "+t_test.x+","+t_test.y+","+t_test.z+"  - "+t_test.is_bridge()+"")
+								coora.z = t_test.z
+								local desc = test_brid.get_desc()
+								local brid_h = desc.get_name()
+								break
+							}
 						}
 					}
-					else {
+					if(way_hold) {
+					 	local ribi = way_hold.get_dirs()
+						//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+brid_h+"")
+					}
+				}
+				else{
+					if(squ.get_tile_at_height(coora.z)== null){
 						coora.z = sq_z
 					}
-					if(way){
-						if(!tun && sq_z != c_test.z)
-							continue
-						//gui.add_message("way "+coora.x+" :: "+coora.z+","+c_test.z+"  -p "+res.p+" :: slp "+ slope.to_dir(c_test.get_slope()) +" - "+slope.to_dir(res.s))
-						if(sq_z != c_test.z && ( slp != 0 && (slope.to_dir(c_test.get_slope()) == res.s || res.s == 0)) && (c_test.z == coora.z || res.p == 1 )){
-							res.p = 1
-						}
-						else res.p = 0
-						if(way_hold && way.get_dirs() == way_hold.get_dirs()) {
-							coora.z = c_test.z
-							break
-						}
-						//gui.add_message("way2 "+coora.x+" :: "+coora.z+","+c_test.z+"  - "+brig_height+" :: slp "+ slp)
-						coora.z = c_test.z
-						break
-					}
 				}
-				//else{
-					//if(!tun && !bridge)
-						//coora.z = squ.get_ground_tile().z
-					//gui.add_message("way "+coora.x+","+coora.y+"  - "+bridge+"")
-				//}
-			}*/
+			}
+
+
 
 
 			r_way_list[coord3d_to_key(coora)] <- coora
@@ -1531,7 +1516,7 @@ class basic_chapter
 				return res
 			}
 
-			gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+ribi+"")
+			//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+ribi+"")
 			if (obj){
 				if (obj == mo_wayobj){
 					if(!way.is_electrified()){
@@ -1920,7 +1905,7 @@ class basic_chapter
 
 	function get_corret_slope(slope, corret_slope)
 	{
-
+		gui.add_message(""+slope +" "+corret_slope)
 		if (slope==corret_slope ) { //72
 			return true
 		}
@@ -2858,7 +2843,6 @@ class basic_chapter
 
 	function delay_mark_tile_list(list, m_buil, stop = false)
 	{
-
 		if (stop){
 			foreach(t in list){
 				local buil = m_buil ? t.find_object(mo_building): null
@@ -2868,7 +2852,7 @@ class basic_chapter
 		}
 		if(tile_delay_list>=3){
 			foreach(t in list){
-				gui.add_message("list: "+t.x)
+				//gui.add_message("list: "+t.x)
 				local buil = m_buil ? t.find_object(mo_building): null
 				buil ? buil.mark() : t.mark()
 			}
@@ -2884,7 +2868,6 @@ class basic_chapter
 			tile_delay_list++
 			return true
 		}
-		
 	}
 
 	function delay_mark_tile(coora, coorb, opt, stop = false)

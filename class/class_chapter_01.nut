@@ -158,7 +158,6 @@ class tutorial.chapter_01 extends basic_chapter
 				local next_mark = true
 				local list = cit_list
 				local m_buil = true
-				gui.add_message(""+list.len())
 				try {
 					next_mark = delay_mark_tile_list(list, m_buil)
 				}
@@ -193,14 +192,14 @@ class tutorial.chapter_01 extends basic_chapter
 			case 2:
 				break
 			case 3: 
-				if(pot0==0){
-					if ((tool_id == 4096)&&(pos.x == c_buil1.x)&&(pos.y == c_buil1.y)){
-						pot0 = 1
-						return null
+				if (tool_id == 4096){
+					if(pot0==0){
+						if ((pos.x == c_buil1.x)&&(pos.y == c_buil1.y)){
+							pot0 = 1
+							return null
+						}
 					}
-				}
-				else if (pot1==1 && pot2==0){
-					if (tool_id == 4096){
+					else if (pot1==1 && pot2==0){
 						local list = buil2_list
 						foreach(t in list){
 							if(pos.x == t.x && pos.y == t.y) {

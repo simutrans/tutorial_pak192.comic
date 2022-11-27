@@ -90,9 +90,8 @@ tool_alias  <-	{	inspe = translate("Abfrage"), road= translate("ROADTOOLS"), rai
 				}
 
 good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "Kohle",
-					flour = "flour", deliv = "Crates Deliverables", oel = "CATEGORY_03", gas = "fuel", wood = "CATEGORY_06", plan = "boards"
+					flour = "flour", deliv = "Crates Deliverables", oel = "oil", gas = "fuel", wood = "logs", plan = "boards"
 				}
-
 // table containing all system_types
 all_systemtypes <- [st_flat, st_elevated, st_runway, st_tram]
 
@@ -472,12 +471,13 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 	//return tile_x(pos.x,pos.y,pos.z).find_object(mo_way).get_dirs()
 	if (pl != 0) return null
+
+	local result = translate("Action not allowed")
 	if (correct_cov){
-		local result = chapter.is_work_allowed_here(pl, tool_id, pos)
+		result = chapter.is_work_allowed_here(pl, tool_id, pos)
 		return fail_count_message(result, tool_id)
 	}
 	else {
-		local result = translate("Action not allowed")
 		if (tool_id==4108 || tool_id==4096)
 			result = null
 	}
