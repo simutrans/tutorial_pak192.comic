@@ -89,10 +89,10 @@ tool_alias  <-	{	inspe = translate("Abfrage"), road= translate("ROADTOOLS"), rai
 					ship = translate("SHIPTOOLS"), land = translate("SLOPETOOLS"), spec = translate("SPECIALTOOLS")
 				}
 
-// placeholder for good names in pak128
 good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "Kohle",
-					flour = "flour", deliv = "Crates Deliverables", oel = "Oel", gas = "Gasoline"
+					flour = "flour", deliv = "Crates Deliverables", oel = "CATEGORY_03", gas = "fuel", wood = "CATEGORY_06", plan = "boards"
 				}
+
 // table containing all system_types
 all_systemtypes <- [st_flat, st_elevated, st_runway, st_tram]
 

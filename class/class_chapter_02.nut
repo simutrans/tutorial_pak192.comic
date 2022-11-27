@@ -82,7 +82,7 @@ class tutorial.chapter_02 extends basic_chapter
 	c_way_limi1 = {a = coord(104,39), b = coord(108,56)}
 	c_way1 = {a = coord3d(106,54,2), b = coord3d(106,40,2)}
 
-	sch_list3 = [coord(116,38), coord(115,33), coord(110,32), coord(110,38), coord(105,32), coord(105,38)]
+	sch_list3 = [coord(92,56), coord(116,38), coord(115,33), coord(110,32), coord(110,38), coord(105,32), coord(105,38)]
 	line3_name = "Test 3"
 	dep_cnr3 = null //auto started
 	
