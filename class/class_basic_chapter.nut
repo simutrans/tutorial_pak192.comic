@@ -1531,20 +1531,14 @@ class basic_chapter
 
 			if ((ribi==1)||(ribi==2)||(ribi==4)||(ribi==8)){
 				//gui.add_message(""+ribi+"---"+name+" ("+coora.x+","+coora.y+","+coora.z+")")
-				foreach(obj in t.get_objects()){
-					type = obj.get_type()
-					t.find_object(type).mark()
-				}
+				way.mark()
 				//Detecta la pocision del cursor	
 				cursor_control(coora)
 				res.m = !res.m
 				return res
 			}
 			else{
-				foreach(obj in t.get_objects()){
-					type = obj.get_type()
-					t.find_object(type).unmark()
-				}
+				way.unmark()
 			}
 
 			if (dir==2){
@@ -3008,6 +3002,10 @@ class basic_chapter
 		return nw_list
 	}
 
+	//dir 1 = x++
+	//dir 2 = y++
+	//dir 3 = x--
+	//dir 4 = y--
 	function clean_track_segment(t, siz, opt) {
 		local tool = command_x(tool_remover)
 
