@@ -147,25 +147,27 @@ class tutorial.chapter_03 extends basic_chapter
 	f3_reached = 30
 
 	//Step 8 =====================================================================================
+	//Tramo de via para el tunel
+	c_way6_lim = {b = coord(93,79), a = coord(93,109)}
+	c_way6 = {a = coord3d(93,79,0), b = coord3d(93,109,8) dir = 3}		//Inicio, Fin de la via y direcion (fullway)
+
+	//------------------------------------------------------------------------------------------
 	//Para la entrada del tunel
 	//------------------------------------------------------------------------------------------
-	c_tunn1_lim = {a = coord(92,19), b = coord(92,16)}
-	start_tunn = coord(92,18)
-	end_tunn = coord(92,17)
-	//c_tun_lock = coord(92,16)
+	c_tunn1_lim = {b = coord(93,109), a = coord(93,111)}
+	start_tunn = coord(93,110)
 	//------------------------------------------------------------------------------------------
 
 	//Subterraneo
 	//------------------------------------------------------------------------------------------
-	c_tunn2_lim = {a = coord(90,19), b = coord(93,3)}
-	c_tunn1 = {a = coord3d(92,18,0), b = coord3d(92,3,-3)}		//Inicio y Fin de la via (fullway)
-	labex = coord(92,17) 										//Mark in slope surface
+	c_tunn2_lim = {a = coord(91,109), b = coord(96,144)}
+	c_tunn1 = {a = coord3d(93,110,8), b = coord3d(93,143,7), dir = 3}		//Inicio, Fin de la via y direcion (fullway)
 
-	sl_dir1 = 4 //Direccion de la ladera 
-	layer_lvl = 0 
-	start_lvl_z = 0
-	end_lvl_z = -3
-	c_tun_list = [coord3d(92,17,0), coord3d(92,16,-1), coord3d(92,15,-2), coord3d(92,14,-3)]
+	dir_1 = {s = 36, r = 1 }		//Direccion de la slope y Way ribi
+	layer_lvl = 8
+	start_lvl_z = 8
+	end_lvl_z = 7
+	c_tun_list = [coord3d(93,111,8), coord3d(93,112,7)]
 	//------------------------------------------------------------------------------------------
 
 	//Step 9 =====================================================================================
@@ -235,6 +237,8 @@ class tutorial.chapter_03 extends basic_chapter
 	function start_chapter(){  //Inicia solo una vez por capitulo
 		rules.clear()
 		set_all_rules(0)
+
+		gl_wt = this.step < 8 ? wt_rail : wt_narrowgauge
 
 		local t = my_tile(fac_1.c)
 		local buil = t.find_object(mo_building)
@@ -439,16 +443,21 @@ class tutorial.chapter_03 extends basic_chapter
 				text.w2 = c_dep2_lim.b.href("("+c_dep2_lim.b.tostring()+")")
 				break
 			case 8:	
-
 				if (pot0==0){
-					text = ttextfile("chapter_03/08_1-3.txt")
-					text.tx = ttext("<em>[1/3]</em>")
+					text = ttextfile("chapter_03/08_1-4.txt")
+					text.tx = ttext("<em>[1/4]</em>")
+					text.w1 = c_way6_lim.b.href("("+c_way6_lim.b.tostring()+")")
+					text.w2 = c_way6_lim.a.href("("+c_way6_lim.a.tostring()+")")
+				}
+				else if (pot1==0){
+					text = ttextfile("chapter_03/08_2-4.txt")
+					text.tx = ttext("<em>[2/4]</em>")
 					text.t1 = "<a href=\"("+ start_tunn.x+","+ start_tunn.y+")\">("+ start_tunn.tostring()+")</a>"
 				}
-				else if(pot1==0){
+				else if(pot2==0){
 					if(r_way.c.z>end_lvl_z){
-						text = ttextfile("chapter_03/08_2-3.txt")
-						text.tx = ttext("<em>[2/3]</em>")
+						text = ttextfile("chapter_03/08_3-4.txt")
+						text.tx = ttext("<em>[3/4]</em>")
 						local tx_list = ""
 						layer_lvl = r_way.c.z
 						local slope = tile_x(r_way.c.x, r_way.c.y, r_way.c.z).get_slope()
@@ -475,8 +484,8 @@ class tutorial.chapter_03 extends basic_chapter
 						text.list = tx_list
 					}
 					else{
-						text = ttextfile("chapter_03/08_3-3.txt")
-						text.tx = ttext("<em>[3/3]</em>")
+						text = ttextfile("chapter_03/08_4-4.txt")
+						text.tx = ttext("<em>[4/4]</em>")
 						text.lev = layer_lvl+(end_lvl_z-start_lvl_z)
 						text.t1 = "<a href=\"("+ start_tunn.x+","+ start_tunn.y+")\">("+ start_tunn.tostring()+")</a>"
 						text.t2 = "<a href=\"("+ start_tunn.x+","+ start_tunn.y+")\">("+ start_tunn.tostring()+")</a>"
@@ -1190,32 +1199,41 @@ class tutorial.chapter_03 extends basic_chapter
 				return 40
 				break
 			case 8:
-				//Para la entrada del tunel
+				//Para el tramo de via
 				if (pot0==0){
+					local coora = coord3d(c_way6.a.x, c_way6.a.y, c_way6.a.z)
+					local coorb = coord3d(c_way6.b.x, c_way6.b.y, c_way6.b.z)
+					local obj = false
+					local tunnel = false
+					local dir = c_way6.dir
+					r_way = get_fullway(coora, coorb, dir, obj, tunnel)
+					if (r_way.r){
+						pot0=1
+						return 45
+					}
+				}
+				//Para la entrada del tunel
+				else if (pot0==1 && pot1==0){
 					local t_tunn = my_tile(start_tunn)
 
 					if (!t_tunn.find_object(mo_tunnel))
 						label_x.create(start_tunn, player_x(0), translate("Place a Tunnel here!."))
 					else{
-						pot0=1
+						pot1=1
 						t_tunn.remove_object(player_x(0), mo_label)						
 					}							
 				}
 				//Para conectar las dos entradas del tunel
-				else if (pot0==1 && pot1==0){
-					local t_label = my_tile(labex)
-					if (!t_label.find_object(mo_label))
-						label_x.create(labex, player_x(1), translate("X"))
-
+				else if (pot1==1 && pot2==0){
 					local coora = coord3d(c_tunn1.a.x, c_tunn1.a.y, c_tunn1.a.z)
 					local coorb = coord3d(c_tunn1.b.x, c_tunn1.b.y, c_tunn1.b.z)
 					local obj = false
 					local tunnel = true
-					local dir = 2
+					local dir = c_tunn1.dir
 					r_way = get_fullway(coora, coorb, dir, obj, tunnel)
 					if (r_way.r){
 						t_label.remove_object(player_x(1), mo_label)						
-						pot1=1
+						pot2=1
 						return 45
 					}
 
@@ -1231,7 +1249,7 @@ class tutorial.chapter_03 extends basic_chapter
 							tile.z--
 							if(glsw[j] == 0){
 								local slope = tile.get_slope()
-								if (slope == sl_dir1){ //Decremento para bajar en pendientes
+								if (slope == dir_1.s){ //Decremento para bajar en pendientes
 									c_tun_list[j].x = tile.x
 									c_tun_list[j].y = tile.y
 									c_tun_list[j].z = tile.z
@@ -1248,7 +1266,7 @@ class tutorial.chapter_03 extends basic_chapter
 					}
 				}
 			
-				else if (pot1==1){
+				else if (pot2==1){
 					this.next_step()
 				}		
 				return 45
@@ -1487,9 +1505,8 @@ class tutorial.chapter_03 extends basic_chapter
 			wt = way.get_waytype()
 			if (tool_id!=tool_build_bridge)
 				ribi = way.get_dirs()
-			if (!t.has_way(wt_rail))
-				ribi = 0
 		}
+		//return "s: "+slope+" r: "+ribi
 		local result = translate("Action not allowed")		// null is equivalent to 'allowed'
 
 		switch (this.step) {
@@ -1825,17 +1842,26 @@ class tutorial.chapter_03 extends basic_chapter
 				break
 
 			case 8:
-				//Construye Entrada del tunel
+				//Construye tramo de via para el tunel
 				if (pot0==0){
+					if (pos.x>=c_way6_lim.a.x && pos.y>=c_way6_lim.a.y && pos.x<=c_way6_lim.b.x && pos.y<=c_way6_lim.b.y){
+						if (tool_id==tool_build_way || tool_id == tool_build_bridge || tool_id == tool_build_tunnel){
+							return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
+						}
+					}
+					else return  translate("Connect the Track here")+" ("+r_way.c.tostring()+")."
+				}
+				//Construye Entrada del tunel
+				else if (pot0==1 && pot1==0){
 					if (tool_id==tool_build_tunnel || tool_id==tool_build_way){
-						if (pos.x>=c_tunn1_lim.a.x && pos.y<=c_tunn1_lim.a.y && pos.x<=c_tunn1_lim.b.x && pos.y>=c_tunn1_lim.b.y) {
+						if (pos.x>=c_way6_lim.a.x && pos.y>=c_way6_lim.a.y && pos.x<=c_way6_lim.b.x && pos.y<=c_way6_lim.b.y){
 							return null
 						}
 						else return translate("Press [Ctrl] to build a tunnel entrance here")+" ("+start_tunn.tostring()+".)"	
 					}
 				}
 				//Conecta los dos extremos del tunel
-				else if (pot0==1 && pot1==0){
+				else if (pot1==1 && pot2==0){
 					local squ_bor = square_x(r_way.c.x, r_way.c.y)
 					local z_bor = squ_bor.get_ground_tile().z
 					local res = underground_message()
@@ -1844,7 +1870,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local max = 1
 					local count_tunn = count_tunnel(pos, max)
 					if (tool_id==tool_remover){
-						if (pos.x>=c_tunn2_lim.a.x && pos.y<=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y>=c_tunn2_lim.b.y){
+						if (pos.x>=c_tunn2_lim.a.x && pos.y>=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y<=c_tunn2_lim.b.y){
 							if(!count_tunn && slope==0 && way && way.is_marked())
 								return null
 							if(count_tunn && pos.z!=end_lvl_z)
@@ -1853,7 +1879,8 @@ class tutorial.chapter_03 extends basic_chapter
 					}
 
 					if (tool_id==tool_build_tunnel || tool_id==tool_build_way || tool_id== 4099){
-						if (pos.x>=c_tunn2_lim.a.x && pos.y<=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y>=c_tunn2_lim.b.y){
+						if (pos.x>=c_tunn2_lim.a.x && pos.y>=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y<=c_tunn2_lim.b.y){
+
 							local squ = square_x(pos.x, pos.y)
 							//Ingnora algunas comprobaciones
 							local z = squ.get_ground_tile().z
@@ -1866,7 +1893,7 @@ class tutorial.chapter_03 extends basic_chapter
 								return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
 							}
 							local under = c_tunn1.b.z
-							local dir = 4
+							local dir = dir_1.r
 							result = under_way_check(under, dir)
 
 
@@ -1875,7 +1902,7 @@ class tutorial.chapter_03 extends basic_chapter
 								return result
 
 							local slp_way = tile_x(r_way.c.x, r_way.c.y, r_way.c.z).get_slope()
-							if (z_bor == r_way.c.z && pos.z == c_tunn1.a.z && pos.y > r_way.c.y -3 ) { 
+							if (z_bor == r_way.c.z && pos.z == c_tunn1.a.z && pos.y < r_way.c.y +3 ) { 
 								// Check if not have more tunnel 
 								local max = 3
 								result = tunnel_build_check(start, under,  max, dir)
@@ -1884,8 +1911,8 @@ class tutorial.chapter_03 extends basic_chapter
 
 								return result
 							}
-							if(pos.y > r_way.c.y -3){
-								if(slp_way == sl_dir1 )
+							if(pos.y < r_way.c.y +3){
+								if(slp_way == dir_1.s )
 									return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
 								else return translate("You must use the tool to lower the ground here")+" ("+r_way.c.tostring()+".)" 
 								if (!squ.get_tile_at_height(pos.z))
@@ -1907,13 +1934,13 @@ class tutorial.chapter_03 extends basic_chapter
 						else return translate("Build a tunnel here")+" ("+r_way.c.tostring()+")."	
 					}
 					if (tool_id==4100){
-						if (pos.x>=c_tunn2_lim.a.x && pos.y<=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y>=c_tunn2_lim.b.y){
+						if (pos.x>=c_tunn2_lim.a.x && pos.y>=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y<=c_tunn2_lim.b.y){
 							local slp_way = tile_x(r_way.c.x, r_way.c.y, r_way.c.z).get_slope()
 							local end_z = c_tunn1.b.z
-							if (slp_way == sl_dir1)
+							if (slp_way == dir_1.s)
 								return translate("The slope is ready.")
 							else if (pos.z > end_z){
-								local dir = 4		
+								local dir = dir_1.r	
 								local under = end_z
 								result = under_way_check(under, dir)
 								return result
@@ -2741,7 +2768,7 @@ class tutorial.chapter_03 extends basic_chapter
 							tool_remove_way,tool_build_depot,tool_build_roadsign,tool_build_wayobj
 						]
 		foreach(wt in all_waytypes)
-			if (wt != wt_rail){
+			if (wt != (this.step < 8 ? wt_rail : wt_narrowgauge)){
 				foreach (tool_id in forbid)
 					rules.forbid_way_tool(pl, tool_id, wt )
 			}
@@ -2809,25 +2836,25 @@ class tutorial.chapter_03 extends basic_chapter
 				break
 
 			case 6:
-				local forbid = [4129,tool_build_bridge,tool_build_depot,tool_build_roadsign,tool_build_wayobj]
+				local forbid = [4129, tool_build_bridge, tool_build_depot, tool_build_roadsign, tool_build_wayobj]
 				foreach (tool_id in forbid)
 					rules.forbid_way_tool(pl, tool_id, wt_rail )
 				break
 
 			case 7:
-				local forbid = [tool_build_bridge,tool_build_tunnel,tool_build_roadsign]
+				local forbid = [tool_build_bridge, tool_build_tunnel, tool_build_roadsign]
 				foreach (tool_id in forbid)
 					rules.forbid_way_tool(pl, tool_id, wt_rail )
 				break
 
 			case 8:
-				local forbid =	[	4129,tool_build_roadsign,tool_build_station,
-									tool_build_depot,tool_build_roadsign,tool_build_wayobj
+				local forbid =	[	4129,tool_build_roadsign, tool_build_station,
+									tool_build_depot, tool_build_roadsign, tool_build_wayobj
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
 
-				local forbid = [tool_build_station,tool_build_bridge,tool_build_way]
+				local forbid = [tool_build_station, tool_build_bridge]
 				foreach (tool_id in forbid)
 					rules.forbid_tool(pl, tool_id )		
 				break
@@ -2835,7 +2862,7 @@ class tutorial.chapter_03 extends basic_chapter
 			case 9:
 				local forbid = [tool_build_bridge,tool_build_tunnel,tool_build_wayobj,tool_build_station]
 					foreach (tool_id in forbid)
-						rules.forbid_way_tool(pl, tool_id, wt_rail )
+						rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
 				break
 
 			case 10:
@@ -2843,7 +2870,7 @@ class tutorial.chapter_03 extends basic_chapter
 									tool_build_tunnel,tool_build_station,4113,4129
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
 
 				local forbid = [tool_build_station]
 				foreach (tool_id in forbid)
@@ -2855,7 +2882,7 @@ class tutorial.chapter_03 extends basic_chapter
 									tool_build_tunnel,tool_build_station,tool_remover,tool_build_depot,4113,4129
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
 
 
 				foreach (tool_id in forbid)

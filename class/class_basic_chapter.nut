@@ -9,7 +9,7 @@
 currt_pos <- null
 
 // Results for fullway, c = coord3d, p = plus, r = result, m = marked, l = look, s = slope
-r_way <- { c = coord3d(0, 0, 0), p = 0, r = false, m = false, l = false, s = 0}
+r_way <- { c = coord3d(0, 0, 0), p = 0, r = false, m = false, l = false, s = 0, z = null}
 r_way_list <- {}
 wayend <- coord3d(0, 0, 0)
 
@@ -1395,7 +1395,7 @@ class basic_chapter
 		while(true){
 			local tile = tile_x(coora.x,coora.y,coora.z)
 			local tunnel = tile.find_object(mo_tunnel)
-			local pill = tile.find_object(mo_pillar)
+			local bridg = tile.find_object(mo_bridge)
 			local way_hold = tile.find_object(mo_way)
 			local slp = tile.get_slope()
 			local type = false
@@ -1412,16 +1412,6 @@ class basic_chapter
 					local c_z = coora.z -1
 					for(local j = c_z;j<=(c_z+2);j++){
 						local c_test = squ.get_tile_at_height(j)
-						local brig_height = false
-						local brig_height_z = null
-
-						try {
-							brig_height_z = c_test.z+1
-							brig_height = tile_x(coora.x, coora.y, brig_height_z).is_bridge()				
-						}
-						catch(ev) {
-						}
-
 						if(c_test && c_test.is_valid()){
 							local way = c_test.find_object(mo_way)
 							if(way){
@@ -1437,21 +1427,16 @@ class basic_chapter
 									break
 
 								}
-								//gui.add_message("way2 "+coora.x+" :: "+coora.z+","+c_test.z+"  - "+brig_height+" :: slp "+ slp)
+								//gui.add_message("way2 "+coora.x+" :: "+coora.z+","+c_test.z+"  - "+sq_z+" :: slp "+ slp)
 								coora.z = c_test.z
 								break
 							}
 						}
-						//else{
-							//if(!tun && !bridge)
-								//coora.z = squ.get_ground_tile().z
-							//gui.add_message("way "+coora.x+","+coora.y+"  - "+bridge+"")
-						//}
 					}
 				}
 			}
 			else{
-				if(pill){
+				if(res.z){
 					for(local j = 0;j<3;j++){
 						local t_test = squ.get_tile_at_height(tile.z + j)
 						if(t_test){
@@ -1459,26 +1444,24 @@ class basic_chapter
 							if(test_brid){
 								//gui.add_message("Brid "+t_test.x+","+t_test.y+","+t_test.z+"  - "+t_test.is_bridge()+"")
 								coora.z = t_test.z
-								local desc = test_brid.get_desc()
-								local brid_h = desc.get_name()
+								bridg = test_brid
 								break
+								
 							}
 						}
 					}
-					if(way_hold) {
-					 	local ribi = way_hold.get_dirs()
-						//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+brid_h+"")
-					}
+				}
+				if(bridg){
+					res.z = res.z == null? (coora.z+1) : res.z
+
 				}
 				else{
+					res.z = null
 					if(squ.get_tile_at_height(coora.z)== null){
 						coora.z = sq_z
 					}
 				}
 			}
-
-
-
 
 			r_way_list[coord3d_to_key(coora)] <- coora
 			persistent.r_way_list = r_way_list
