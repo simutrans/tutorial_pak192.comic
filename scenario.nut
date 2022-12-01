@@ -26,7 +26,7 @@ script_test <- true
 
 persistent.st_nr <- array(30)			//Numero de estaciones/paradas
 
-scr_jump <- true 
+scr_jump <- false 
 
 gl_percentage <- 0
 persistent.gl_percentage <- 0
@@ -216,14 +216,15 @@ chapter            <- tutorial.chapter_02      	// must be placed here !!!
 
 function script_text()
 {	
+	scr_jump = true
 	if(!correct_cov){
 		gui.add_message(""+translate("Advance not allowed"))
 		return null
 	}
-	if(/*scr_jump*/ persistent.chapter<7){
+	if(persistent.chapter<7){
 		//gui.add_message(""+persistent.chapter)
 		local result = null
-		scr_jump = false
+
 		result = chapter.script_text()
 		if(result == 0) gui.add_message(""+translate("Advance not allowed")+"")
 		return result
@@ -342,7 +343,6 @@ function get_rule_text(pl)
 
 function get_goal_text(pl)
 {
-	scr_jump = true
 	return chapter.give_title() + chapter.get_goal_text( pl, my_chapter() )
 }
 
@@ -380,6 +380,15 @@ function start()
 
 function is_scenario_completed(pl)
 {
+	/*
+	local tile = tile_x(93, 171, 0)
+	local label = tile.find_object(mo_label)
+	if(!label)
+		label_x.create(coord(tile.x, tile.y), player_x(0), "Fail count: "+ fail_count)
+	else
+		label.set_text("Fail count: "+ fail_count)
+	*/
+
 	//gui.add_message(""+glsw[0]+"")
 	//gui.add_message("Persis Step:"+persistent.step+" Status Step:"+persistent.status.step+"  Step:"+chapter.step+"")				
 	if (pl != 0) return 0			// other player get only 0%
@@ -398,8 +407,8 @@ function is_scenario_completed(pl)
 	if(fail_count == null){
 		if (fail_num <= 0){
 			gui.open_info_win_at("goal")
-			fail_count = 1
-			fail_num = 20
+			//fail_count = 1
+			//fail_num = 20
 		}
 		else fail_num--
 	}
@@ -472,6 +481,10 @@ function is_work_allowed_here(pl, tool_id, pos)
 	//return tile_x(pos.x,pos.y,pos.z).find_object(mo_way).get_dirs()
 	if (pl != 0) return null
 
+	if(scr_jump){
+		return null
+	}
+
 	local result = translate("Action not allowed")
 	if (correct_cov){
 		result = chapter.is_work_allowed_here(pl, tool_id, pos)
@@ -486,20 +499,20 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 function fail_count_message(result, tool_id)
 {
-	//gui.add_message(result+" "+fail_count)
+	//gui.add_message(result+" ")
 	//Desabilitado
-	/*if(tool_id != tool_build_tunnel && result != ""){
+	//if(tool_id != tool_build_tunnel && result != ""){
 		//gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
 		if (fail_count && result != null){
 			fail_count++
 			if (fail_count >= fail_num){
-				fail_count = null
-				return translate("Are you lost ?, see the instructions shown below.")
+				true//fail_count = null
+				//return translate("Are you lost ?, see the instructions shown below.")
 			}
 		}
 		else if (result == null)
-		    fail_count = 1
-	}*/
+			true//fail_count = 1
+	//}
 	return result
 }
 

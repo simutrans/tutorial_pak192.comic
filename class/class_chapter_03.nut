@@ -147,7 +147,7 @@ class tutorial.chapter_03 extends basic_chapter
 	//Step 8 =====================================================================================
 	//Tramo de via para el tunel
 	c_way6_lim = {a = coord(93,79), b = coord(93,109)}
-	c_way6 = {a = coord3d(93,79,0), b = coord3d(93,109,8) dir = 3}		//Inicio, Fin de la via y direcion (fullway)
+	c_way6 = {a = coord3d(93,82,1), b = coord3d(93,109,8) dir = 3}		//Inicio, Fin de la via y direcion (fullway)
 
 	//------------------------------------------------------------------------------------------
 	//Para la entrada del tunel
@@ -169,9 +169,15 @@ class tutorial.chapter_03 extends basic_chapter
 	//------------------------------------------------------------------------------------------
 
 	//Step 9 =====================================================================================
-	c_way_list1 = 	[{a = coord3d(92,147,7), b = coord3d(92,166,7) }, {a = coord3d(93,166,7), b = coord3d(93,147,7) }]
+	c_way_list1 = 	[	{a = coord3d(92,147,7), b = coord3d(92,166,7), tunn = false}, 
+						{a = coord3d(93,166,7), b = coord3d(93,147,7), tunn = false}, 
+						{a = coord3d(92,171,7), b = coord3d(92,206,7), tunn = true}, 
+						{a = coord3d(93,171,7), b = coord3d(93,206,7), tunn = true}
+					]
 
-	c_way_lim1 =	[{a = coord(92,147), b = coord(92,166)}, {a = coord(93,147), b = coord(93,166)}]
+	c_way_lim1 =	[	{a = coord(92,147), b = coord(92,166)}, {a = coord(93,147), b = coord(93,166)},
+						{a = coord(90,171), b = coord(92,207)}, {a = coord(93,171), b = coord(95,207)}
+					]
 	
 	signr = signal.len()
 
@@ -1268,23 +1274,22 @@ class tutorial.chapter_03 extends basic_chapter
 				break
 
 			case 9:
-
-
 				if (pot0==0){
 		            for(local j=0;j<c_way_list1.len();j++){
 						if(glsw[j] == 0){
 							local tile_a = my_tile(c_way_lim1[j].a)
 							local tile_b = my_tile(c_way_lim1[j].b)
+							local tunn = c_way_list1[j].tunn
 
-							if (!tile_a.find_object(mo_label))
+							if (!tile_a.find_object(mo_label) && !tunn)
 								label_x.create(c_way_lim1[j].a, player_x(1), translate("Build Rails form here"))
 
-							if (!tile_b.find_object(mo_label))
+							if (!tile_b.find_object(mo_label) && !tunn)
 								label_x.create(c_way_lim1[j].b, player_x(1), translate("Build Rails form here"))
 							
 							local coora = coord3d(c_way_list1[j].a.x, c_way_list1[j].a.y, c_way_list1[j].a.z)
 							local coorb = coord3d(c_way_list1[j].b.x, c_way_list1[j].b.y, c_way_list1[j].b.z)
-							local obj = false
+							local obj = tunn
 							local dir = get_dir_start(coora)
 							r_way = get_fullway(coora, coorb, dir, obj)
 							if (r_way.r){
@@ -1515,11 +1520,28 @@ class tutorial.chapter_03 extends basic_chapter
 								return null
 							}
 						}
+						list = factory_x(fac_2.c.x, fac_2.c.y).get_fields_list()
+
+						foreach(t in list){
+							if(pos.x == t.x && pos.y == t.y) {
+								pot0 = 1
+								return null
+							}
+						}
 					}
 					else if (pot1==1){
 						local list = fac_1.c_list
 						foreach(t in list){
 							if(pos.x == t.x && pos.y == t.y) {
+								pot2 = 1
+								return null
+							}
+						}
+						list = factory_x(fac_1.c.x, fac_1.c.y).get_fields_list()
+
+						foreach(t in list){
+							if(pos.x == t.x && pos.y == t.y) {
+								gui.add_message(""+t.x+","+t.y+" :: "+pos)
 								pot2 = 1
 								return null
 							}
@@ -1949,23 +1971,30 @@ class tutorial.chapter_03 extends basic_chapter
 
 				break
 			case 9:
-				if (pot0==0){
-					result = translate("Connect the Track here")+" ("+r_way.c.tostring()+")."
+				if (pot0==0){		
+					local sq_z = square_x(pos.x, pos.y).get_ground_tile().z
+					
 		            for(local j=0;j<c_way_lim1.len();j++){
 						if(glsw[j] == 0){
-							if(pos.x>=c_way_lim1[j].a.x && pos.y>=c_way_lim1[j].a.y && pos.x<=c_way_lim1[j].b.x && pos.y<=c_way_lim1[j].b.y){
-												   
-								if(tool_id == tool_build_way){
-								   return null
+							if(c_way_list1[j].tunn){
+								result = underground_message()
+								if(result != null)
+									return result
+							}
+							if(pos.x>=c_way_lim1[j].a.x && pos.y>=c_way_lim1[j].a.y && pos.x<=c_way_lim1[j].b.x && pos.y<=c_way_lim1[j].b.y)	{
+								if(c_way_list1[j].tunn){
+									if(sq_z == pos.z)
+										return null
 								}
-							   }
-						   else if (j== c_way_lim1.len()-1){
+								return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
+							}
+							else {
 								result = translate("You are outside the allowed limits!")+" ("+pos.tostring()+")."
 						   	}
 							break
 						}
 					}
-					return result
+					return result==null? translate("Connect the Track here")+" ("+r_way.c.tostring()+")." : result
 				}
 				if (pot0==1 && pot1==0){
 					//Elimina las señales
@@ -2258,6 +2287,7 @@ class tutorial.chapter_03 extends basic_chapter
 
 	function script_text()
 	{
+		local pl = 0
 		local way = tile_x(r_way.c.x, r_way.c.y, r_way.c.z).find_object(mo_way)
 		if(way) way.unmark()
 		
@@ -2274,22 +2304,21 @@ class tutorial.chapter_03 extends basic_chapter
 			case 2:
 				//Primer tramo de rieles
 				if (pot0==0){
-
 					//Station tramo ----------------------------------------------------------------------
 					local t_start = my_tile(st1_way_lim.a)
 					local t_end = my_tile(label1_lim)
 
-					t_start.remove_object(player_x(0), mo_label)
-					t_end.remove_object(player_x(0), mo_label)
+					t_start.remove_object(player_x(pl), mo_label)
+					t_end.remove_object(player_x(pl), mo_label)
 
 					local t = command_x(tool_build_way)			
-					local err = t.work(player_x(1), t_start, t_end, sc_way1_name)
+					local err = t.work(player_x(pl), t_start, t_end, sc_way1_name)
 
 					//Outside tramo ----------------------------------------------------------------------
 					t_start = my_tile(label1_lim)
 					t_end = my_tile(coord(c_way1.b.x, c_way1.b.y))
 					t = command_x(tool_build_way)			
-					err = t.work(player_x(1), t_start, t_end, sc_way1_name)
+					err = t.work(player_x(pl), t_start, t_end, sc_way1_name)
 
 					//elimina el cuadro label
 					local opt = 0
@@ -2302,11 +2331,11 @@ class tutorial.chapter_03 extends basic_chapter
 					local t_start = my_tile(c_brge2.a)
 					local t_end = my_tile(c_brge2.b)
 
-					t_start.remove_object(player_x(0), mo_label)
+					t_start.remove_object(player_x(pl), mo_label)
 
 					local t = command_x(tool_build_bridge)
 					t.set_flags(2)		
-					local err = t.work(player_x(1), t_start, t_end, sc_bridge_name)
+					local err = t.work(player_x(pl), t_start, t_end, sc_bridge_name)
 				}
 
 				//Segundo tramo de rieles
@@ -2315,7 +2344,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local t_start = my_tile(coord(c_way2.a.x, c_way2.a.y))
 					local t_end = my_tile(label2_lim)
 					local t = command_x(tool_build_way)			
-					local err = t.work(player_x(1), t_start, t_end, sc_way1_name)
+					local err = t.work(player_x(0), t_start, t_end, sc_way1_name)
 
 					//Station tramo ----------------------------------------------------------------------
 					t_start = my_tile(label2_lim)
@@ -2325,7 +2354,7 @@ class tutorial.chapter_03 extends basic_chapter
 					t_end.remove_object(player_x(0), mo_label)
 
 					t = command_x(tool_build_way)			
-					err = t.work(player_x(1), t_start, t_end, sc_way1_name)
+					err = t.work(player_x(0), t_start, t_end, sc_way1_name)
 
 				}
 				return null
@@ -2630,23 +2659,28 @@ class tutorial.chapter_03 extends basic_chapter
 
 			case 9:
 				if (pot0==0){
+					local t = command_x(tool_build_way)
+					t.set_flags(2)
+					local list = c_way_list1
 		            for(local j=0;j<c_way_lim1.len();j++){
 						if(glsw[j] == 0){
-							local tile_a = my_tile(c_way_lim1[j].a)
-							local tile_b = my_tile(c_way_lim1[j].b)
+							local tile_a = tile_x(list[j].a.x, list[j].a.y, list[j].a.z)
+							local tile_b = tile_x(list[j].b.x, list[j].b.y, list[j].b.z)
 
 							tile_a.find_object(mo_way).unmark()
 							tile_b.find_object(mo_way).unmark()
 
 							tile_a.remove_object(player_x(1), mo_label)
 							tile_b.remove_object(player_x(1), mo_label)
-							
-							local coora = coord3d(c_way_list1[j].a.x, c_way_list1[j].a.y, c_way_list1[j].a.z)
-							local coorb = coord3d(c_way_list1[j].b.x, c_way_list1[j].b.y, c_way_list1[j].b.z)
-							local t = command_x(tool_build_way)
-							t.set_flags(2)			
-							local err = t.work(player_x(1), coora, coorb, sc_way1_name)
 
+							if(list[j].tunn) {
+								t = command_x(tool_build_tunnel)
+								t.work(player_x(1), tile_a, tile_b, sc_tunn2_name)
+							}
+							else {
+								t.work(player_x(1), tile_a, tile_b, sc_way2_name)
+							}
+							
 							if(j == c_way_lim1.len()-1){
 								pot0 = 1
 								reset_glsw()
@@ -2868,7 +2902,7 @@ class tutorial.chapter_03 extends basic_chapter
 				break
 
 			case 9:
-				local forbid = [tool_build_bridge,tool_build_tunnel,tool_build_wayobj,tool_build_station]
+				local forbid = [tool_build_bridge,tool_build_wayobj,tool_build_station]
 					foreach (tool_id in forbid)
 						rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
 				break

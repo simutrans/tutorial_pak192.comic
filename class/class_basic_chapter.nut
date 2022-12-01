@@ -1807,6 +1807,9 @@ class basic_chapter
 			else {
 				local cur_key = coord3d_to_key(pos)
 				result = translate("Action not allowed")+" ("+pos.tostring()+")."
+				if(way && way.get_desc().get_system_type() == st_elevated)
+					return null
+
 				foreach(key, c in r_way_list){
 					if(key == cur_key){
 						//delete r_way_list[key] //Delate objt example
@@ -1832,12 +1835,19 @@ class basic_chapter
 					return null
 				}
 				else{
-					if (under_lv == unde_view){
-						local slope = tile_x(pos.x, pos.y, pos.z).get_slope()
-						if(slope != 0 || pos.z != (coor.z + plus))
+					under_lv = settings.get_underground_view_level()
+					//gui.add_message("pos: "+coor+" plus: "+r_way.p )
+					if (under_lv != norm_view){
+						local sq = square_x(pos.x,pos.y)
+						local sq_z = sq.get_ground_tile().z
+						local c_test = sq.get_tile_at_height(coor.z)
+						if(!c_test && under_lv <= coor.z && pos.z < sq_z)
 							return null
+						//local slope = tile_x(pos.x, pos.y, pos.z).get_slope()
+						//if(slope != 0 || pos.z != (coor.z + plus))
+							//return null
 					}
-					
+
 					return translate("No intersections allowed")+" ("+pos.tostring()+")."
 				}
 			}
