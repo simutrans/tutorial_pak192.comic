@@ -1232,7 +1232,7 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				if (pot2==0){
 					local t = command_x(tool_build_way)			
-					local err = t.work(player_x(1), my_tile(c_label1.a), my_tile(c_label1.b), sc_way_name)
+					local err = t.work(player_x(pl), c_way1.a, c_way1.b, sc_way_name)
 				}
 				if (current_cov>ch2_cov_lim3.a && current_cov<ch2_cov_lim3.b){
 					local player = player_x(pl)

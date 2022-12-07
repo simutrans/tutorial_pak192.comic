@@ -804,7 +804,7 @@ class tutorial.chapter_06 extends basic_chapter
 					coora = my_tile(c1_track.a)
 					coorb = my_tile(c1_track.b)
 					local t = command_x(tool_build_way)
-					t.work(player_x(0), coora, coorb, obj1_way_name)
+					t.work(player, coora, coorb, obj1_way_name)
 					pot0=1
 				}
 
@@ -839,14 +839,14 @@ class tutorial.chapter_06 extends basic_chapter
 					coorb = my_tile(c2_track.b)
 
 					local t = command_x(tool_build_way)
-					t.work(player_x(0), coora, coorb, obj2_way_name)
+					t.work(player, coora, coorb, obj2_way_name)
 					pot1 = 1
 				}
 				// Parada aerea ---------------------------------
 				if(pot2 == 0) {
 					local tile = my_tile(st1_pos)
 					local t = command_x(tool_build_station)			
-					t.work(player_x(0), tile, sc_sta1)
+					t.work(player, tile, sc_sta1)
 					tile.unmark()
 					pot2 = 1
 				}
@@ -854,7 +854,7 @@ class tutorial.chapter_06 extends basic_chapter
 				if(pot3 == 0) {
 					local tile = my_tile(st2_pos)
 					local t = command_x(tool_build_station)			
-					t.work(player_x(0), tile, sc_sta2)
+					t.work(player, tile, sc_sta2)
 					tile.unmark()
 					pot3 = 1
 				}
@@ -864,16 +864,16 @@ class tutorial.chapter_06 extends basic_chapter
 					local coora = my_tile(c_dep_lim1.a)
 					local coorb = my_tile(c_dep_lim1.b)
 					local t = command_x(tool_build_way)
-					t.work(player_x(0), coora, coorb, obj2_way_name)
+					t.work(player, coora, coorb, obj2_way_name)
 					local tile = my_tile(c_dep1)
 					t = command_x(tool_build_depot)			
-					t.work(player_x(0), tile, sc_dep1)
+					t.work(player, tile, sc_dep1)
 					tile.unmark()
 					pot4 = 1
 				}
 				if(pot5 == 0) {
 					local t = command_x(tool_make_stop_public)			
-					t.work(player_x(0), my_tile(st1_pos), "")
+					t.work(player, my_tile(st1_pos), "")
 					pot5 = 1
 				}
 				return null
@@ -881,12 +881,10 @@ class tutorial.chapter_06 extends basic_chapter
 			case 2:
 				//gui.add_message(""+current_cov+" -- "+ch6_cov_lim1.a +" -- "+ ch6_cov_lim1.b)
 				if (current_cov> ch6_cov_lim1.a && current_cov< ch6_cov_lim1.b){
-
-					local pl = player_x(0)
 					local c_depot = my_tile(c_dep1)
 
 					try {
-						comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+						comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 					}
 					catch(ev) {
 						return null
@@ -906,13 +904,13 @@ class tutorial.chapter_06 extends basic_chapter
 						return 0
 
 					local convoy = depot.get_convoy_list()
-					comm_start_convoy(pl, gl_wt, sched, convoy, depot)
+					comm_start_convoy(player, gl_wt, sched, convoy, depot)
 				}
 
 			break
 			case 3:
 				local c_depot = my_tile(c_dep2)
-				comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 				//gui.add_message(""+current_cov+" -- "+ch6_cov_lim2.a +" -- "+ ch6_cov_lim2.b)
 				if (current_cov>ch6_cov_lim2.a && current_cov<ch6_cov_lim2.b){
 					local good_nr = 0 //Passengers
@@ -935,7 +933,7 @@ class tutorial.chapter_06 extends basic_chapter
 							else
 								sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
 						}
-						comm_start_convoy(pl, wt_road, sched, convoy, depot)
+						comm_start_convoy(player, wt_road, sched, convoy, depot)
 					}
 				}
 				return null
@@ -943,12 +941,11 @@ class tutorial.chapter_06 extends basic_chapter
 			case 4:
 				local c_depot = my_tile(c_dep3)
 				if(pot0==0){
-
 					local tool = command_x(tool_build_depot)
-					tool.work(player_x(0), c_depot, sc_dep2)
+					tool.work(player, c_depot, sc_dep2)
 					pot0=1
 				}
-				comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 				//gui.add_message(""+current_cov+" -- "+ch6_cov_lim3.a +" -- "+ ch6_cov_lim3.b)
 				if (current_cov>ch6_cov_lim3.a && current_cov<ch6_cov_lim3.b){
 					local good_nr = 0 //Passengers
@@ -971,7 +968,7 @@ class tutorial.chapter_06 extends basic_chapter
 							else
 								sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
 						}
-						comm_start_convoy(pl, wt_road, sched, convoy, depot)
+						comm_start_convoy(player, wt_road, sched, convoy, depot)
 					}
 				}
 				return null
