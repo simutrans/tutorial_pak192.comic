@@ -101,6 +101,9 @@ select_option      <- { x = 0, y = 0, z = 1 }	// place of station to control nam
 select_option_halt <- null			// placeholder for halt_x
 tutorial		  <- {}				// placeholder for all chapter CLASS
 
+gl_test_result <- ""
+
+
 //returns pakset name (lower case)
 function get_set_name(name)
 {
@@ -216,20 +219,26 @@ chapter            <- tutorial.chapter_02      	// must be placed here !!!
 
 function script_text()
 {	
-	scr_jump = true
 	if(!correct_cov){
 		gui.add_message(""+translate("Advance not allowed"))
 		return null
 	}
+
 	if(persistent.chapter<7){
-		//gui.add_message(""+persistent.chapter)
+		if(scr_jump)
+			return null
+		else
+			scr_jump = true
+
 		local result = null
 
 		result = chapter.script_text()
 		if(result == 0) gui.add_message(""+translate("Advance not allowed")+"")
+
+		scr_jump = false
 		return result
 	}
-//	else gui.add_message(""+translate("Updating text ... Waiting ...")+"")
+
 	return null
 }
 
@@ -380,13 +389,13 @@ function start()
 
 function is_scenario_completed(pl)
 {
-	/*
-	local tile = tile_x(93, 171, 0)
+	
+	/*local tile = tile_x(93, 171, 0)
 	local label = tile.find_object(mo_label)
 	if(!label)
-		label_x.create(coord(tile.x, tile.y), player_x(0), "Fail count: "+ fail_count)
+		label_x.create(coord(tile.x, tile.y), player_x(0), "Result: "+ gl_test_result)
 	else
-		label.set_text("Fail count: "+ fail_count)
+		label.set_text("Result: "+ gl_test_result)
 	*/
 
 	//gui.add_message(""+glsw[0]+"")
@@ -499,6 +508,7 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 function fail_count_message(result, tool_id)
 {
+	//gl_test_result = result
 	//gui.add_message(result+" ")
 	//Desabilitado
 	//if(tool_id != tool_build_tunnel && result != ""){
@@ -599,13 +609,10 @@ function resume_game()
 	cov_save  = data_save().convoys_save()
 
 //-------------------------------------------------------
-
-	point = persistent.point
 	gcov_nr = persistent.gcov_nr
 	gall_cov = persistent.gall_cov
 	current_cov = persistent.current_cov
 	gcov_id = persistent.gcov_id
-	gsignal = persistent.signal
 	sigcoord = persistent.sigcoord
 	id_save = persistent.id_save
 	ignore_save = persistent.ignore_save
