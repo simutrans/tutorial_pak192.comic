@@ -2428,8 +2428,12 @@ class tutorial.chapter_03 extends basic_chapter
 				comm_script = true
 				if (current_cov>ch3_cov_lim1.a && current_cov<ch3_cov_lim1.b){
 					local c_depot = my_tile(c_dep1)
-
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
+
+					local sched = schedule_x(wt, [])
+					sched.entries.append(schedule_entry_x(my_tile(st1_list[0]), loc1_load, loc1_wait))
+					sched.entries.append(schedule_entry_x(my_tile(st2_list[0]), 0, 0))
+					local c_line = comm_get_line(player, gl_wt, sched)
 
 					local good_nr = 0 //Passengers
 					local name = loc1_name_obj
@@ -2444,17 +2448,15 @@ class tutorial.chapter_03 extends basic_chapter
 						if (!comm_set_convoy(cov_nr, c_depot, wag_name, wag))
 							return 0
 					}
-					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
-					local convoy = depot.get_convoy_list()
-					local sched = schedule_x(wt, [])
-					sched.entries.append(schedule_entry_x(my_tile(st1_list[0]), loc1_load, loc1_wait))
-					sched.entries.append(schedule_entry_x(my_tile(st2_list[0]), 0, 0))
 
-					comm_start_convoy(player, wt, sched, convoy, depot)
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+					local conv = depot.get_convoy_list()
+					conv[0].set_line(player, c_line)
+					comm_start_convoy(player, conv[0], depot)
+
 					pot1=1
 				}
-				comm_script = false
-
 				return null
 				break
 			case 6:
@@ -2587,8 +2589,12 @@ class tutorial.chapter_03 extends basic_chapter
 					local wt = wt_rail
 					if (current_cov>ch3_cov_lim2.a && current_cov<ch3_cov_lim2.b){
 						local c_depot = my_tile(c_dep2)
-
 						comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
+
+						local sched = schedule_x(wt, [])
+						sched.entries.append(schedule_entry_x(my_tile(st3_list[0]), loc2_load, loc2_wait))
+						sched.entries.append(schedule_entry_x(my_tile(st4_list[0]), 0, 0))
+						local c_line = comm_get_line(player, gl_wt, sched)
 
 						local name = loc2_name_obj
 						local wag_name = sc_veh2_name
@@ -2601,16 +2607,14 @@ class tutorial.chapter_03 extends basic_chapter
 							if (!comm_set_convoy(cov_nr, c_depot, wag_name, wag))
 								return 0
 						}
-						local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
-						local convoy = depot.get_convoy_list()
-						local sched = schedule_x(wt, [])
-						sched.entries.append(schedule_entry_x(my_tile(st3_list[0]), loc2_load, loc2_wait))
-						sched.entries.append(schedule_entry_x(my_tile(st4_list[0]), 0, 0))
 
-						comm_start_convoy(player, wt, sched, convoy, depot)
+						local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+						local conv = depot.get_convoy_list()
+						conv[0].set_line(player, c_line)
+						comm_start_convoy(player, conv[0], depot)
+
+						pot3=1
 					}
-					comm_script = false	
-					pot3=1			
 				}
 
 				return null

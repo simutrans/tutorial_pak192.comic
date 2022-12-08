@@ -179,6 +179,7 @@ class basic_chapter
 			}
 		}
 		//gui.add_message(""+sched.entries.len()+" "+sched.waytype)
+		if(wt != sched.waytype) return gui.add_message("Err Waytype: "+wt +" :: "+ sched.waytype)
 		c_line.change_schedule(player, sched)
 		
 		return c_line

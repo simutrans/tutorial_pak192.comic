@@ -453,7 +453,6 @@ class tutorial.chapter_02 extends basic_chapter
 					}
 					pot1 = 1
 				}
-
 				if (pot1 == 1 ){	
 					local c_dep = this.my_tile(c_dep)
 		            local line_name = line1_name //"Test 1"
@@ -470,14 +469,16 @@ class tutorial.chapter_02 extends basic_chapter
 					sch_cov_correct = all_result.res == null ? true : false
 
 				}
+				if (pot2 == 1 ){
+					this.next_step()
+				}
 				if (current_cov == ch2_cov_lim1.b){
 					local conv = my_tile(sch_list1[0]).find_object(mo_car)
-					if (conv || comm_script) {						
-						comm_script = false
-						this.next_step()
+					if (conv) {						
+						pot2=1
+
 					}
 				}
-
 				return 50
 				break
 			case 5:
@@ -555,12 +556,6 @@ class tutorial.chapter_02 extends basic_chapter
 				break
 
 			case 7:
-				if (gcov_nr != 4 && gcov_nr != 5)
-					return 0
-
-				if (comm_script)
-					return 0
-			
 				if (pot0==0){
 
 					local siz = sch_list3.len()
@@ -1125,7 +1120,6 @@ class tutorial.chapter_02 extends basic_chapter
 				break
 			case 4:
 				//delay_mark_tile(c_dep, c_dep,0, true)
-				comm_script = true
 				if (pot0 == 0){
 					pot0 = 1
 				}
@@ -1133,29 +1127,32 @@ class tutorial.chapter_02 extends basic_chapter
 				if (current_cov>ch2_cov_lim1.a && current_cov<ch2_cov_lim1.b){
 					local player = player_x(pl)
 					local c_depot = my_tile(c_dep)
-
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
-					local good_nr = 0 //Passengers
-					local name = veh1_obj
-					local cov_nr = 0  //Max convoys nr in depot
-					local c_list = sch_list1
-					local sch_siz = c_list.len()
 
-					if (!comm_set_convoy(cov_nr, c_depot, name))
-						return 0
-					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
-					local convoy = depot.get_convoy_list()
+					local c_list = sch_list1
 					local sched = schedule_x(gl_wt, [])
 					local load = veh1_load
 					local wait = veh1_wait
+					local sch_siz = c_list.len()
 					for(local j=0;j<sch_siz;j++){
 						if (j==0)
 							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), load, wait))
 						else
 							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), 0, 0))
 					}
-					comm_start_convoy(player, gl_wt, sched, convoy, depot)
+					local c_line = comm_get_line(player, gl_wt, sched)
 
+					local good_nr = 0 //Passengers
+					local name = veh1_obj
+					local cov_nr = 0  //Max convoys nr in depot
+					if (!comm_set_convoy(cov_nr, c_depot, name))
+						return 0
+
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+					local conv = depot.get_convoy_list()
+					conv[0].set_line(player, c_line)
+					comm_start_convoy(player, conv[0], depot)
+					pot2=1
 				}
 				return null
 				break
@@ -1176,13 +1173,12 @@ class tutorial.chapter_02 extends basic_chapter
 
 			case 6:
 				//gui.add_message(""+current_cov+"  "+ch2_cov_lim2.b+"")
-				comm_script = true
 				local player = player_x(pl)
 				local c_depot = my_tile(c_dep)
-
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
 				if (current_cov>ch2_cov_lim2.a && current_cov<ch2_cov_lim2.b){
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 					local good_nr = 0 //Passengers
 					local name = veh1_obj
 					local cov_nr = 0  //Max convoys nr in depot
@@ -1190,32 +1186,33 @@ class tutorial.chapter_02 extends basic_chapter
 					local sch_siz = c_list.len()
 					local load = veh1_load
 					local wait = veh1_wait
+					local sched = schedule_x(gl_wt, [])
+					for(local i=0;i<sch_siz;i++){
+						if (i==0)
+							sched.entries.append(schedule_entry_x(my_tile(c_list[i]), load, wait))
+						else
+							sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
+					}
+					for(local i=sch_siz-2;i>0;i--){
+						sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
+					}
+					local c_line = comm_get_line(player, gl_wt, sched)
 					for (local j = current_cov; j>ch2_cov_lim2.a && j<ch2_cov_lim2.b && correct_cov; j++){
 						if (!comm_set_convoy(cov_nr, c_depot, name))
 							return 0
-						local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+
 						local convoy = depot.get_convoy_list()
 						if (convoy.len()==0) continue
-						local sched = schedule_x(gl_wt, [])
-						for(local i=0;i<sch_siz;i++){
-							if (i==0)
-								sched.entries.append(schedule_entry_x(my_tile(c_list[i]), load, wait))
-							else
-								sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
-						}
-						for(local i=sch_siz-2;i>0;i--){
-							sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
-						}
-						comm_start_convoy(player, gl_wt, sched, convoy, depot)
+
+						local conv = depot.get_convoy_list()
+						conv[0].set_line(player, c_line)
+						comm_start_convoy(player, conv[0], depot)
 					}
 				}
-				comm_script = false
 				return null
 				break
 
 			case 7:
-
-				comm_script = true
 				if (pot1==0){
 					for(local j=0;j<sch_list3.len();j++){
 						local tile = my_tile(sch_list3[j])
@@ -1236,33 +1233,32 @@ class tutorial.chapter_02 extends basic_chapter
 				if (current_cov>ch2_cov_lim3.a && current_cov<ch2_cov_lim3.b){
 					local player = player_x(pl)
 					local c_depot = my_tile(c_dep)
-
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
-					local good_nr = 0 //Passengers
-					local name = veh1_obj
-					local cov_nr = 0  //Max convoys nr in depot
-					if (!comm_set_convoy(cov_nr, c_depot, name))
-						return 0
-					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
-					local convoy = depot.get_convoy_list()
 					local sched = schedule_x(gl_wt, [])
-
-					local c_list = sch_list3
-					local sch_siz = c_list.len()
 					local load = veh1_load
 					local wait = veh1_wait
-
+					local c_list = sch_list3
+					local sch_siz = c_list.len()
 					for(local j=0;j<sch_siz;j++){
 						if (j==sch_siz-1)
 							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), load, wait))
 						else
 							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), 0, 0))
 					}
-					comm_start_convoy(player, gl_wt, sched, convoy, depot)
-				}
+					local c_line = comm_get_line(player, gl_wt, sched)
 
-				comm_script = false
+					local good_nr = 0 //Passengers
+					local name = veh1_obj
+					local cov_nr = 0  //Max convoys nr in depot
+					if (!comm_set_convoy(cov_nr, c_depot, name))
+						return 0
+
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+					local conv = depot.get_convoy_list()
+					conv[0].set_line(player, c_line)
+					comm_start_convoy(player, conv[0], depot)
+				}
 				return null
 				break
 
