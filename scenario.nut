@@ -485,8 +485,6 @@ function is_scenario_completed(pl)
 
 function is_work_allowed_here(pl, tool_id, pos)
 {	
-
-	
 	local pause = debug.is_paused()
 	if (pause) return translate("Advance is not allowed with the game paused.")
 
@@ -506,7 +504,6 @@ function is_work_allowed_here(pl, tool_id, pos)
 			result = null
 	}
 	return fail_count_message(result, tool_id)
-	
 }
 
 function fail_count_message(result, tool_id)

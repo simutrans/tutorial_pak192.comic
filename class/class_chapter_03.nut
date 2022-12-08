@@ -2783,6 +2783,7 @@ class tutorial.chapter_03 extends basic_chapter
 					else
 						sched.entries.append(schedule_entry_x(t, 0, 0))
 				}
+				local c_line = comm_get_line(player, gl_wt, sched)
 
 				local cov_nr = d3_cnr
 				local name = loc3_name_obj
@@ -2790,6 +2791,7 @@ class tutorial.chapter_03 extends basic_chapter
 				local cab_name = loc5_name_obj
 				local wag_nr = sc_wag3_nr
 				local wag = true
+				local all = true
 				if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
 					for (local j = 0; j<cov_nr;j++){
 						if (!comm_set_convoy(j, c_depot, name))
@@ -2800,14 +2802,11 @@ class tutorial.chapter_03 extends basic_chapter
 						}
 						if (!comm_set_convoy(j, c_depot, cab_name, wag))
 							return 0
-
-						if(j == ( cov_nr - 1)) {
-							for (local i = 0; i<cov_nr;i++){
-								local convoy = depot.get_convoy_list()
-								comm_start_convoy(player, gl_wt, sched, convoy, depot)
-							}
-						}
+						local conv = depot.get_convoy_list()
+						conv[j].set_line(player, c_line)
 					}
+					local convoy = false
+					comm_start_convoy(player, convoy, depot, all)	
 					gall_cov = checks_all_convoys()
 					current_cov = gall_cov
 				}

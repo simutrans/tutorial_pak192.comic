@@ -144,11 +144,32 @@ class basic_chapter
 		return true
 	}
 
-	function comm_start_convoy(pl, wt, sched, cov_list, depot)
+
+	function comm_start_convoy(player, cov, depot, all = false)
 	{
-		pl.create_line(wt)
+		if(all) {
+			depot.start_all_convoys(player)
+		}
+		else{
+			depot.start_convoy(player, cov)
+			/*for(local j = cov_list.len()-1; j>=0;j--){
+				try {
+					cov_list[j].set_line(player, c_line)
+					depot.start_convoy(player, cov_list[j])
+				}
+				catch(ev) {
+					continue
+				}			
+			}*/
+		}
+		return null
+	}
+
+	function comm_get_line(player, wt, sched)
+	{
+		player.create_line(wt)
 		// find the line - it is a line without schedule and convoys
-		local list = pl.get_line_list()
+		local list = player.get_line_list()
 		local c_line = null
 		foreach(line in list) {
 			if (line.get_waytype() == wt  &&  line.get_schedule().entries.len()==0) {
@@ -158,18 +179,9 @@ class basic_chapter
 			}
 		}
 		//gui.add_message(""+sched.entries.len()+" "+sched.waytype)
-		c_line.change_schedule(pl, sched)
-		for(local j = cov_list.len()-1; j>=0;j--){
-			
-			try {
-				cov_list[j].set_line(pl, c_line)
-				depot.start_convoy(pl, cov_list[j])
-			}
-			catch(ev) {
-				continue
-			}			
-		}
-		return null
+		c_line.change_schedule(player, sched)
+		
+		return c_line
 	}
 
 	//----------------------------------------------------------------------------------------------------------------
