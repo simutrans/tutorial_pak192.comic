@@ -1169,7 +1169,6 @@ class tutorial.chapter_02 extends basic_chapter
 					local t = command_x(tool_build_bridge)
 					t.set_flags(2)
 					local err = t.work(player_x(pl), my_tile(brdg1), my_tile(brdg2), sc_bridge_name)
-					gui.add_message(""+err)
 				}
 	
 				return null

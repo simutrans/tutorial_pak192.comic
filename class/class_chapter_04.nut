@@ -245,7 +245,6 @@ class tutorial.chapter_04 extends basic_chapter
 	
 	function is_chapter_completed(pl) {
 		local percentage=0
-		persistent.point = point
 		save_pot()
 		save_glsw()
 		switch (this.step) {
@@ -404,7 +403,6 @@ class tutorial.chapter_04 extends basic_chapter
 				this.step=1
 				persistent.step=1
 				persistent.status.step = 1
-				persistent.point = null
 				return 100
 				break
 		}

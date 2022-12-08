@@ -219,16 +219,15 @@ chapter            <- tutorial.chapter_02      	// must be placed here !!!
 
 function script_text()
 {	
+
 	if(!correct_cov){
 		gui.add_message(""+translate("Advance not allowed"))
 		return null
 	}
 
 	if(persistent.chapter<7){
-		if(scr_jump)
-			return null
-		else
-			scr_jump = true
+
+		scr_jump = true
 
 		local result = null
 
@@ -321,7 +320,8 @@ function get_info_text(pl)
 
 function get_rule_text(pl)
 {
-	/*local cov_nr_debug = "All convoys-> "+gall_cov+":: Convoys count-> "+gcov_nr+":: current covoy-> "+current_cov+":: Correct cov-> "+correct_cov+":: Convoy id-> "+gcov_id+"<br><br>"
+	/*
+	local cov_nr_debug = "All convoys-> "+gall_cov+":: Convoys count-> "+gcov_nr+":: current covoy-> "+current_cov+":: Correct cov-> "+correct_cov+":: Convoy id-> "+gcov_id+"<br><br>"
 	local tx = ""
 	local j=0
 	for(j;j<gcov_nr;j++){
@@ -346,7 +346,8 @@ function get_rule_text(pl)
 		else
 			tx += "<st>["+j+"]</st> "+id_save[j]+"::"+cov_save[j]+"<br>"
 	}
-	return cov_nr_debug + tx */
+	return cov_nr_debug + tx
+	*/
 	return chapter.give_title() + chapter.get_rule_text( pl, my_chapter() )
 }
 
@@ -389,7 +390,7 @@ function start()
 
 function is_scenario_completed(pl)
 {
-	
+	//gui.add_message(""+chapter.step)
 	/*local tile = tile_x(93, 171, 0)
 	local label = tile.find_object(mo_label)
 	if(!label)
@@ -422,7 +423,7 @@ function is_scenario_completed(pl)
 		else fail_num--
 	}
 	if(gui_delay){
-		//gui.open_info_win_at("goal")
+		gui.open_info_win_at("goal")
 		gui_delay = false
 	}
 	//gui.add_message(""+current_cov+"  "+gall_cov+"")
@@ -484,6 +485,8 @@ function is_scenario_completed(pl)
 
 function is_work_allowed_here(pl, tool_id, pos)
 {	
+
+	
 	local pause = debug.is_paused()
 	if (pause) return translate("Advance is not allowed with the game paused.")
 
@@ -493,7 +496,6 @@ function is_work_allowed_here(pl, tool_id, pos)
 	if(scr_jump){
 		return null
 	}
-
 	local result = translate("Action not allowed")
 	if (correct_cov){
 		result = chapter.is_work_allowed_here(pl, tool_id, pos)
@@ -504,6 +506,7 @@ function is_work_allowed_here(pl, tool_id, pos)
 			result = null
 	}
 	return fail_count_message(result, tool_id)
+	
 }
 
 function fail_count_message(result, tool_id)

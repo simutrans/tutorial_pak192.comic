@@ -157,6 +157,7 @@ class basic_chapter
 				break
 			}
 		}
+		//gui.add_message(""+sched.entries.len()+" "+sched.waytype)
 		c_line.change_schedule(pl, sched)
 		for(local j = cov_list.len()-1; j>=0;j--){
 			
@@ -665,8 +666,9 @@ class basic_chapter
 			return text.tostring()
 		}
 
+		//gui.add_message(""+entrie.wait+" "+wait +" "+nr)
 		if (abs(entrie.wait-wait)>7) {
-			//gui.add_message(""+entrie.wait+"")
+
 			local text = ttext("The waittime in waystop {nr} '{name}' isn't {wait} {pos}")
 			local txwait = get_wait_time_text(wait)
 			text.name = target_list[0].get_name()
@@ -680,7 +682,7 @@ class basic_chapter
 
 	function get_wait_time_text(wait)
 	{
-		return ""+difftick_to_string(wait*(8))+""
+		return ""+difftick_to_string(wait*(16))+""
 	}
 
 	function is_station_build(player,coord,good)
@@ -762,7 +764,7 @@ class basic_chapter
 		local good_count=0		
 		for(local j=0;j<good.len();j++){
 			for(local i=0;i<good_list.len();i++){
-				gui.add_message("a = "+good[j]+", b = "+good_list[i]+"")
+				//gui.add_message("a = "+good[j]+", b = "+good_list[i]+"")
 				if(good[j]==good_list[i])
 					good_count++
 			}
@@ -936,6 +938,7 @@ class basic_chapter
 
 			else break
 		}
+		//gui.add_message(""+result)
 		if (result!=null){
 			switch (result) {
 				case 4:
@@ -1901,7 +1904,7 @@ class basic_chapter
 
 	function get_corret_slope(slope, corret_slope)
 	{
-		gui.add_message(""+slope +" "+corret_slope)
+		//gui.add_message(""+slope +" "+corret_slope)
 		if (slope==corret_slope ) { //72
 			return true
 		}
@@ -2152,7 +2155,7 @@ class basic_chapter
 		return nr
 	}
 
-    function start_sch_tmpsw(pl,coord, c_list){
+    function start_sch_tmpsw(pl,coord, c_list, under = false){
 		local depot = null
 		try {
 			depot = depot_x(coord.x, coord.y, coord.z)  // Deposito /Garaje
@@ -2176,16 +2179,17 @@ class basic_chapter
 							catch(ev) {
 								continue
 							}
+							local c = c_list[j]
 							local halt1   = sch.entries[j].get_halt( player_x(pl) )
-							local tile_c = my_tile(c_list[j])
+							local tile_c = under? tile_x(c.x, c.y, c.z) : my_tile(c)
 							local halt2 = tile_c.get_halt()
 							local t1_list = halt1.get_tile_list()
 							local t2_list = halt2.get_tile_list()
 							local c_buld1 = t1_list[0].find_object(mo_building).get_pos()
 							local c_buld2 = t2_list[0].find_object(mo_building).get_pos()
 							if(c_buld1.x == c_buld2.x && c_buld1.y == c_buld2.y){
-								tmpsw[j]=1
-								tmpcoor[j]=c_list[j]
+								tmpsw[j] = 1
+								tmpcoor[j] = c_list[j]
 							}
 						}
 					}
@@ -2207,7 +2211,7 @@ class basic_chapter
             local sched = schedule_x(wt, [])
 	        for(local j=0;j<tmpsw.len();j++){
 		        if (tmpsw[j]==1)
-			        sched.entries.append(schedule_entry_x(my_tile(tmpcoor[j]), 0, 0))
+			        sched.entries.append(schedule_entry_x(tmpcoor[j], 0, 0))
                 else if (j == 0){
                     return null
                 }
@@ -2284,9 +2288,9 @@ class basic_chapter
 		if (st_count<siz){
 			for(local j=0;j<siz;j++){
 				if(tmpsw[j]==0){
-					if ((pos.x==c_list[j].x)&&(pos.y==c_list[j].y)){
+					if ((pos.x == c_list[j].x)&&(pos.y == c_list[j].y)){
 						tmpsw[j]=1
-                        tmpcoor[j]= coord(c_list[j].x,c_list[j].y)
+                        tmpcoor[j] = coord(c_list[j].x, c_list[j].y, 0)
 						return null
 					}
 					else{
@@ -2302,9 +2306,9 @@ class basic_chapter
 		return 0
 	}
 
-	function is_stop_allowed_ex(result, siz, list, pos, wt)
+	function is_stop_allowed_ex(result, siz, list, pos, wt, under = false)
 	{
-		local c_list = is_water_entry(list)
+		local t_list = is_water_entry(list, under)
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local buil = t.find_object(mo_building)
 		local is_wt = buil ? buil.get_waytype():null
@@ -2323,8 +2327,9 @@ class basic_chapter
 				st_count++
 		}
 		if (st_count<siz){
-			for(local j=0;j<siz;j++){
-				local halt = my_tile(c_list[j]).get_halt()
+			for(local j=0;j<t_list.len();j++){
+				local t = t_list[j]
+				local halt = t.get_halt()
 				if(!halt)break
 				local tile_list = halt.get_tile_list()
 				local max = tile_list.len()
@@ -2340,29 +2345,29 @@ class basic_chapter
 
 								if(t_water.is_water()){
 									tmpsw[j]=1
-						            tmpcoor[j]= coord(c_list[j].x,c_list[j].y)
+						            tmpcoor[j] = coord(t_list[j].x, t_list[j].y, t_list.z)
 									return null
 								}
 								else
-									result = format(translate("Select station No.%d"),j+1)+" ("+coord(c_list[j].x,c_list[j].y).tostring()+")."
+									result = format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
 							}
 							else
-								result = format(translate("Select station No.%d"),j+1)+" ("+coord(c_list[j].x,c_list[j].y).tostring()+")."
+								result = format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
 						}
 						return result
 					}
 					foreach(tile in tile_list){
-						if (pos.x==tile.x && pos.y==tile.y){
+						if (pos.x == tile.x && pos.y == tile.y && pos.z == tile.z){
 							if(has_way && wt == is_wt){
-								tmpsw[j]=1
-				                tmpcoor[j]= coord(c_list[j].x,c_list[j].y)
+								tmpsw[j] = 1
+				                tmpcoor[j] = coord3d(t_list[j].x, t_list[j].y, t_list[j].z)
 								return null
 							}
 							else
-								return format(translate("Select station No.%d"),j+1)+" ("+coord(c_list[j].x,c_list[j].y).tostring()+")."
+								return format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
 						}
 					}
-					return format(translate("Select station No.%d"),j+1)+" ("+coord(c_list[j].x,c_list[j].y).tostring()+")."
+					return format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
 				}
 				if (j==siz-(1))
 					return result
@@ -2438,7 +2443,7 @@ class basic_chapter
 		if(pos.x == c.x && pos.y == c.y){
 			if(tmpsw[nr]==0){
 				tmpsw[nr]=1
-				tmpcoor[nr]= coord(c.x,c.y)
+				tmpcoor[nr]= coord(c.x, c.y, 0)
 				return null
 			}
 			return result
@@ -2993,7 +2998,7 @@ class basic_chapter
 		}
 	}
 
-	function is_water_entry(list)
+	function is_water_entry(list, under = false)
 	{
 		local siz = list.len()
 		local nw_list = array(siz)
@@ -3002,6 +3007,10 @@ class basic_chapter
 			local tile = my_tile(list[j])
 			local buil = tile.find_object(mo_building)
 			local way = tile.find_object(mo_way)
+			if(under) {
+				nw_list[j] = tile_x(list[j].x, list[j].y, list[j].z)
+				continue
+			}
 			if (buil && !way) {
 				local t_list = buil.get_tile_list();
 
@@ -3011,14 +3020,14 @@ class basic_chapter
 
 					if(t_water.is_water()){
 						local buil = t_water.find_object(mo_building)
-						nw_list[j] = coord(t_water.x , t_water.y)
+						nw_list[j] = t_water
 						if(buil)		
 							break
 					}
 				}
 			}
 			else
-				nw_list[j] = list[j];
+				nw_list[j] = my_tile( list[j] );
 		}
 
 		return nw_list
