@@ -1011,14 +1011,6 @@ class tutorial.chapter_02 extends basic_chapter
 			break
 			case 6:
 				if (current_cov>ch2_cov_lim2.a && current_cov<ch2_cov_lim2.b){
-					/*if (comm_script){
-						cov_save[current_cov]=convoy
-						id_save[current_cov]=convoy.id
-						gcov_nr++
-						persistent.gcov_nr = gcov_nr
-						return null
-					}*/
-
 					local cov_list = depot.get_convoy_list()
 					local cov = cov_list.len()
 					local veh = 1
@@ -1045,13 +1037,6 @@ class tutorial.chapter_02 extends basic_chapter
 			break
 			case 7:
 				if (current_cov>ch2_cov_lim3.a && current_cov<ch2_cov_lim3.b){
-					/*if (comm_script){
-						cov_save[current_cov]=convoy
-						id_save[current_cov]=convoy.id
-						gcov_nr++
-						persistent.gcov_nr = gcov_nr
-						return null
-					}*/
 					local cov = 1
 					local veh = 1
 					local good_list = [good_desc_x (good_alias.passa).get_catg_index()] 	 //Passengers

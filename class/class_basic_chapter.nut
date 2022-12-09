@@ -2366,6 +2366,7 @@ class basic_chapter
 						local area = get_tiles_near_stations(tile_list)
 						for(local i=0;i<area.len();i++){
 							local t_water = my_tile(area[i])
+							//t_water.mark()
 							//gui.add_message(""+t_water.x+","+t_water.y+"")
 							if (pos.x == t_water.x && pos.y == t_water.y){
 								if(t_water.is_water()){
@@ -3049,19 +3050,20 @@ class basic_chapter
 
 			if (buil && !way) {
 				local t_list = buil.get_tile_list();
-
 				local area = get_tiles_near_stations(t_list)
-				local t_water = null
+				local save_t = null
 				for(local i=0;i<area.len();i++){
-					t_water = my_tile(area[i])
+					local t_water = my_tile(area[i])
 					if(t_water.is_water()){
 						local buil2 = t_water.find_object(mo_building)
+						save_t = t_water
 						if(buil2){
+							save_t = t_water
 							break
 						}
 					}
 				}
-				nw_list[coord3d_to_key(t_water)] <- t_water
+				nw_list[coord3d_to_key(save_t)] <- save_t
 				continue
 			}
 			else{

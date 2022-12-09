@@ -2424,7 +2424,6 @@ class tutorial.chapter_03 extends basic_chapter
 				break
 			case 5:
 				local wt = wt_rail
-				comm_script = true
 				if (current_cov>ch3_cov_lim1.a && current_cov<ch3_cov_lim1.b){
 					local c_depot = my_tile(c_dep1)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
@@ -2769,7 +2768,6 @@ class tutorial.chapter_03 extends basic_chapter
 			case 11:
 				local c_depot = my_tile(c_dep3)
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
-
 				local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 
 				//Set schedule for all convoys-------------------------------------------------------------
@@ -2794,7 +2792,6 @@ class tutorial.chapter_03 extends basic_chapter
 				local cab_name = loc5_name_obj
 				local wag_nr = sc_wag3_nr
 				local wag = true
-				local all = true
 				if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
 					for (local j = 0; j<cov_nr;j++){
 						if (!comm_set_convoy(j, c_depot, name))
@@ -2809,6 +2806,7 @@ class tutorial.chapter_03 extends basic_chapter
 						conv[j].set_line(player, c_line)
 					}
 					local convoy = false
+					local all = true
 					comm_start_convoy(player, convoy, depot, all)	
 					gall_cov = checks_all_convoys()
 					current_cov = gall_cov
