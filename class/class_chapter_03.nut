@@ -282,7 +282,7 @@ class tutorial.chapter_03 extends basic_chapter
 		if(this.step == 11){
             local c_dep = this.my_tile(c_dep3)
 			local c_list = sch_list
-			start_sch_tmpsw(pl,c_dep, c_list, true)
+			start_sch_tmpsw(pl,c_dep, c_list)
 		}
 	}
 
@@ -2090,15 +2090,14 @@ class tutorial.chapter_03 extends basic_chapter
 					for(local j=0;j<st_lim_a.len();j++){
                         if(!tem_pass[1] || !tem_pass[3] || !tem_pass[3] || !tem_pass[4])
                             return translate("Incorrect vehicle configuration, check vehicle status.")	
-						result = format(translate("Select station No.%d"),j+1)+" ("+st_lim_a[j].a.tostring()+".)"
+						result = format(translate("Select station No.%d"),j+1)+" ("+st_lim_a[j].a.tostring()+")"
 						if(tmpsw[j]==0){
 		                    if((pos.x>=st_lim_a[j].a.x)&&(pos.y>=st_lim_a[j].a.y)&&(pos.x<=st_lim_a[j].b.x)&&(pos.y<=st_lim_a[j].b.y)){
 								local c_list = sch_list 	//Lista de todas las estaciones
 								local c_dep = c_dep3 		//Coordeadas del deposito 
-								local siz = c_list.len()	//Numero de paradas 
-								local tunn = true
+								local siz = c_list.len()	//Numero de paradas
 								result = translate("The route is complete, now you may dispatch the vehicle from the depot")+" ("+c_dep.tostring()+")."
-								return is_stop_allowed_ex(result, siz, c_list, pos, gl_wt, tunn)					
+								return is_stop_allowed_ex(result, siz, c_list, pos, gl_wt)					
 							}
 							else
 								return result
@@ -2779,8 +2778,8 @@ class tutorial.chapter_03 extends basic_chapter
 
 				local c2d = "coord"
 				for(local j=0;j<sch_list.len();j++){
-					local type = typeof(sch_list[j])
 					local c = sch_list[j]
+					local type = typeof(c)
 					local t = type == c2d ? my_tile(c) : tile_x(c.x, c.y, c.z)
 					if (j==0)
 						sched.entries.append(schedule_entry_x(t, loc3_load, loc3_wait))

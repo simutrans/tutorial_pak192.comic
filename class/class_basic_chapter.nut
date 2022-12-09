@@ -38,7 +38,7 @@ class basic_chapter
 	gltool = null
 	glresult = null
 	tmpsw = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    tmpcoor = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+    tmpcoor = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 	stop_flag = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 	st_cover = settings.get_station_coverage()
 
@@ -1232,8 +1232,8 @@ class basic_chapter
 
 	function reset_tmpsw()
 	{	for(local j=0;j<20;j++){
-            tmpcoor[j]=null
-			tmpsw[j]=0
+			tmpsw[j] = 0
+			tmpcoor[j] = 0
 		}
 		return null
 	}
@@ -2168,7 +2168,7 @@ class basic_chapter
 		return nr
 	}
 
-    function start_sch_tmpsw(pl,coord, c_list, under = false){
+    function start_sch_tmpsw(pl,coord, c_list){
 		local depot = null
 		try {
 			depot = depot_x(coord.x, coord.y, coord.z)  // Deposito /Garaje
@@ -2177,6 +2177,7 @@ class basic_chapter
 			return null
 		}
 		if(depot){
+			local c2d = "coord"
 			local cov_list = depot.get_convoy_list() // Lista de vehiculos en el deposito
 			local d_nr = cov_list.len()   //Numero de vehiculos en el deposito
 			if (d_nr > 0){
@@ -2193,8 +2194,9 @@ class basic_chapter
 								continue
 							}
 							local c = c_list[j]
-							local halt1   = sch.entries[j].get_halt( player_x(pl) )
-							local tile_c = under? tile_x(c.x, c.y, c.z) : my_tile(c)
+							local type = typeof(c)
+							local halt1 = sch.entries[j].get_halt( player_x(pl) )
+							local tile_c = type == c2d ? my_tile(c) : tile_x(c.x, c.y, c.z)
 							local halt2 = tile_c.get_halt()
 							local t1_list = halt1.get_tile_list()
 							local t2_list = halt2.get_tile_list()
@@ -2202,7 +2204,7 @@ class basic_chapter
 							local c_buld2 = t2_list[0].find_object(mo_building).get_pos()
 							if(c_buld1.x == c_buld2.x && c_buld1.y == c_buld2.y){
 								tmpsw[j] = 1
-								tmpcoor[j] = c_list[j]
+								tmpcoor[j] = tile_c
 							}
 						}
 					}
@@ -2211,7 +2213,7 @@ class basic_chapter
 		}
 	}
 
-    function set_convoy_schedule(pl,coord, wt, line_name) 
+    function set_convoy_schedule(pl, coord, wt, line_name) 
     {
 		local depot = depot_x(coord.x, coord.y, coord.z)  // Deposito /Garaje
 		local cov_list = depot.get_convoy_list() // Lista de vehiculos en el deposito
@@ -2222,12 +2224,14 @@ class basic_chapter
             local cov_line = cov_list[0].get_line()
             local play =  player_x(pl)
             local sched = schedule_x(wt, [])
-	        for(local j=0;j<tmpsw.len();j++){
-		        if (tmpsw[j]==1)
+			for(local j = 0; j < tmpsw.len(); j++) {
+		        if (tmpsw[j] == 1){
+					//gui.add_message("("+tmpcoor[j].x+","+tmpcoor[j].y+")")
 			        sched.entries.append(schedule_entry_x(tmpcoor[j], 0, 0))
-                else if (j == 0){
-                    return null
-                }
+				}
+				else {
+					break
+				}
 	        }
 		    local entrie
 
@@ -2299,19 +2303,23 @@ class basic_chapter
 				st_count++
 		}
 		if (st_count<siz){
+			local c2d = "coord"
 			for(local j=0;j<siz;j++){
+				local c = c_list[j]
+				local type = typeof(c)
+				local t = type == c2d ? my_tile(c) : tile_x(c.x, c.y, c.z)
 				if(tmpsw[j]==0){
-					if ((pos.x == c_list[j].x)&&(pos.y == c_list[j].y)){
-						tmpsw[j]=1
-                        tmpcoor[j] = coord(c_list[j].x, c_list[j].y, 0)
+					if ((pos.x == c.x)&&(pos.y == c.y)){
+						tmpsw[j] = 1
+						tmpcoor[j] = t
 						return null
 					}
 					else{
-						local halt = my_tile(c_list[j]).get_halt()
-						return format(translate("Select station No.%d [%s]"),j+1 , halt.get_name())+" ("+coord(c_list[j].x,c_list[j].y).tostring()+")."
+						local halt = t.get_halt()
+						return format(translate("Select station No.%d [%s]"),j+1 , halt.get_name())+" ("+t.tostring()+")."
 					}
 				}
-				if (j==siz-(1))
+				if (j == siz-(1))
 					return result
 			}	
 		}
@@ -2319,9 +2327,9 @@ class basic_chapter
 		return 0
 	}
 
-	function is_stop_allowed_ex(result, siz, list, pos, wt, under = false)
+	function is_stop_allowed_ex(result, siz, list, pos, wt)
 	{
-		local t_list = is_water_entry(list, under)
+		local t_list = is_water_entry(list)
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local buil = t.find_object(mo_building)
 		local is_wt = buil ? buil.get_waytype():null
@@ -2340,32 +2348,37 @@ class basic_chapter
 				st_count++
 		}
 		if (st_count<siz){
-			for(local j=0;j<t_list.len();j++){
-				local t = t_list[j]
-				local halt = t.get_halt()
-				if(!halt)break
+			local j = 0
+			local c2d = "coord"
+			foreach(t in t_list){
+
+				local c = list[j]
+				local type = typeof(c)
+				local st_t = type == c2d ? my_tile(c) : tile_x(c.x, c.y, c.z)
+				local halt = st_t.get_halt()
 				local tile_list = halt.get_tile_list()
 				local max = tile_list.len()
-				local c_lim_list = {a = tile_list[0], b = tile_list[max-1]}
-				if(tmpsw[j]==0){
+				//local c_lim_list = {a = tile_list[0], b = tile_list[max-1]}
+				//gui.add_message(""+j+" :: "+tmpsw[j])
+				if(tmpsw[j] == 0){
 					//if(max == 1 && t.is_water()) return check_water_tile(result, tile_list[0], pos, j)
 					if(wt == wt_water && t.is_water()){
 						local area = get_tiles_near_stations(tile_list)
 						for(local i=0;i<area.len();i++){
 							local t_water = my_tile(area[i])
 							//gui.add_message(""+t_water.x+","+t_water.y+"")
-							if (pos.x==t_water.x && pos.y==t_water.y){
-
+							if (pos.x == t_water.x && pos.y == t_water.y){
 								if(t_water.is_water()){
-									tmpsw[j]=1
-						            tmpcoor[j] = coord(t_list[j].x, t_list[j].y, t_list.z)
-									return null
+									tmpsw[j] = 1
+									tmpcoor[j] = t
+									result = null
+									break
 								}
 								else
-									result = format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
+									result = format(translate("Select station No.%d"),j+1)+" ("+c.tostring()+")."
 							}
 							else
-								result = format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
+								result = format(translate("Select station No.%d"),j+1)+" ("+c.tostring()+")."
 						}
 						return result
 					}
@@ -2373,21 +2386,27 @@ class basic_chapter
 						if (pos.x == tile.x && pos.y == tile.y && pos.z == tile.z){
 							if(has_way && wt == is_wt){
 								tmpsw[j] = 1
-				                tmpcoor[j] = coord3d(t_list[j].x, t_list[j].y, t_list[j].z)
+								tmpcoor[j] = st_t
 								return null
 							}
 							else
-								return format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
+								return format(translate("Select station No.%d"),j+1)+" ("+c.tostring()+")."
 						}
 					}
-					return format(translate("Select station No.%d"),j+1)+" ("+t_list[j].tostring()+")."
+					return format(translate("Select station No.%d"),j+1)+" ("+c.tostring()+")."
 				}
-				if (j==siz-(1))
+				j++
+				if (j == t_list.len())
 					return result
 			}
 		}
 
 		return 0
+	}
+	function get_c_key(c, i){
+		local res =  ("coord_" + c.x + "_" + c.y + "_" + c.z +"_"+i).toalnum()
+		gui.add_message(""+res)
+		return res
 	}
 
 	function get_tiles_near_stations(tile_list)
@@ -2415,38 +2434,38 @@ class basic_chapter
 		return area.len() > 0 ?  area : []
 	}
 
-	function check_water_tile(result, tile, pos, nr)
+	function check_water_tile(result, t, pos, nr)
 	{
-		local t = my_tile(pos)
-		local halt = t.get_halt()
+		local tile = my_tile(pos)
+		local halt = tile.get_halt()
 		local slope = tile.get_slope()
-		local c = coord(tile.x, tile.y)
+
 
 		switch (slope){
 			case 0:
 			break
 			case 4:
-				c.y--
+				t.y--
 			break
 
 			case 12:
-				c.x--
+				t.x--
 			break
 
 			case 28:
-				c.x++
+				t.x++
 			break
 
 			case 36:
-				c.y++
+				t.y++
 			break
 
 			case 56:
-				c.x++
+				t.x++
 			break
 
 			case 72:
-				c.y++
+				t.y++
 			break
 
 			default:
@@ -2455,8 +2474,8 @@ class basic_chapter
 		}
 		if(pos.x == c.x && pos.y == c.y){
 			if(tmpsw[nr]==0){
-				tmpsw[nr]=1
-				tmpcoor[nr]= coord(c.x, c.y, 0)
+				tmpsw[nr] = 1
+				tmpcoor[j] = t
 				return null
 			}
 			return result
@@ -3014,33 +3033,42 @@ class basic_chapter
 	function is_water_entry(list, under = false)
 	{
 		local siz = list.len()
-		local nw_list = array(siz)
-
-		for (local j = 0;j<siz;j++){
-			local tile = my_tile(list[j])
-			local buil = tile.find_object(mo_building)
-			local way = tile.find_object(mo_way)
-			if(under) {
-				nw_list[j] = tile_x(list[j].x, list[j].y, list[j].z)
+		local nw_list = {}
+		local c2d = "coord"
+		for (local j = 0; j<siz; j++){
+			local c = list[j]
+			local type = typeof(c)
+			if(type != c2d) {
+				local t = tile_x(c.x, c.y, c.z)
+				nw_list[coord3d_to_key(t)] <- t
 				continue
 			}
+			local tile = my_tile(c)
+			local buil = tile.find_object(mo_building)
+			local way = tile.find_object(mo_way)
+
 			if (buil && !way) {
 				local t_list = buil.get_tile_list();
 
 				local area = get_tiles_near_stations(t_list)
+				local t_water = null
 				for(local i=0;i<area.len();i++){
-					local t_water = my_tile(area[i])
-
+					t_water = my_tile(area[i])
 					if(t_water.is_water()){
-						local buil = t_water.find_object(mo_building)
-						nw_list[j] = t_water
-						if(buil)		
+						local buil2 = t_water.find_object(mo_building)
+						if(buil2){
 							break
+						}
 					}
 				}
+				nw_list[coord3d_to_key(t_water)] <- t_water
+				continue
 			}
-			else
-				nw_list[j] = my_tile( list[j] );
+			else{
+
+				local t = my_tile(list[j])
+				nw_list[coord3d_to_key(t)] <- t
+			}
 		}
 
 		return nw_list

@@ -27,47 +27,36 @@ class tutorial.chapter_04 extends basic_chapter
 
 	//Step 1 =====================================================================================
 	//Productor
-	f1name = "Oelbohrinsel"
-	f1_coord = coord(113,57)
-	f1_good = good_alias.oel
-	f1_lim = {a = coord(113,57), b = coord(115,59)}
+	fac_1 = {c = coord(127,82), c_list = null /*auto started*/, name = "" /*auto started*/, good = good_alias.oel}
 
 	//Fabrica
-	f2name = "Raffinerie"
-	f2_coord = coord(95,39)
-	f2_good = good_alias.gas
-	f2_lim = {a = coord(95,39), b = coord(97,41)}
+	fac_2 = {c = coord(110,71), c_list = null /*auto started*/, name = "" /*auto started*/, good = good_alias.oel}
 
 	//Step 2 =====================================================================================
 	//Para los muelles
-	dock_list1 = [coord(94,42)]
+	dock_list1 = [coord(115,77)]
 
 	//Step 3 =====================================================================================
-	c_dep1 = coord(113,69)
+	c_dep1 = coord(119,80)
 	d1_cnr = 5
 
 	//Step 4 =====================================================================================
-	ship1_name_obj = "MHz-OT5_Oil_Barge"
+	ship1_name_obj = "RMS_BlackDragon"
 	ship1_load = 100
 	ship1_wait = 0
 
-	sch_list1 = [coord(113,57), coord(94,42)]
+	sch_list1 = [coord(127,82), coord(115,77)]
 
 	//Step 5 =====================================================================================
 	//Para el canal acuatico
-	c1_way = {a = coord3d(84,43,-1), b = coord3d(80,33,-1)}
-	c1_way_lim = {a = coord(78,32), b = coord(84,46)}
-
-	//Para Astillero
-	c_dep2 = coord(94,44)
+	c1_way = {a = coord3d(112,79,-2), b = coord3d(97,77,-1)}
+	c1_way_lim = {a = coord(96,75), b = coord(113,83)}
 
 	//Consumidor Final
-	f3name = "TANKE1"
-	f3_coord = coord(80,30)
-	f3_good = good_alias.gas
+	fac_3 = {c = coord(94,76), c_list = null /*auto started*/, name = "" /*auto started*/, good = good_alias.gas}
 	d2_cnr = 5
 
-	sch_list2 = [coord(94,42), coord(80,33)]
+	sch_list2 = [coord(115,77), coord(97,77)]
 
 	//Step 6 =====================================================================================
 	sch_list3 = [coord(98,46), coord(91,63), coord(88,70), coord(91,63)]
@@ -75,7 +64,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 	//Step 7 =====================================================================================
 	tur = coord(88,65)
-	ship2_name_obj = "MV_Balmoral"
+	ship2_name_obj = "alsterdampfer_1940"
 
 	ship2_load = 100
 	ship2_wait = 42282
@@ -83,11 +72,11 @@ class tutorial.chapter_04 extends basic_chapter
 
 	//Script
 	//----------------------------------------------------------------------------------
-	sc_way_name = "canal_030"
-	sc_dock_name1 = "Long_Goods_Dock"
-	sc_dock_name2 = "canal_ware_stop"
-	sc_dock_name3 = "ShipStop"
-	sc_dep_name = "ShipDepot"
+	sc_way_name = "channel"
+	sc_dock_name1 = "dock_long"
+	sc_dock_name2 = "null"	//canal dock
+	sc_dock_name3 = "null"	//slope dock
+	sc_dep_name = "Schiffdepot"
 
 	comm_script = false
 
@@ -96,9 +85,30 @@ class tutorial.chapter_04 extends basic_chapter
 		rules.clear()
 		set_all_rules(0)
 
+		local t = my_tile(fac_1.c)
+		local buil = t.find_object(mo_building)
+		if(buil) {
+			fac_1.c_list = buil.get_tile_list()
+			fac_1.name = translate(buil.get_name())
+		}
+
+		t = my_tile(fac_2.c)
+		buil = t.find_object(mo_building)
+		if(buil) {
+			fac_2.c_list = buil.get_tile_list()
+			fac_2.name = translate(buil.get_name())
+		}
+
+		t = my_tile(fac_3.c)
+		buil = t.find_object(mo_building)
+		if(buil) {
+			fac_3.c_list = buil.get_tile_list()
+			fac_3.name = translate(buil.get_name())
+		}
+
 		local pl = 0
 		if(this.step == 7){
-            local c_dep = this.my_tile(c_dep2)
+            local c_dep = this.my_tile(c_dep1)
 			local c_list = sch_list3
 			start_sch_tmpsw(pl,c_dep, c_list)
 		}
@@ -229,16 +239,16 @@ class tutorial.chapter_04 extends basic_chapter
 
 		}
 		text.dep1 = c_dep1.href("("+c_dep1.tostring()+")")+""
-		text.dep2 = c_dep2.href("("+c_dep2.tostring()+")")+""
+		text.dep2 = c_dep1.href("("+c_dep1.tostring()+")")+""
 		text.sh = translate(ship1_name_obj)
 		text.cir = cov_cir
-		text.f1 = f1_coord.href(""+translate(f1name)+" ("+f1_coord.tostring()+")")+""
-		text.f3 = f2_coord.href(""+translate(f2name)+" ("+f2_coord.tostring()+")")+""
-		text.f4 = f3_coord.href(""+translate(f3name)+" ("+f3_coord.tostring()+")")+""
+		text.f1 = fac_1.c.href(""+translate(fac_1.name)+" ("+fac_1.c.tostring()+")")+""
+		text.f3 = fac_2.c.href(""+translate(fac_2.name)+" ("+fac_2.c.tostring()+")")+""
+		text.f4 = fac_3.c.href(""+translate(fac_3.name)+" ("+fac_3.c.tostring()+")")+""
 		text.tur = tur.href(" ("+tur.tostring()+")")+""
-		text.good1 = translate(f1_good)
-		text.good2 = translate(f2_good)
-		text.good3 = translate(f3_good)
+		text.good1 = translate(fac_1.good)
+		text.good2 = translate(fac_2.good)
+		text.good3 = translate(fac_3.good)
 
 		return text
 	}
@@ -249,6 +259,36 @@ class tutorial.chapter_04 extends basic_chapter
 		save_glsw()
 		switch (this.step) {
 			case 1:
+				local next_mark = false
+				if(pot0==0 || pot1 == 0){
+					local list = fac_2.c_list
+					local m_buil = true
+					try {
+						next_mark = delay_mark_tile_list(list, m_buil)
+					}
+					catch(ev) {
+						return 0
+					}
+					if(next_mark && pot0 == 1){
+						pot1=1
+					}
+				}
+				else if (pot2==0 || pot3==0){
+					local list = fac_1.c_list
+					local m_buil = true
+					try {
+						next_mark = delay_mark_tile_list(list, m_buil)
+					}
+					catch(ev) {
+						return 0
+					}
+					if(next_mark && pot2 == 1){
+						pot3=1
+					}
+				}
+				else if (pot3==1 && pot4==0){
+					this.next_step()
+				}
 				return 5
 				break;
 			case 2:
@@ -343,11 +383,11 @@ class tutorial.chapter_04 extends basic_chapter
 				}
 				//Para Astillero
 				else if (pot1==1 && pot2==0){
-					local t1 = tile_x(c_dep2.x, c_dep2.y, 0)
+					local t1 = tile_x(c_dep1.x, c_dep1.y, 0)
 					local depot = t1.find_object(mo_depot_water)
 
 					if (!depot){
-						label_x.create(c_dep2, player_x(pl), translate("Build Shipyard here!."))
+						label_x.create(c_dep1, player_x(pl), translate("Build Shipyard here!."))
 					}
 					else{
 						t1.remove_object(player_x(pl), mo_label)
@@ -384,7 +424,7 @@ class tutorial.chapter_04 extends basic_chapter
 				break
 
 			case 7:
-                local c_dep = this.my_tile(c_dep2)
+                local c_dep = this.my_tile(c_dep1)
                 local line_name = line1_name
                 set_convoy_schedule(pl,c_dep, gl_wt, line_name)
 				if(current_cov == ch4_cov_lim3.b){
@@ -434,27 +474,44 @@ class tutorial.chapter_04 extends basic_chapter
 		gltool = tool_id			
 		switch (this.step) {
 			case 1:
-				if ((pos.x>=f2_lim.a.x)&&(pos.y>=f2_lim.a.y)&&(pos.x<=f2_lim.b.x)&&(pos.y<=f2_lim.b.y)){
-					if (tool_id == 4096){
-						if (pot0==0){
-							pot0=1
-							return null
-						}			
-					}
-					else
-						translate("You must use the inspection tool")+" ("+pos.tostring()+")."	
-				}
+				if (tool_id == 4096){
+					if (pot0==0){
+						local list = fac_2.c_list
+						foreach(t in list){
+							if(pos.x == t.x && pos.y == t.y) {
+								pot0 = 1
+								return null
+							}
+						}
+						list = factory_x(fac_2.c.x, fac_2.c.y).get_fields_list()
 
-				if ((pos.x>=f1_lim.a.x)&&(pos.y>=f1_lim.a.y)&&(pos.x<=f1_lim.b.x)&&(pos.y<=f1_lim.b.y)){
-					if (tool_id == 4096){
-						if (pot0==1){
-							this.next_step()
-							return null
-						}			
+						foreach(t in list){
+							if(pos.x == t.x && pos.y == t.y) {
+								pot0 = 1
+								return null
+							}
+						}
 					}
-					else
-						translate("You must use the inspection tool")+" ("+pos.tostring()+")."	
+					else if (pot1==1){
+						local list = fac_1.c_list
+						foreach(t in list){
+							if(pos.x == t.x && pos.y == t.y) {
+								pot2 = 1
+								return null
+							}
+						}
+						list = factory_x(fac_1.c.x, fac_1.c.y).get_fields_list()
+
+						foreach(t in list){
+							if(pos.x == t.x && pos.y == t.y) {
+								pot1 = 1
+								return null
+							}
+						}
+					}
 				}
+				else
+					return translate("You must use the inspection tool")+" ("+pos.tostring()+")."
 		
 				break;
 			//Construyendo los Muelles
@@ -519,7 +576,7 @@ class tutorial.chapter_04 extends basic_chapter
 				}
 				//Para Astillero
 				else if (pot1==1 && pot2==0){
-					if (pos.x==c_dep2.x && pos.y==c_dep2.y){			
+					if (pos.x==c_dep1.x && pos.y==c_dep1.y){			
 						if (tool_id==4117){
 							return null
 						}
@@ -529,7 +586,7 @@ class tutorial.chapter_04 extends basic_chapter
 				else if (pot2==1 && pot3==0){
 					if (tool_id==4108){
 						local c_list = sch_list2	//Lista de todas las paradas de autobus
-						local c_dep = c_dep2		//Coordeadas del deposito 
+						local c_dep = c_dep1		//Coordeadas del deposito 
 						local siz = c_list.len()	//Numero de paradas 
 						result = translate("The route is complete, now you may dispatch the vehicle from the depot")+" ("+c_dep.tostring()+")."
 						return is_stop_allowed_ex(result, siz, c_list, pos, gl_wt)	
@@ -549,7 +606,7 @@ class tutorial.chapter_04 extends basic_chapter
 			case 7:
 				if (tool_id==4108){
 					local c_list = sch_list3	//Lista de todas las paradas de autobus
-					local c_dep = c_dep2		//Coordeadas del deposito 
+					local c_dep = c_dep1		//Coordeadas del deposito 
 					local siz = c_list.len()	//Numero de paradas 
 					result = translate("The route is complete, now you may dispatch the vehicle from the depot")+" ("+c_dep.tostring()+")."
 					return is_stop_allowed_ex(result, siz, c_list, pos, gl_wt)
@@ -579,7 +636,10 @@ class tutorial.chapter_04 extends basic_chapter
 				local time = ship1_wait
 				local c_list = sch_list1
 				local siz = c_list.len()
-				return set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)			
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+				if(result != null)
+					reset_tmpsw()
+				return result	
 			break
 			case 5:
 				local selc = 0
@@ -587,7 +647,10 @@ class tutorial.chapter_04 extends basic_chapter
 				local time = ship1_wait
 				local c_list = sch_list2
 				local siz = c_list.len()
-				return set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)	
+				result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz)
+				if(result != null)
+					reset_tmpsw()()	
+				return result	
 			break
 			case 7:
 				local selc = 0
@@ -627,7 +690,7 @@ class tutorial.chapter_04 extends basic_chapter
 				local cov = d1_cnr
 				local in_dep = true
 				local veh = 1
-				local good_list = [good_desc_x(f1_good).get_catg_index()] //Fuels
+				local good_list = [good_desc_x(fac_1.good).get_catg_index()] //Fuels
 				local name = ship1_name_obj
 				local st_tile = 1
 
@@ -640,7 +703,7 @@ class tutorial.chapter_04 extends basic_chapter
 				result = is_convoy_correct(depot,cov,veh,good_list,name,st_tile)
 
 				if (result!=null){
-					local good = translate(f1_good)
+					local good = translate(fac_1.good)
 	 				return ship_result_message(result, translate(name), good, veh, cov)
 				}
 
@@ -665,12 +728,12 @@ class tutorial.chapter_04 extends basic_chapter
 					return null
 				}
 
-				if ((depot.x != c_dep2.x)||(depot.y != c_dep2.y))
+				if ((depot.x != c_dep1.x)||(depot.y != c_dep1.y))
 					return translate("You must select the deposit located in")+" ("+c_dep1.tostring()+")."
 				local cov = d2_cnr
 		        local in_dep = true
 				local veh = 1
-				local good_list = [good_desc_x(f2_good).get_catg_index()] //Fuels
+				local good_list = [good_desc_x(fac_2.good).get_catg_index()] //Fuels
 				local name = ship1_name_obj
 				local st_tile = 1
 
@@ -682,7 +745,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 				result = is_convoy_correct(depot,cov,veh,good_list,name,st_tile)
 				if (result!=null){
-					local good = translate(f2_good)
+					local good = translate(fac_2.good)
 	 				return ship_result_message(result, translate(name), good, veh, cov)
 				}
 				if (current_cov>ch4_cov_lim2.a && current_cov<ch4_cov_lim2.b){
@@ -695,7 +758,7 @@ class tutorial.chapter_04 extends basic_chapter
 				}
 			break
 			case 7:
-				if ((depot.x != c_dep2.x)||(depot.y != c_dep2.y))
+				if ((depot.x != c_dep1.x)||(depot.y != c_dep1.y))
 					return translate("You must select the deposit located in")+" ("+c_dep1.tostring()+")."
 				local cov = 1
 				local veh = 1
@@ -766,7 +829,7 @@ class tutorial.chapter_04 extends basic_chapter
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
 				local depot = c_depot.find_object(mo_depot_water)
-				local good_nr = good_desc_x(f1_good).get_catg_index()  //Fuels
+				local good_nr = good_desc_x(fac_1.good).get_catg_index()  //Fuels
 				local name = ship1_name_obj
 
 				if (current_cov> ch4_cov_lim1.a && current_cov< ch4_cov_lim1.b){
@@ -839,7 +902,7 @@ class tutorial.chapter_04 extends basic_chapter
 				}
 				//Para Astillero
 				if (pot1==1 && pot2==0){
-					local t1 = my_tile(c_dep2)
+					local t1 = my_tile(c_dep1)
 					local label = t1.find_object(mo_label)
 
 					if (label){
@@ -851,11 +914,11 @@ class tutorial.chapter_04 extends basic_chapter
 					pot2 = 1
 				}
 				if (current_cov> ch4_cov_lim2.a && current_cov< ch4_cov_lim2.b){
-					local c_depot = my_tile(c_dep2)
+					local c_depot = my_tile(c_dep1)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
 					local depot = c_depot.find_object(mo_depot_water)
-					local good_nr = good_desc_x(f2_good).get_catg_index()  //Fuels
+					local good_nr = good_desc_x(fac_2.good).get_catg_index()  //Fuels
 					local name = ship1_name_obj
 					local cov_nr = d2_cnr  //Max convoys nr in depot
 
@@ -878,7 +941,7 @@ class tutorial.chapter_04 extends basic_chapter
 				break;
 
 			case 6:
-				local t_dep = my_tile(c_dep2)
+				local t_dep = my_tile(c_dep1)
 				local depot = t_dep.find_object(mo_depot_water)
 
 				if (!depot){
@@ -900,7 +963,7 @@ class tutorial.chapter_04 extends basic_chapter
 				break;
 
 			case 7:
-				local c_depot = my_tile(c_dep2)
+				local c_depot = my_tile(c_dep1)
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
 				local depot = c_depot.find_object(mo_depot_water)
