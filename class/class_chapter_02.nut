@@ -27,7 +27,7 @@ class tutorial.chapter_02 extends basic_chapter
 	gl_wt = wt_road
 
 	//Limites para las ciudades
-	city1_lim = {a = coord(84,48), b = coord(105,76)}
+	city1_lim = {a = coord(84,48), b = coord(105,78)}
 	city2_lim = {a = coord(102,28), b = coord(120,44)} 
 	cty1 = {c = coord(94,69), name = ""}
 
@@ -80,7 +80,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 	cty2 = {c = coord(107,33), name = ""}
 	c_way_limi1 = {a = coord(104,39), b = coord(108,56)}
-	c_way1 = {a = coord3d(106,54,2), b = coord3d(106,40,2)}
+	c_way1 = {b = coord3d(106,54,2), a = coord3d(106,40,2), dir = 3}	//Inicio, Fin de la via y direccion(fullway)
 
 	sch_list3 = [coord(92,56), coord(116,38), coord(115,33), coord(110,32), coord(110,38), coord(105,32), coord(105,38)]
 	line3_name = "Test 3"
@@ -593,9 +593,9 @@ class tutorial.chapter_02 extends basic_chapter
 
 				else if (pot1==1 && pot2==0){
 						//Comprueba la conexion de la via
-						local coora=coord3d(c_way1.a.x,c_way1.a.y,c_way1.a.z)
-						local coorb=coord3d(c_way1.b.x,c_way1.b.y,c_way1.b.z)
-						local dir = 2
+						local coora = coord3d(c_way1.a.x,c_way1.a.y,c_way1.a.z)
+						local coorb = coord3d(c_way1.b.x,c_way1.b.y,c_way1.b.z)
+						local dir = c_way1.dir
 						local obj = false		
 						r_way = get_fullway(coora, coorb, dir, obj)
 

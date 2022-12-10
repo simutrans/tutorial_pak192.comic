@@ -34,7 +34,7 @@ class tutorial.chapter_01 extends basic_chapter
 
 	// Step 4 =====================================================================================
 	cit_list = null //auto started
-	city_lim = {a = coord(84,48), b = coord(105,76)}
+	city_lim = {a = coord(84,48), b = coord(105,78)}
 	cty1 = {c = coord(94,69), name = ""}
 	
 	function start_chapter()  //Inicia solo una vez por capitulo

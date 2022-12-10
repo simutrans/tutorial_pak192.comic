@@ -393,9 +393,10 @@ class tutorial.chapter_04 extends basic_chapter
 					local t = my_tile(sch_list2[1])
 					local dock4 = t.find_object(mo_building)
 					if (!dock4){
-					label_x.create(sch_list2[1], player_x(pl), translate("Build a Dock here!."))
+						label_x.create(sch_list2[1], player_x(pl), translate("Build a Dock here!."))
 					}
 					else{
+						t.remove_object(player_x(pl), mo_label)
 						if (is_station_build(0, sch_list2[1], good_alias.goods)==null)
 							pot1=1
 					}
@@ -586,7 +587,6 @@ class tutorial.chapter_04 extends basic_chapter
 					}					
 					if(pos.x==sch_list2[1].x && pos.y==sch_list2[1].y){
 						if(tool_id==tool_build_station){
-							t.remove_object(player_x(pl), mo_label)
 							return null
 						}	
 					}

@@ -337,6 +337,12 @@ class tutorial.chapter_05 extends basic_chapter
 		switch (this.step) {
 			case 1:
 				if(pot0==1){
+					//Creea un cuadro label
+					local opt = 0
+					local del = false
+					local text = "X"
+					label_bord(c_way_lim1.a, c_way_lim1.b, opt, del, text)	
+
 					this.next_step()
 				}
 				return 0
@@ -358,14 +364,6 @@ class tutorial.chapter_05 extends basic_chapter
 						label_x.create(coord(coorb.x, coorb.y), player_x(pl), translate("Place the Road here!."))
 					}
 					else t_end.remove_object(player_x(pl), mo_label)
-
-
-					//Creea un cuadro label
-					local opt = 0
-					local del = false
-					local text = "X"
-					label_bord(c_way_lim1.a, c_way_lim1.b, opt, del, text)		
-					
 
 					//Comprueba la conexion de la via
 					local obj = false
@@ -401,9 +399,9 @@ class tutorial.chapter_05 extends basic_chapter
 						label_x.create(c_dep1_lim.a, player_x(pl), translate("Place the Road here!."))
 					}
 					else {
-
 						if (!tile.find_object(mo_depot_road)){
-							label_x.create(c_dep1_lim.a, player_x(pl), translate("Build a Depot here!."))
+							local lab = tile.find_object(mo_label)
+							if(lab) lab.set_text(translate("Build a Depot here!."))
 						}
 						else{
 							tile.remove_object(player_x(pl), mo_label)
@@ -416,6 +414,7 @@ class tutorial.chapter_05 extends basic_chapter
 
 					if (cov_cir == d1_cnr){
 						this.next_step()
+						return 15
 					}
 				}
 				return 0
@@ -630,7 +629,6 @@ class tutorial.chapter_05 extends basic_chapter
 				else if(pot1==1 && pot2==0){
 					if(pos.x>=c_dep1_lim.a.x && pos.y>=c_dep1_lim.a.y && pos.x<=c_dep1_lim.b.x && pos.y<=c_dep1_lim.b.y){
 						if(tool_id==tool_build_way || tool_id==tool_build_depot){
-							if(label) t.remove_object(player_x(pl), mo_label)
 							return null
 						}
 					}
@@ -825,6 +823,7 @@ class tutorial.chapter_05 extends basic_chapter
 				result = is_convoy_correct(depot, cov, veh, good_list, name, st_tile)
 
 				if (result!=null){
+					reset_tmpsw()
 					local good = translate(f1_good)
 					return truck_result_message(result, translate(name), good, veh, cov)
 				}

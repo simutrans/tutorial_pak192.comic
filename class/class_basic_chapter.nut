@@ -38,7 +38,7 @@ class basic_chapter
 	gltool = null
 	glresult = null
 	tmpsw = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    tmpcoor = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    tmpcoor = []
 	stop_flag = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 	st_cover = settings.get_station_coverage()
 
@@ -1233,8 +1233,9 @@ class basic_chapter
 	function reset_tmpsw()
 	{	for(local j=0;j<20;j++){
 			tmpsw[j] = 0
-			tmpcoor[j] = 0
+
 		}
+		tmpcoor = []
 		return null
 	}
 
@@ -2204,7 +2205,7 @@ class basic_chapter
 							local c_buld2 = t2_list[0].find_object(mo_building).get_pos()
 							if(c_buld1.x == c_buld2.x && c_buld1.y == c_buld2.y){
 								tmpsw[j] = 1
-								tmpcoor[j] = tile_c
+								tmpcoor.push(tile_c)
 							}
 						}
 					}
@@ -2311,7 +2312,7 @@ class basic_chapter
 				if(tmpsw[j]==0){
 					if ((pos.x == c.x)&&(pos.y == c.y)){
 						tmpsw[j] = 1
-						tmpcoor[j] = t
+						tmpcoor.push(t)
 						return null
 					}
 					else{
@@ -2371,7 +2372,7 @@ class basic_chapter
 							if (pos.x == t_water.x && pos.y == t_water.y){
 								if(t_water.is_water()){
 									tmpsw[j] = 1
-									tmpcoor[j] = t
+									tmpcoor.push(t)
 									result = null
 									break
 								}
@@ -2387,7 +2388,7 @@ class basic_chapter
 						if (pos.x == tile.x && pos.y == tile.y && pos.z == tile.z){
 							if(has_way && wt == is_wt){
 								tmpsw[j] = 1
-								tmpcoor[j] = st_t
+								tmpcoor.push(st_t)
 								return null
 							}
 							else
@@ -2476,7 +2477,7 @@ class basic_chapter
 		if(pos.x == c.x && pos.y == c.y){
 			if(tmpsw[nr]==0){
 				tmpsw[nr] = 1
-				tmpcoor[j] = t
+				tmpcoor.push(t)
 				return null
 			}
 			return result
@@ -2601,7 +2602,6 @@ class basic_chapter
 			local goods = good_alias.goods
 			if ((pos.x == st_c.x) && (pos.y == st_c.y)){
 				if (glsw[j]==0){
-					tile.remove_object(player_x(1), mo_label)
 					way.unmark()	
 					return null
 				}
