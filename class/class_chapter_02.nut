@@ -1164,9 +1164,6 @@ class tutorial.chapter_02 extends basic_chapter
 
 				if (current_cov>ch2_cov_lim2.a && current_cov<ch2_cov_lim2.b){
 					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
-					local good_nr = 0 //Passengers
-					local name = veh1_obj
-					local cov_nr = 0  //Max convoys nr in depot
 					local c_list = sch_list2
 					local sch_siz = c_list.len()
 					local load = veh1_load
@@ -1182,14 +1179,16 @@ class tutorial.chapter_02 extends basic_chapter
 						sched.entries.append(schedule_entry_x(my_tile(c_list[i]), 0, 0))
 					}
 					local c_line = comm_get_line(player, gl_wt, sched)
+
+					local good_nr = 0 //Passengers
+					local name = veh1_obj
+					local cov_nr = 0  //Max convoys nr in depot
 					for (local j = current_cov; j>ch2_cov_lim2.a && j<ch2_cov_lim2.b && correct_cov; j++){
 						if (!comm_set_convoy(cov_nr, c_depot, name))
 							return 0
 
-						local convoy = depot.get_convoy_list()
-						if (convoy.len()==0) continue
-
 						local conv = depot.get_convoy_list()
+						if (conv.len()==0) continue
 						conv[0].set_line(player, c_line)
 						comm_start_convoy(player, conv[0], depot)
 					}

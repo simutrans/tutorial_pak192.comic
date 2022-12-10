@@ -837,14 +837,12 @@ class tutorial.chapter_04 extends basic_chapter
 
 				if (current_cov> ch4_cov_lim1.a && current_cov< ch4_cov_lim1.b){
 					local sched = schedule_x(gl_wt, [])
-					local c_list = is_water_entry(sch_list1)
-					local j = 0
-					foreach(t in c_list){
+					local t_list = is_water_entry(sch_list1)
+					for(local j =0;j<t_list.len();j++){
 						if(j == 0)
-							sched.entries.append(schedule_entry_x(t, ship1_load, ship1_wait))
+							sched.entries.append(schedule_entry_x(t_list[j], ship1_load, ship1_wait))
 						else
-							sched.entries.append(schedule_entry_x(t, 0, 0))
-						j++
+							sched.entries.append(schedule_entry_x(t_list[j], 0, 0))
 					}
 					local c_line = comm_get_line(player, gl_wt, sched)
 
@@ -863,7 +861,6 @@ class tutorial.chapter_04 extends basic_chapter
 					gall_cov = checks_all_convoys()
 					current_cov = gall_cov						
 				}
-
 				return null
 				break;
 
@@ -918,16 +915,10 @@ class tutorial.chapter_04 extends basic_chapter
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 
+					local t_list = is_water_entry(sch_list2)
 					local sched = schedule_x(gl_wt, [])
-					local c_list = is_water_entry(sch_list2)
-					local j = 0
-					foreach(t in c_list){
-						if(j == 0)
-							sched.entries.append(schedule_entry_x(t, ship1_load, ship1_wait))
-						else
-							sched.entries.append(schedule_entry_x(t, 0, 0))
-						j++
-					}
+					sched.entries.append(schedule_entry_x(t_list[0], ship1_load, ship1_wait))
+					sched.entries.append(schedule_entry_x(t_list[1], 0, 0))
 					local c_line = comm_get_line(player, gl_wt, sched)
 
 					local good_nr = good_desc_x(fac_2.good).get_catg_index()  //Fuels
@@ -983,18 +974,15 @@ class tutorial.chapter_04 extends basic_chapter
 				if (current_cov> ch4_cov_lim3.a && current_cov< ch4_cov_lim3.b){
 					local c_depot = my_tile(c_dep2)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
-					local depot = c_depot.find_object(mo_depot_water)
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 
 					local sched = schedule_x(gl_wt, [])
-					local c_list = is_water_entry(sch_list3)
-
-					local j = 0
-					foreach(t in c_list){
+					local t_list = is_water_entry(sch_list3)
+					for(local j =0;j<t_list.len();j++){
 						if(j == 0)
-							sched.entries.append(schedule_entry_x(t, ship2_load, ship2_wait))
+							sched.entries.append(schedule_entry_x(t_list[j], ship2_load, ship2_wait))
 						else
-							sched.entries.append(schedule_entry_x(t, 0, 0))
-						j++
+							sched.entries.append(schedule_entry_x(t_list[j], 0, 0))
 					}
 					local c_line = comm_get_line(player, gl_wt, sched)
 

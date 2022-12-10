@@ -2448,7 +2448,6 @@ class tutorial.chapter_03 extends basic_chapter
 					}
 
 					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
-					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 					local conv = depot.get_convoy_list()
 					conv[0].set_line(player, c_line)
 					comm_start_convoy(player, conv[0], depot)
@@ -2770,29 +2769,29 @@ class tutorial.chapter_03 extends basic_chapter
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 				local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 
-				//Set schedule for all convoys-------------------------------------------------------------
-				local sched = schedule_x(gl_wt, [])
-				//gui.add_message(""+typeof(sch_list[0]))
-
-				local c2d = "coord"
-				for(local j=0;j<sch_list.len();j++){
-					local c = sch_list[j]
-					local type = typeof(c)
-					local t = type == c2d ? my_tile(c) : tile_x(c.x, c.y, c.z)
-					if (j==0)
-						sched.entries.append(schedule_entry_x(t, loc3_load, loc3_wait))
-					else
-						sched.entries.append(schedule_entry_x(t, 0, 0))
-				}
-				local c_line = comm_get_line(player, gl_wt, sched)
-
-				local cov_nr = d3_cnr
-				local name = loc3_name_obj
-				local wag_name = loc4_name_obj
-				local cab_name = loc5_name_obj
-				local wag_nr = sc_wag3_nr
-				local wag = true
 				if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
+					//Set schedule for all convoys-------------------------------------------------------------
+
+					local sched = schedule_x(gl_wt, [])
+					local c_list = sch_list
+					local c2d = "coord"
+					for(local j=0;j<sch_list.len();j++){
+						local c = c_list[j]
+						local type = typeof(c)
+						local t = type == c2d ? my_tile(c) : tile_x(c.x, c.y, c.z)
+						if (j==0)
+							sched.entries.append(schedule_entry_x(t, loc3_load, loc3_wait))
+						else
+							sched.entries.append(schedule_entry_x(t, 0, 0))
+					}
+					local c_line = comm_get_line(player, gl_wt, sched)
+
+					local cov_nr = d3_cnr
+					local name = loc3_name_obj
+					local wag_name = loc4_name_obj
+					local cab_name = loc5_name_obj
+					local wag_nr = sc_wag3_nr
+					local wag = true
 					for (local j = 0; j<cov_nr;j++){
 						if (!comm_set_convoy(j, c_depot, name))
 							return 0
