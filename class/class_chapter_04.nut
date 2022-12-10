@@ -94,6 +94,10 @@ class tutorial.chapter_04 extends basic_chapter
 		if(buil) {
 			fac_1.c_list = buil.get_tile_list()
 			fac_1.name = translate(buil.get_name())
+			/*local fields = buil.get_factory().get_fields_list()
+			foreach(t in fields){
+				fac_1.c_list.push(t)
+			}*/
 		}
 
 		t = my_tile(fac_2.c)
@@ -101,6 +105,10 @@ class tutorial.chapter_04 extends basic_chapter
 		if(buil) {
 			fac_2.c_list = buil.get_tile_list()
 			fac_2.name = translate(buil.get_name())
+			/*local fields = buil.get_factory().get_fields_list()
+			foreach(t in fields){
+				fac_2.c_list.push(t)
+			}*/
 		}
 
 		t = my_tile(fac_3.c)
@@ -108,6 +116,10 @@ class tutorial.chapter_04 extends basic_chapter
 		if(buil) {
 			fac_3.c_list = buil.get_tile_list()
 			fac_3.name = translate(buil.get_name())
+			/*local fields = buil.get_factory().get_fields_list()
+			foreach(t in fields){
+				fac_3.c_list.push(t)
+			}*/
 		}
 
 		local pl = 0
@@ -431,11 +443,9 @@ class tutorial.chapter_04 extends basic_chapter
 
 			case 7:
 				//Para el astillero
+				local t1 = my_tile(c_dep2)
+				local depot = t1.find_object(mo_depot_water)
 				if(pot0 == 0){
-				//Para Astillero
-					local t1 = my_tile(c_dep2)
-					local depot = t1.find_object(mo_depot_water)
-
 					if (!depot){
 						label_x.create(c_dep2, player_x(pl), translate("Build Shipyard here!."))
 					}
@@ -444,11 +454,13 @@ class tutorial.chapter_04 extends basic_chapter
 						pot0=1
 					}
 				}
-                local c_dep = this.my_tile(c_dep2)
-                local line_name = line1_name
-                set_convoy_schedule(pl,c_dep, gl_wt, line_name)
-				if(current_cov == ch4_cov_lim3.b){
-					this.next_step()
+				if(depot){
+		            local c_dep = this.my_tile(c_dep2)
+		            local line_name = line1_name
+		            set_convoy_schedule(pl,c_dep, gl_wt, line_name)
+					if(current_cov == ch4_cov_lim3.b){
+						this.next_step()
+					}
 				}
 				return 0
 				break
@@ -503,28 +515,12 @@ class tutorial.chapter_04 extends basic_chapter
 								return null
 							}
 						}
-						list = factory_x(fac_2.c.x, fac_2.c.y).get_fields_list()
-
-						foreach(t in list){
-							if(pos.x == t.x && pos.y == t.y) {
-								pot0 = 1
-								return null
-							}
-						}
 					}
 					else if (pot1==1){
 						local list = fac_1.c_list
 						foreach(t in list){
 							if(pos.x == t.x && pos.y == t.y) {
 								pot2 = 1
-								return null
-							}
-						}
-						list = factory_x(fac_1.c.x, fac_1.c.y).get_fields_list()
-
-						foreach(t in list){
-							if(pos.x == t.x && pos.y == t.y) {
-								pot1 = 1
 								return null
 							}
 						}
@@ -975,8 +971,17 @@ class tutorial.chapter_04 extends basic_chapter
 				break;
 
 			case 7:
+				if(pot0==0){
+					//Para Astillero
+					local t1 = my_tile(c_dep2)
+					local label = t1.find_object(mo_label)
+					t1.remove_object(player, mo_label)
+		
+					local tool = command_x(tool_build_depot)			
+					local err = tool.work(player, t1, sc_dep_name)
+				}
 				if (current_cov> ch4_cov_lim3.a && current_cov< ch4_cov_lim3.b){
-					local c_depot = my_tile(c_dep1)
+					local c_depot = my_tile(c_dep2)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 					local depot = c_depot.find_object(mo_depot_water)
 

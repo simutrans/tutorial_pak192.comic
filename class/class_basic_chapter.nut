@@ -3034,14 +3034,14 @@ class basic_chapter
 	function is_water_entry(list, under = false)
 	{
 		local siz = list.len()
-		local nw_list = {}
+		local nw_list = []
 		local c2d = "coord"
 		for (local j = 0; j<siz; j++){
 			local c = list[j]
 			local type = typeof(c)
 			if(type != c2d) {
 				local t = tile_x(c.x, c.y, c.z)
-				nw_list[coord3d_to_key(t)] <- t
+				nw_list.push(t)
 				continue
 			}
 			local tile = my_tile(c)
@@ -3063,13 +3063,13 @@ class basic_chapter
 						}
 					}
 				}
-				nw_list[coord3d_to_key(save_t)] <- save_t
+				nw_list.push(save_t)
 				continue
 			}
 			else{
 
 				local t = my_tile(list[j])
-				nw_list[coord3d_to_key(t)] <- t
+				nw_list.push(t)
 			}
 		}
 

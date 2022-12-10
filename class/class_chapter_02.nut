@@ -45,7 +45,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 	// Step 3 =====================================================================================
 	//Paradas de Autobus
-	sch_list1 =	[coord(96,66), coord(96,71), coord(101,75), coord(94,75), coord(90,74), coord(91,69), coord(91,64)]
+	sch_list1 =	[coord(96,66), coord(96,71), coord(101,75), coord(96,76), coord(91,75), coord(87,72), coord(91,69), coord(91,64)]
 
 	// Step 4 =====================================================================================
 	// El primer Autobus
@@ -88,7 +88,7 @@ class tutorial.chapter_02 extends basic_chapter
 	
 
 	// Step 8 =====================================================================================
-	pub_st1 = coord(94,75)
+	pub_st1 = coord(91,75)
 	pub_st2 = coord(88,4)
 
 	//Script
