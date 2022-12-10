@@ -36,7 +36,6 @@ class tutorial.chapter_05 extends basic_chapter
 	c_fab_lim =	[	{a = coord(149,200), b = coord(150,201)}, {a = coord(110,190), b = coord(111,191)},
 					{a = coord(131,235), b = coord(133,237)}, {a = coord(130,207), b = coord(131,208)}
 				]
-	f_name = ["Raffinerie", "Materialswholesale",  "Kohlegrube", "Kohlekraftwerk"]
 
 	//Step 2 =====================================================================================
 	//Para la carretera
@@ -128,10 +127,10 @@ class tutorial.chapter_05 extends basic_chapter
 			if(buil){
 				fab_list[j].c_list = buil.get_tile_list()
 				fab_list[j].name = translate(buil.get_name())
-				/*local fields = buil.get_factory().get_fields_list()
+				local fields = buil.get_factory().get_fields_list()
 				foreach(t in fields){
 					fab_list[j].c_list.push(t)
-				}*/
+				}
 			}
 			else{
 				gui.add_message("Error aqui: ")
@@ -356,12 +355,20 @@ class tutorial.chapter_05 extends basic_chapter
 					local t_end = tile_x(coorb.x,coorb.y,coorb.z)
 
 					if(!t_start.find_object(mo_way)){
-						label_x.create(coord(coora.x, coora.y), player_x(pl), translate("Place the Road here!."))
+						local label = t_start.find_object(mo_label)
+						if(label.get_text()== "X")
+							t_start.remove_object(player_x(1), mo_label)
+
+						label_x.create(t_start, player_x(pl), translate("Place the Road here!."))
 					}
 					else t_start.remove_object(player_x(pl), mo_label)
 
 					if(!t_end.find_object(mo_way)){
-						label_x.create(coord(coorb.x, coorb.y), player_x(pl), translate("Place the Road here!."))
+						local label = t_end.find_object(mo_label)
+						if(label.get_text()== "X")
+							t_end.remove_object(player_x(1), mo_label)
+
+						label_x.create(t_end, player_x(pl), translate("Place the Road here!."))
 					}
 					else t_end.remove_object(player_x(pl), mo_label)
 
@@ -387,7 +394,6 @@ class tutorial.chapter_05 extends basic_chapter
 					local name =  translate("Place Stop here!.")
 					local load = good_alias.goods
 					local all_stop = is_stop_building(siz, c_list, name, load)
-
 					if (all_stop){
 						reset_glsw()
 						pot1=1
@@ -455,7 +461,6 @@ class tutorial.chapter_05 extends basic_chapter
 					local pow_list = [0,0,0,0]
 					local f_tile_t = my_tile(transf_list[3])
 					local f_transf = f_tile_t.find_object(mo_transformer_s)
-			           // f_power = 0
 					for(local j=0;j<f_list.len();j++){
 						local tile = my_tile(f_list[j].c)
 						local factory = tile.find_object(mo_building).get_factory()
@@ -473,7 +478,7 @@ class tutorial.chapter_05 extends basic_chapter
 									glsw[j] = 1
 						    }
 						}  
-					}              
+					}
 					if (glsw[0] == 1 && glsw[1] == 1 && glsw[2] == 1){
 						//Elimina cuadro label para las power line
 						local opt = 0
@@ -618,7 +623,7 @@ class tutorial.chapter_05 extends basic_chapter
                     for(local j=0;j<sch_list1.len();j++){
                        if(pos.x==sch_list1[j].x && pos.y==sch_list1[j].y){
 							if(tool_id==tool_build_station || tool_id==tool_remover){
-								if(label) t.remove_object(player_x(pl), mo_label)
+								way.unmark()
 								local c_list = sch_list1
 								local good = good_alias.goods
 								return is_station_truck_build(pos, tool_id, c_list, good)
@@ -990,8 +995,6 @@ class tutorial.chapter_05 extends basic_chapter
                 if (pot0==0){
                     for(local j=0;j<transf_list.len();j++){
                         local tile = my_tile(transf_list[j])
-                        local f_transfc = tile.find_object(mo_transformer_c)
-                        local f_transfs = tile.find_object(mo_transformer_s)
                         local label = tile.find_object(mo_label)	
                         if (label){
 							tile.remove_object(player_x(pl), mo_label)
@@ -1033,27 +1036,25 @@ class tutorial.chapter_05 extends basic_chapter
 						    }
 						}
 					}
-                    pot0=1  
 				}
-				if (pot0==1 && pot1==0){
+				if (pot1==0){
 				    local count=0
 				    local nr = obj_list1.len()
 				    local c_st = obj_list1
 
 					for(local j=0;j<nr;j++){
-						local tile = my_tile(c_st[j])
-						local label = tile.find_object(mo_label)
-						local halt = tile.get_halt()
-						local tool = command_x(tool_build_station)
+						if (glsw[j]==0){
+							local tile = my_tile(c_st[j])
+							local label = tile.find_object(mo_label)
+							local halt = tile.get_halt()
+							local tool = command_x(tool_build_station)
 
-						if (label)
-							tile.remove_object(player_x(1), mo_label)
+							if (label)
+								tile.remove_object(player_x(1), mo_label)
 
-						tool.work(player_x(pl), tile, st_name)
-						glsw[j]=1						
+							tool.work(player_x(pl), tile, st_name)
+						}					
 					}
-					pot1=1
-					reset_glsw()
                 }
 
 				local ok = false

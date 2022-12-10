@@ -79,8 +79,6 @@ class tutorial.chapter_04 extends basic_chapter
 	sc_dock_name3 = "dock_long_pax"
 	sc_dep_name = "depot_river"
 
-	comm_script = false
-
 	function start_chapter()  //Inicia solo una vez por capitulo
 	{		
 		rules.clear()
@@ -94,10 +92,10 @@ class tutorial.chapter_04 extends basic_chapter
 		if(buil) {
 			fac_1.c_list = buil.get_tile_list()
 			fac_1.name = translate(buil.get_name())
-			/*local fields = buil.get_factory().get_fields_list()
+			local fields = buil.get_factory().get_fields_list()
 			foreach(t in fields){
 				fac_1.c_list.push(t)
-			}*/
+			}
 		}
 
 		t = my_tile(fac_2.c)
@@ -105,10 +103,10 @@ class tutorial.chapter_04 extends basic_chapter
 		if(buil) {
 			fac_2.c_list = buil.get_tile_list()
 			fac_2.name = translate(buil.get_name())
-			/*local fields = buil.get_factory().get_fields_list()
+			local fields = buil.get_factory().get_fields_list()
 			foreach(t in fields){
 				fac_2.c_list.push(t)
-			}*/
+			}
 		}
 
 		t = my_tile(fac_3.c)
@@ -542,13 +540,13 @@ class tutorial.chapter_04 extends basic_chapter
 				//Primer Astillero
 				if (pos.x==c_dep1.x && pos.y==c_dep1.y){			
 					if (pot0==0){
-						if (tool_id==4117){
+						if (tool_id == tool_build_depot){
 							pot0=1
 							return null
 						}
 					}
 					else if (pot0==1 && pot1==0){
-						if (tool_id==4096){
+						if (tool_id == 4096){
 							pot1=1
 							return null
 						}

@@ -2510,6 +2510,7 @@ class basic_chapter
 					glsw[j]=1
 					count++
 					tile.remove_object(player_x(1), mo_label)
+					if(way)way.unmark()
 					if (count==siz) {
 						return true
 					}
