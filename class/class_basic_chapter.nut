@@ -2225,10 +2225,12 @@ class basic_chapter
             local cov_line = cov_list[0].get_line()
             local play =  player_x(pl)
             local sched = schedule_x(wt, [])
-			for(local j = 0; j < tmpsw.len(); j++) {
+			local siz = tmpcoor.len()
+			for(local j = 0; j < siz; j++) {
+				local c = tmpcoor[j]
 		        if (tmpsw[j] == 1){
 					//gui.add_message("("+tmpcoor[j].x+","+tmpcoor[j].y+")")
-			        sched.entries.append(schedule_entry_x(tmpcoor[j], 0, 0))
+			        sched.entries.append(schedule_entry_x(c, 0, 0))
 				}
 				else {
 					break
@@ -2237,13 +2239,11 @@ class basic_chapter
 		    local entrie
 
 		    try {
-
 			     entrie = sched.entries[1]
 		    }
 		    catch(ev) {
 			    return null
 		    }
-
             if (!cov_line)
                 play.create_line(wt)
 
@@ -2486,77 +2486,19 @@ class basic_chapter
 		return format(translate("Select station No.%d"),nr+1)+" ("+c.tostring()+")."
 	}
 
-	function is_stop_building(siz, c_list, lab_name, load, label_sw = false)
-	{
-		local count = 0
-		for(local j=0;j<siz;j++){
-			local tile = my_tile(c_list[j])
-			local build = tile.find_object(mo_building)
-			local label = tile.find_object(mo_label)
-			local way = tile.find_object(mo_way)
-			local halt = tile.get_halt()
-			if(build && halt){
-				local sw = false
-				local st_desc = build.get_desc()
-				local st_list = building_desc_x.get_available_stations(st_desc.get_type(), st_desc.get_waytype(), good_desc_x(load))
-							
-				foreach(st in st_list){
-					if (st.get_name() == st_desc.get_name()){
-						sw=true
-					}
-				}
-
-				if (sw){
-					glsw[j]=1
-					count++
-					tile.remove_object(player_x(1), mo_label)
-					if(way)way.unmark()
-					if (count==siz) {
-						return true
-					}
-				}
-			}
-			else if (glsw[j]==1){
-				tile.mark()
-				if (!label && label_sw)
-					label_x.create(c_list[j], player_x(0), lab_name)
-				if (way && !way.is_marked()){
-					way.mark()
-				}
-				glsw[j]=0
-			}
-			else if (!halt){
-				tile.mark()
-				if (way && !way.is_marked()){
-					way.mark()
-				}
-				if (!label && label_sw)
-					label_x.create(c_list[j], player_x(0), lab_name)
-
-				glsw[j]=0
-			}
-		}
-		return false
-	}
-
-	function is_stop_building_ex(siz, list, lab_name, load)
+	function is_stop_building(siz, c_list, lab_name, good, label_sw = false)
 	{
 		local player = player_x(1)
 		local count = 0
 		for(local j=0;j<siz;j++){
-			local c = list[j].c
-			local name = list[j].name
-			local good = list[j].good
-			local tile = my_tile(c)
-			local label = tile.find_object(mo_label)
-			local way = tile.find_object(mo_way)
-			local buil = tile.find_object(mo_building)
-			local halt = tile.get_halt()
-
-			//gui.add_message("b"+glsw[j]+" "+j)
-
-			if(tile.is_marked())
-				tile.remove_object(player, mo_label)
+			local c = c_list[j]
+			local t = my_tile(c)
+			local buil = t.find_object(mo_building)
+			local label = t.find_object(mo_label)
+			local way = t.find_object(mo_way)
+			local halt = t.get_halt()
+			if(t.is_marked())
+				t.remove_object(player, mo_label)
 
 			if(buil && halt){
 				local desc = buil.get_desc()
@@ -2572,7 +2514,53 @@ class basic_chapter
 						return true
 					}
 				}
-				if(name == desc.get_name()){
+			}
+			else{
+				if (way && !way.is_marked()){
+					way.mark()
+				}
+				if (!label && !t.is_marked()) {
+					label_x.create(c, player, lab_name)
+				}
+			}
+		}
+		return false
+	}
+
+	function is_stop_building_ex(siz, list, lab_name, load)
+	{
+		local player = player_x(1)
+		local count = 0
+		for(local j=0;j<siz;j++){
+			local c = list[j].c
+			local name = list[j].name
+			local good = list[j].good
+			local t = my_tile(c)
+			local label = tile.find_object(mo_label)
+			local way = tile.find_object(mo_way)
+			local buil = tile.find_object(mo_building)
+			local halt = tile.get_halt()
+
+			//gui.add_message("b"+glsw[j]+" "+j)
+
+			if(t.is_marked())
+				t.remove_object(player, mo_label)
+
+			if(buil && halt){
+				local desc = buil.get_desc()
+				local g_list = get_build_load_type(desc)
+				local is_good = station_compare_load(good, g_list)
+				if(name == "" && is_good) {
+					if(way){
+						way.unmark()
+					}
+					glsw[j]=1
+					count++
+					if (count==siz) {
+						return true
+					}
+				}
+				if(name == desc.get_name() && is_good){
 					glsw[j]=1
 					count++
 					if (count==siz) {
@@ -2584,7 +2572,7 @@ class basic_chapter
 				if(way){
 					way.mark()
 				}
-				else if (!label && !tile.is_marked()) {
+				else if (!label && !t.is_marked()) {
 					label_x.create(c, player, lab_name)
 				}
 			}
@@ -2972,6 +2960,7 @@ class basic_chapter
 			foreach(t in list){
 				local buil = m_buil ? t.find_object(mo_building): null
 				buil ? buil.unmark() : t.unmark()
+
 			}
 
 			tile_delay_list++
@@ -2985,28 +2974,26 @@ class basic_chapter
 			for (local j = coora.x ;j<=coorb.x;j++){
 				for (local i = coora.y;i<=coorb.y;i++){
                     local c = coord(j,i)
-					local tile = my_tile(c)
-					tile.unmark()
-					foreach(obj in tile.get_objects()){
+					local t = my_tile(c)
+					t.unmark()
+					foreach(obj in t.get_objects()){
 						local type = obj.get_type()
-						tile.find_object(type).unmark()
+						t.find_object(type).unmark()
 					}
 				}
 			}
 			return true
 		}
-
-		local tile = tile_x(coora.x, coora.y, 0)
 		if(tile_delay>=3){
 			if (opt == 0){
 				for (local j = coora.x ;j<=coorb.x;j++){
 					for (local i = coora.y;i<=coorb.y;i++){
                         local c = coord(j,i)
-						local tile = my_tile(c)
-						tile.mark()
-						foreach(obj in tile.get_objects()){
+						local t = my_tile(c)
+						t.mark()
+						foreach(obj in t.get_objects()){
 							local type = obj.get_type()
-							tile.find_object(type).mark()
+							t.find_object(type).mark()
 						}
 					}
 				}
@@ -3018,10 +3005,10 @@ class basic_chapter
 				for (local j = coora.x ;j<=coorb.x;j++){
 					for (local i = coora.y;i<=coorb.y;i++){
                         local c = coord(j,i)
-						local tile = my_tile(c)
-						foreach(obj in tile.get_objects()){
+						local t = my_tile(c)
+						foreach(obj in t.get_objects()){
 							local type = obj.get_type()
-							tile.find_object(type).mark()
+							t.find_object(type).mark()
 						}
 					}
 				}
@@ -3033,8 +3020,8 @@ class basic_chapter
 				for (local j = coora.x ;j<=coorb.x;j++){
 					for (local i = coora.y;i<=coorb.y;i++){
                         local c = coord(j,i)
-						local tile = my_tile(c)
-						tile.mark()
+						local t = my_tile(c)
+						t.mark()
 					}
 				}
 				tile_delay = 0
@@ -3046,11 +3033,10 @@ class basic_chapter
 			for (local j = coora.x ;j<=coorb.x;j++){
 				for (local i = coora.y;i<=coorb.y;i++){
                     local c = coord(j,i)
-					local tile = my_tile(c)
-					tile.unmark()
-					foreach(obj in tile.get_objects()){
+					local t = my_tile(c)
+					foreach(obj in t.get_objects()){
 						local type = obj.get_type()
-						tile.find_object(type).unmark()
+						t.find_object(type).unmark()
 					}
 				}
 			}

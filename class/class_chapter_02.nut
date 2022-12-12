@@ -482,16 +482,13 @@ class tutorial.chapter_02 extends basic_chapter
 				return 50
 				break
 			case 5:
-				local t_label = my_tile(brdg1)
-				local label = t_label.find_object(mo_label)
-
-				local c_lim = {a = c_brdg_limi1.a, b = c_brdg_limi1.b} 
+				local t = my_tile(brdg1)
+				local label = t.find_object(mo_label)
+				local c_lim = {a = c_brdg_limi1.a, b = c_brdg_limi1.b}
 				local next_mark = true
-				if (pot0 == 0){
-					if (!label)
-						label_x.create(brdg1, player_x(pl), translate("Build a Bridge here!."))
+				if (pot0==0){
 					try {
-						 next_mark = delay_mark_tile(c_lim.a, c_lim.b, 0, stop_mark)
+						 next_mark = delay_mark_tile(c_lim.a, c_lim.b, 0)
 					}
 					catch(ev) {
 						return 0
@@ -515,7 +512,7 @@ class tutorial.chapter_02 extends basic_chapter
 					local obj = false		
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
-						t_label.remove_object(player_x(1), mo_label)
+						t.remove_object(player_x(1), mo_label)
 						this.next_step()
 					}
 				}

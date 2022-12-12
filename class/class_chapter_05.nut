@@ -71,17 +71,17 @@ class tutorial.chapter_05 extends basic_chapter
 				]
 
 	//Step 4 =====================================================================================
-    st_name = "extension_Postamt"
+    st_name = "extension_postoffice"
     obj_list1 = [
-					{c = coord(87,71), name = "extension_Postamt", good = good_alias.mail},
-					{c = coord(91,70), name = "extension_Postamt", good = good_alias.mail}, 
-					{c = coord(97,76), name = "extension_Postamt", good = good_alias.mail}, 
-					{c = coord(101,76), name = "extension_Postamt", good = good_alias.mail},
-					{c = coord(91,65), name = "extension_Postamt", good = good_alias.mail},
-					{c = coord(92,55), name = "extension_Postamt", good = good_alias.mail}, 
-					{c = coord(99,58), name = "extension_Postamt", good = good_alias.mail},
-					{c = coord(95,54), name = "extension_Postamt", good = good_alias.mail}, 
-					{c = coord(102,52), name = "extension_Postamt", good = good_alias.mail},
+					{c = coord(87,71), name = "extension_postoffice", good = good_alias.mail},
+					{c = coord(91,70), name = "extension_postoffice", good = good_alias.mail}, 
+					{c = coord(97,76), name = "extension_postoffice", good = good_alias.mail}, 
+					{c = coord(101,76), name = "extension_postoffice", good = good_alias.mail},
+					{c = coord(91,65), name = "extension_postoffice", good = good_alias.mail},
+					{c = coord(92,55), name = "extension_postoffice", good = good_alias.mail}, 
+					{c = coord(99,58), name = "extension_postoffice", good = good_alias.mail},
+					{c = coord(95,54), name = "extension_postoffice", good = good_alias.mail}, 
+					{c = coord(102,52), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(108,72), name = "", good = [good_alias.mail, good_alias.passa]},
 					{c = coord(84,96), name = "", good = [good_alias.mail, good_alias.passa]}
 				]
