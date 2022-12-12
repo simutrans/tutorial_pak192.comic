@@ -1,0 +1,22 @@
+<p>
+Some nearby factories need workers (passengers) to improve their efficiency.
+</p>
+<p>
+In depot {dep}, select a  <em>{veh}</em> and press <em>[Schedule]</em>.
+</p>
+<p>
+<em>Now select the stops:</em><br/>
+{list}
+</p>
+<p>
+After adding the {nr} stops, select the stop <em>{stnam}</em> and configure it as follows:<br/>
+<em>--> [a]</em> Set <em>Minimum load</em> to <em>{load}%</em>.<br/>
+<em>--> [b]</em> Set <em>Depart after</em> to <em>{wait}</em>.<br/>
+Press the button <em>[Copy convoy]</em> until you reach <em>{all_cov}</em> convoys, Finally press the button <em>[Start]</em>.
+</p>
+<p>
+<st>Advances to the next step</st> when all convoys are in circulation.
+</p>
+<p>
+<em>Convoys in circulation:</em> <st>{cir}/{all_cov}</st>
+</p>

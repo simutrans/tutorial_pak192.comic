@@ -20,3 +20,7 @@ In this chapter we will improve the efficiency of our industrial chains, transpo
 {txtst_04}Step D</em> -  Delivering the Mail<br/>
 {step_04}
 </p>
+<p>
+{txtst_05}Step D</em> -  industrial workers<br/>
+{step_05}
+</p>

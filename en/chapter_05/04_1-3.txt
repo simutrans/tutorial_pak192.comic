@@ -1,5 +1,10 @@
 <p>
-{tx} In the <em>{toolbar}</em> menu, select one of the <em>"Extension Buildings"</em> for mail and place one in each of the following positions:
+{tx} In the <em>{toolbar}</em> menu, select one of the <em>"Extension Buildings"</em> for mail and place in the indicated places.
+Also place the stops for multiple types of load in the indicated places:
+</p>
+<p>
+<h1>Multipurpose stops:</h1>
+They are stops that can accept more than one type of load, for example [mail and passengers].
 </p>
 <p>
 {st}
