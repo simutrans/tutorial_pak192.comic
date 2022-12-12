@@ -20,3 +20,7 @@ En este capítulo vamos a mejorar la eficiencia de nuestras cadenas industriales,
 {txtst_04}Paso D</em> - Entregando el Correo<br>
 {step_04}
 </p>
+<p>
+{txtst_05}Paso E</em> - Trabajadores de la industria<br>
+{step_05}
+</p>

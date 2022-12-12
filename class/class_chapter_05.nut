@@ -9,8 +9,11 @@
 ch5_cov_lim1 <- {a = 20 , b = 31}
 
 //Step 4 =====================================================================================
-ch5_cov_lim2 <- {a = 30 , b = 34}
-ch5_cov_lim3 <- {a = 33 , b = 35}
+ch5_cov_lim2 <- {a = 30 , b = 33}
+ch5_cov_lim3 <- {a = 32 , b = 34}
+
+//Step 5 =====================================================================================
+ch5_cov_lim4 <- {a = 33 , b = 35}
 
 
 class tutorial.chapter_05 extends basic_chapter
@@ -18,11 +21,7 @@ class tutorial.chapter_05 extends basic_chapter
 	chapter_name  = "Industrial Efficiency"
 	chapter_coord = coord(60,7)
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
-
 	cov_cir = 0
-
-	comm_script = false
-
 	sch_cov_correct = false
 
 	//Step 1 =====================================================================================
@@ -76,50 +75,46 @@ class tutorial.chapter_05 extends basic_chapter
     obj_list1 = [
 					{c = coord(87,71), name = "extension_Postamt", good = good_alias.mail},
 					{c = coord(91,70), name = "extension_Postamt", good = good_alias.mail}, 
-					{c = coord(95,71), name = "extension_Postamt", good = good_alias.mail},
 					{c = coord(97,76), name = "extension_Postamt", good = good_alias.mail}, 
 					{c = coord(101,76), name = "extension_Postamt", good = good_alias.mail},
-					{c = coord(95,66), name = "extension_Postamt", good = good_alias.mail}, 
 					{c = coord(91,65), name = "extension_Postamt", good = good_alias.mail},
 					{c = coord(92,55), name = "extension_Postamt", good = good_alias.mail}, 
 					{c = coord(99,58), name = "extension_Postamt", good = good_alias.mail},
 					{c = coord(95,54), name = "extension_Postamt", good = good_alias.mail}, 
 					{c = coord(102,52), name = "extension_Postamt", good = good_alias.mail},
-					{c = coord(97,48), name = "extension_Postamt", good = good_alias.mail}, 
 					{c = coord(108,72), name = "", good = [good_alias.mail, good_alias.passa]},
 					{c = coord(84,96), name = "", good = [good_alias.mail, good_alias.passa]}
 				]
 
 
     sch_list2 =	[
-					coord(111,183), coord(116,183),  coord(120,183), coord(126,187),
-					coord(132,189), coord(121,189), coord(118,191), coord(113,190)
+					coord(108,72), coord(101,75), coord(96,76), coord(84,96),
+					coord(91,75), coord(87,72), coord(91,69), coord(91,64),
+					coord(92,56), coord(96,54), coord(99,57), coord(101,52)
 				]
 
 	//Para el Camion
     veh2_obj = "road_truck_post_1967_t2"
     c_dep2 = coord(92,65) // depot
-	line1_name = "Test 6"
+	line2_name = "Test 6"
 	veh2_load = 100
 	veh2_wait = 10571
 	d2_cnr = null //auto started
 
 	//Para el barco
-	sch_list3 = [coord(133,189), coord(168,189)]
+	sch_list3 = [coord(97,77), coord(127,82)]
     veh3_obj = "Kanalschiff-Post"
 	veh3_load = 100
 	veh3_wait = 42282
-    c_dep3 = coord(150,190) // depot
+    c_dep3 = coord(119,80) // depot
 	d3_cnr = null //auto started
 
 	//Step 5 =====================================================================================
 	//Para el Autobus
-    sch_list4 =	[
-					coord(111,183), coord(116,183),  coord(120,183), coord(126,187),
-					coord(132,189), coord(121,189), coord(118,191), coord(113,190)
-				]
+	sch_list4 =	[coord(108,72),  coord(96,76), coord(84,96), coord(96,76)]
+
     veh4_obj = "road_bus_1972_ikarus260"
-	line1_name = "Test 7"
+	line4_name = "Test 7"
 	veh4_load = 100
 	veh4_wait = 10571
 	d4_cnr = null //auto started
@@ -153,6 +148,7 @@ class tutorial.chapter_05 extends basic_chapter
 		d1_cnr = get_dep_cov_nr(ch5_cov_lim1.a,ch5_cov_lim1.b)
 		d2_cnr = get_dep_cov_nr(ch5_cov_lim2.a,ch5_cov_lim2.b)
 		d3_cnr = get_dep_cov_nr(ch5_cov_lim3.a,ch5_cov_lim3.b)
+		d4_cnr = get_dep_cov_nr(ch5_cov_lim4.a,ch5_cov_lim4.b)
 		
 		local list = fab_list
 		for(local j = 0; j<list.len(); j++){
@@ -280,14 +276,14 @@ class tutorial.chapter_05 extends basic_chapter
 					local tile = my_tile(c)
 					local st_halt = tile.get_halt()
 					if(sch_cov_correct){
-						list_tx += format("<em>%d %s:</em> %s <em>%s</em><br>",  j+1, translate("Stop"), st_halt.get_name(), translate("OK"))
+						list_tx += format("<em>%s %d:</em> %s <em>%s</em><br>", translate("Stop"), j+1, st_halt.get_name(), translate("OK"))
 						continue
 					}
 					if(tmpsw[j]==0){
-						list_tx += format("<st>%d %s:</st> %s<br>",  j+1, translate("Stop"), c.href(st_halt.get_name()+" ("+c.tostring()+")"))
+						list_tx += format("<st>%s %d:</st> %s<br>", translate("Stop"), j+1, c.href(st_halt.get_name()+" ("+c.tostring()+")"))
 					}
 					else{						
-						list_tx += format("<em>%d %s:</em> %s <em>%s</em><br>", j+1, translate("Stop"), st_halt.get_name(), translate("OK"))
+						list_tx += format("<em>%s %d:</em> %s <em>%s</em><br>", translate("Stop"), j+1, st_halt.get_name(), translate("OK"))
 					}
 				}
 				local c = coord(c_list[0].x, c_list[0].y)
@@ -337,6 +333,36 @@ class tutorial.chapter_05 extends basic_chapter
 			}
 			break
 			case 5:
+			local list_tx = ""
+			local c_list = sch_list4
+			local siz = c_list.len()
+			for (local j=0;j<siz;j++){
+				local c = coord(c_list[j].x, c_list[j].y)
+				local tile = my_tile(c)
+				local st_halt = tile.get_halt()
+				if(sch_cov_correct){
+					list_tx += format("<em>%s %d:</em> %s <em>%s</em><br>", translate("Stop"), j+1, st_halt.get_name(), translate("OK"))
+					continue
+				}
+				if(tmpsw[j]==0){
+					list_tx += format("<st>%s %d:</st> %s<br>", translate("Stop"), j+1, c.href(st_halt.get_name()+" ("+c.tostring()+")"))
+				}
+				else{						
+					list_tx += format("<em>%s %d:</em> %s <em>%s</em><br>", translate("Stop"), j+1, st_halt.get_name(), translate("OK"))
+				}
+			}
+			local c = coord(c_list[0].x, c_list[0].y)
+			local tile = my_tile(c)
+			text.stnam = "1) "+tile.get_halt().get_name()+" ("+c.tostring()+")"
+
+			text.list = list_tx
+			text.dep = c_dep2.href("("+c_dep2.tostring()+")")
+			text.veh = translate(veh4_obj)
+			text.all_cov = d4_cnr
+			text.cir = cov_cir
+			text.load = veh4_load
+			text.wait = get_wait_time_text(veh4_wait)
+			text.nr = siz
 
 			break
 			case 6:
@@ -553,7 +579,7 @@ class tutorial.chapter_05 extends basic_chapter
                 }
 				if (pot1==1 && pot2==0){
 				    local c_dep = this.my_tile(c_dep2)
-                    local line_name = line1_name
+                    local line_name = line2_name
                     set_convoy_schedule(pl, c_dep, wt_road, line_name)
 
 					local depot = depot_x(c_dep.x, c_dep.y, c_dep.z)
@@ -590,6 +616,25 @@ class tutorial.chapter_05 extends basic_chapter
 				return 80
 				break
 			case 5:
+
+			    local c_dep = this.my_tile(c_dep2)
+                local line_name = line4_name
+                set_convoy_schedule(pl, c_dep, wt_road, line_name)
+
+				local depot = depot_x(c_dep.x, c_dep.y, c_dep.z)
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+
+				cov_cir = get_convoy_nr((ch5_cov_lim4.a), d4_cnr)
+				if (current_cov >= ch5_cov_lim4.b){
+					sch_cov_correct = false
+					this.next_step()
+				}
 
 				return 90
 				break
@@ -776,6 +821,15 @@ class tutorial.chapter_05 extends basic_chapter
                 }
 			break
 			case 5:
+
+				if (tool_id==4108) {			
+					local c_list = sch_list4  	//Lista de todas las paradas de autobus
+					local c_dep = c_dep2		//Coordeadas del deposito 
+					local nr = c_list.len()		//Numero de paradas 
+					result = translate("The route is complete, now you may dispatch the vehicle from the depot")+" ("+c_dep.tostring()+")."
+					return is_stop_allowed(result, nr, c_list, pos)
+				}
+                
 			break
 
 		}
@@ -820,7 +874,7 @@ class tutorial.chapter_05 extends basic_chapter
 					local line = true
 					result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
 					if(result == null){
-						local line_name = line1_name
+						local line_name = line2_name
 						update_convoy_schedule(pl, wt_road, line_name, schedule)
 					}
 				}
@@ -834,6 +888,21 @@ class tutorial.chapter_05 extends basic_chapter
 				}
 				return result
 			break
+			case 5:
+				if (current_cov> ch5_cov_lim4.a && current_cov< ch5_cov_lim4.b){
+					local selc = 0
+					local load = veh4_load
+					local time = veh4_wait
+					local c_list = sch_list4
+					local siz = c_list.len()
+					local line = true
+					result = set_schedule_list(result, pl, schedule, nr, selc, load, time, c_list, siz, line)
+					if(result == null){
+						local line_name = line4_name
+						update_convoy_schedule(pl, wt_road, line_name, schedule)
+					}
+				}
+			break
 		}
 		return result
 	}
@@ -843,15 +912,6 @@ class tutorial.chapter_05 extends basic_chapter
 
 		switch (this.step) {
 			case 2:
-				if(comm_script) {
-					cov_save[current_cov]=convoy
-					id_save[current_cov]=convoy.id
-					gcov_nr++
-					persistent.gcov_nr = gcov_nr
-					current_cov++
-					gall_cov++
-					return null
-				}
 				local cov = d1_cnr
 				local veh = 2
 				local good_list = [good_desc_x(f1_good).get_catg_index()] 	 //Coal
@@ -882,15 +942,6 @@ class tutorial.chapter_05 extends basic_chapter
 				}
 			break
 			case 4:
-				if(comm_script) {
-					cov_save[current_cov]=convoy
-					id_save[current_cov]=convoy.id
-					gcov_nr++
-					persistent.gcov_nr = gcov_nr
-					current_cov++
-					gall_cov++
-					return null
-				}
 				if (current_cov> ch5_cov_lim2.a && current_cov< ch5_cov_lim2.b){
 					local cov = d2_cnr
 					local veh = 1
@@ -939,6 +990,34 @@ class tutorial.chapter_05 extends basic_chapter
 					return set_schedule_convoy(result, pl, cov, convoy, selc, load, time, c_list, siz)
 				}
 			break
+			case 5:
+				if (current_cov> ch5_cov_lim4.a && current_cov< ch5_cov_lim4.b){
+					local cov = d4_cnr
+					local veh = 1
+					local good_list = [good_desc_x(good_alias.passa).get_catg_index()] 	 //Mail
+					local name = veh4_obj
+					local st_tile = 1
+
+					//Para arracar varios vehiculos
+					local id_start = ch5_cov_lim4.a
+					local id_end = ch5_cov_lim4.b
+					local c_sch = sch_list4[0]
+					local cir_nr = get_convoy_number_exp(c_sch, depot, id_start, id_end)
+					cov -= cir_nr
+
+					result = is_convoy_correct(depot, cov, veh, good_list, name, st_tile)
+
+					if (result!=null){
+						local good = translate(good_alias.passa)
+						return truck_result_message(result, translate(name), good, veh, cov)
+					}
+					local selc = 0
+					local load = veh4_load
+					local time = veh4_wait
+					local c_list = sch_list4
+					local siz = c_list.len()
+					return set_schedule_convoy(result, pl, cov, convoy, selc, load, time, c_list, siz)
+				}
 		}
 		return result = translate("It is not allowed to start vehicles.")
 	}
@@ -1100,16 +1179,14 @@ class tutorial.chapter_05 extends basic_chapter
 						}					
 					}
                 }
-				gui.add_message("Return aqui")
-				return null
 				local ok = false
 				if (current_cov> ch5_cov_lim2.a && current_cov< ch5_cov_lim2.b){
-
+					local wt = wt_road
 					local player = player_x(pl)
 					local c_depot = my_tile(c_dep2)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
-					local sched = schedule_x(wt_road, [])
+					local sched = schedule_x(wt, [])
 					local c_list = sch_list2
 					local siz = c_list.len()
 					for(local j = 0;j<siz;j++){
@@ -1118,7 +1195,7 @@ class tutorial.chapter_05 extends basic_chapter
 						else
 							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), 0, 0))
 					}
-					local c_line = comm_get_line(player, gl_wt, sched)
+					local c_line = comm_get_line(player, wt, sched)
 
 					local name = veh2_obj
 					local cov_nr = d2_cnr  //Max convoys nr in depot
@@ -1137,12 +1214,12 @@ class tutorial.chapter_05 extends basic_chapter
 				}
 
 				if (ok || (current_cov> ch5_cov_lim3.a && current_cov< ch5_cov_lim3.b)){
-
+					local wt = wt_water
 					local player = player_x(pl)
 					local c_depot = my_tile(c_dep3)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
-					local sched = schedule_x(wt_water, [])
+					local sched = schedule_x(wt, [])
 					local c_list = is_water_entry(sch_list3)
 					local siz = c_list.len()
 					for(local j = 0;j<siz;j++){
@@ -1151,7 +1228,7 @@ class tutorial.chapter_05 extends basic_chapter
 						else
 							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), 0, 0))
 					}
-					local c_line = comm_get_line(player, gl_wt, sched)
+					local c_line = comm_get_line(player, wt, sched)
 
 					local name = veh3_obj
 					local cov_nr = d3_cnr  //Max convoys nr in depot
@@ -1169,6 +1246,39 @@ class tutorial.chapter_05 extends basic_chapter
                 
 				return null
 			break
+			case 5:
+				if (current_cov> ch5_cov_lim4.a && current_cov< ch5_cov_lim4.b){
+					local wt = wt_road
+					local player = player_x(pl)
+					local c_depot = my_tile(c_dep2)
+					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
+
+					local sched = schedule_x(wt, [])
+					local c_list = sch_list4
+					local siz = c_list.len()
+					local load = veh4_load
+					local wait = veh4_wait
+					for(local j = 0;j<siz;j++){
+						if(j==0)
+							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), load, wait))
+						else
+							sched.entries.append(schedule_entry_x(my_tile(c_list[j]), 0, 0))
+					}
+					local c_line = comm_get_line(player, wt, sched)
+
+					local name = veh4_obj
+					local cov_nr = d4_cnr  //Max convoys nr in depot
+					if (!comm_set_convoy(cov_nr, c_depot, name))
+						return 0
+
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+					local conv = depot.get_convoy_list()
+					conv[0].set_line(player, c_line)
+					comm_start_convoy(player, conv[0], depot)
+
+					gall_cov = checks_all_convoys()
+					current_cov = gall_cov	
+				}
 		}
 		return null
 	}

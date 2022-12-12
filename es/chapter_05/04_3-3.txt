@@ -1,5 +1,5 @@
 <p>
-{tx} Usa la <em>Herramienta de Inspección</em> en el <em>Astillero</em> {dep} y en la pestaña de <em>Ferris</em> compra un <em>{ship}</em> con una extensión <em>{ext}</em>.
+{tx} Usa la <em>Herramienta de Inspección</em> en el <em>Astillero</em> {dep} y en la pestaña de <em>Ferris</em> compra un <em>{ship}</em>.
 </p>
 <p>
 Ahora pulsa <em>Itinerario</em> y selecciona las paradas:<br>

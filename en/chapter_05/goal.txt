@@ -21,6 +21,6 @@ In this chapter we will improve the efficiency of our industrial chains, transpo
 {step_04}
 </p>
 <p>
-{txtst_05}Step D</em> -  industrial workers<br/>
+{txtst_05}Step E</em> -  industrial workers<br/>
 {step_05}
 </p>
