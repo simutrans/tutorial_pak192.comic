@@ -4,7 +4,7 @@
  
  *  Can NOT be used in network game !
  */
-const version = 0100
+const version = 1640
 map.file = "tutorial192.sve"
 scenario_name             <- "Tutorial Scenario"
 scenario.short_description = scenario_name

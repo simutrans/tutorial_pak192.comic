@@ -18,7 +18,7 @@ ch4_cov_lim3 <- {a = 19, b = 21}
 class tutorial.chapter_04 extends basic_chapter
 {
 	chapter_name  = "Setting Sail"
-	chapter_coord = coord(95,39)
+	chapter_coord = coord(110,71)
 
 	startcash     = 1000000	   				// pl=0 startcash; 0=no reset
 	gl_wt = wt_water
@@ -74,7 +74,7 @@ class tutorial.chapter_04 extends basic_chapter
 	//Script
 	//----------------------------------------------------------------------------------
 	sc_way_name = "river_0"
-	sc_dock_name1 = "dock_goods01"
+	sc_dock_name1 = "dock_container"
 	sc_dock_name2 = "water_station_goods"
 	sc_dock_name3 = "dock_long_pax"
 	sc_dep_name = "depot_river"
@@ -805,11 +805,11 @@ class tutorial.chapter_04 extends basic_chapter
 				//Para los muelles mrcancias
 				local c_list = dock_list1
 				local name = sc_dock_name1
-				for(local j =0;j<c_list.len();j++){
-					local tile = my_tile(c_list[j])
-					tile.remove_object(player, mo_label)
+				for(local j=0; j<c_list.len(); j++){
+					local t = my_tile(c_list[j])
+					t.remove_object(player_x(1), mo_label)
 					local tool = command_x(tool_build_station)			
-					local err = tool.work(player, tile, name)
+					local err = tool.work(player, t, name)
 				}
 				return null
 				break;
@@ -951,7 +951,7 @@ class tutorial.chapter_04 extends basic_chapter
 				for(local j =0;j<c_list.len();j++){
 					local t = my_tile(c_list[j])
 					t.unmark()
-					t.remove_object(player, mo_label)
+					t.remove_object(player_x(1), mo_label)
 					local tool = command_x(tool_build_station)			
 					tool.work(player, t, name)
 					glsw[j]=1

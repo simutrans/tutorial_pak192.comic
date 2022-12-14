@@ -19,7 +19,7 @@ ch5_cov_lim4 <- {a = 33 , b = 35}
 class tutorial.chapter_05 extends basic_chapter
 {
 	chapter_name  = "Industrial Efficiency"
-	chapter_coord = coord(60,7)
+	chapter_coord = coord(61,72)
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 	cov_cir = 0
 	sch_cov_correct = false
@@ -75,20 +75,21 @@ class tutorial.chapter_05 extends basic_chapter
     obj_list1 = [
 					{c = coord(87,71), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(91,70), name = "extension_postoffice", good = good_alias.mail}, 
-					{c = coord(97,76), name = "extension_postoffice", good = good_alias.mail}, 
-					{c = coord(101,76), name = "extension_postoffice", good = good_alias.mail},
+					{c = coord(97,76), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(91,65), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(92,55), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(99,58), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(95,54), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(102,52), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(108,72), name = "", good = [good_alias.mail, good_alias.passa]},
+					{c = coord(103,75), name = "", good = [good_alias.passa]},
+					{c = coord(102,74), name = "", good = [good_alias.mail]},
 					{c = coord(84,96), name = "", good = [good_alias.mail, good_alias.passa]}
 				]
 
 
     sch_list2 =	[
-					coord(108,72), coord(101,75), coord(96,76), coord(84,96),
+					coord(108,72), coord(102,74), coord(96,76), coord(84,96),
 					coord(91,75), coord(87,72), coord(91,69), coord(91,64),
 					coord(92,56), coord(96,54), coord(99,57), coord(101,52)
 				]
@@ -111,7 +112,7 @@ class tutorial.chapter_05 extends basic_chapter
 
 	//Step 5 =====================================================================================
 	//Para el Autobus
-	sch_list4 =	[coord(108,72),  coord(96,76), coord(84,96), coord(96,76)]
+	sch_list4 =	[coord(103,75), coord(108,72),  coord(96,76), coord(84,96), coord(96,76)]
 
     veh4_obj = "road_bus_1972_ikarus260"
 	line4_name = "Test 7"
@@ -135,7 +136,7 @@ class tutorial.chapter_05 extends basic_chapter
 						{a = coord3d(115,109,1) , b = coord3d(87,96,7)},
 						{a = coord3d(115,109,1) , b = coord3d(111,76,-1)}
 					]
-	sc_power_name = "Leitung"
+	sc_power_name = "Stromleitung"
 	sc_transf_name = "Aufspanntransformator"
 
 	sc_st_name2 = "road_busstop1947small_post"
@@ -157,10 +158,10 @@ class tutorial.chapter_05 extends basic_chapter
 			if(buil){
 				fab_list[j].c_list = buil.get_tile_list()
 				fab_list[j].name = translate(buil.get_name())
-				/*local fields = buil.get_factory().get_fields_list()
+				local fields = buil.get_factory().get_fields_list()
 				foreach(t in fields){
 					fab_list[j].c_list.push(t)
-				}*/
+				}
 			}
 			else{
 				gui.add_message("Error aqui: ")
@@ -788,9 +789,7 @@ class tutorial.chapter_05 extends basic_chapter
 					if (tool_id==tool_build_station){
 						local list = obj_list1
 						local nr = list.len()
-						local test = build_stop_ex(nr, list, t)
-						gui.add_message(""+test)
-						return test
+						return build_stop_ex(nr, list, t)
 					}
 					
 					//Permite eliminar paradas

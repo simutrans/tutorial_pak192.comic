@@ -17,15 +17,15 @@ ch6_cov_lim3 <- {a = 37, b = 43}
 class tutorial.chapter_06 extends basic_chapter
 {
 	chapter_name  = "The forgotten Air transport"
-	chapter_coord = coord(112,174)
+	chapter_coord = coord(101,51)
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 
 	gl_wt = wt_air
 
 	c_way = coord(0,0)
 
-	cty1 = {c = coord(118,190), name = ""}
-	cty2 = {c = coord(163,498), name = ""}
+	cty1 = {c = coord(94,69), name = ""}
+	cty2 = {c = coord(59,534), name = ""}
 
 	cty1_lim = {a = null, b = null}
 	cty2_lim = {a = null, b = null}
@@ -34,43 +34,43 @@ class tutorial.chapter_06 extends basic_chapter
 
 	// Step 1 =====================================================================================
 	// Pista de aterrizaje --------------------------
-	c1_track = {a = coord(112,174), b = coord(112,178)}
-	c1_start = coord(112,174)
+	c1_track = {a = coord(100,49), b = coord(102,49), dir = 2}
+	c1_start = coord(100,49)
 	c1_is_way = null
-	obj1_way_name = "runway_modern"
+	obj1_way_name = "rw_plate"
 
 	// Pista de maniobras --------------------------
-	c2_track = {a = coord(112,176), b = coord(114,176)}
-	c2_start = coord(112,176)
+	c2_track = {b = coord(101,51), a = coord(101,49), dir = 4}
+	c2_start = coord(101,49)
 	c2_is_way = null
-	obj2_way_name = "taxiway"
+	obj2_way_name = "tw_unmarked"
 
 	// Parada aerea ---------------------------------
-	st1_pos = coord(114,176)
+	st1_pos = coord(101,51)
 	// Terminal -------------------------------------
-	st2_pos = coord(113,175)
+	st2_pos = coord(102,51)
 	//  Hangar --------------------------------------
-	c_dep_lim1 = {a = coord(113,176), b = coord(113,177)}
-	c_dep1 = coord(113,177)
+	c_dep_lim1 = {a = coord(100,50), b = coord(101,50)}
+	c_dep1 = coord(100,50)
 
 	// Step 2 =====================================================================================
 	d1_cnr = null //auto started
-	plane1_obj = "DC-3"
+	plane1_obj = "*DC-3"
 	plane1_load = 100
 	plane1_wait = 25369
 	sch_list1 = [coord(114,176), coord(168,489)]
 
 	// Step 3 =====================================================================================
-	line1_name = "Test 7"
+	line1_name = "*Test 7"
 	c_dep2 = coord(115,185)
 	d2_cnr = null //auto started
 	sch_list2 = [coord(114,177) coord(121,189), coord(126,187)]
-	veh1_obj = "BuessingLinie"
+	veh1_obj = "*BuessingLinie"
 	veh1_load = 100
 	veh1_wait = 10571
 
 	// Step 4 =====================================================================================
-	line2_name = "Test 8"
+	line2_name = "*Test 8"
 	c_dep3 = coord(167,497)
 	d3_cnr = null //auto started
 
@@ -78,16 +78,16 @@ class tutorial.chapter_06 extends basic_chapter
 					coord(164,498), coord(166,503), coord(171,501), coord(176,501), coord(173,493)
 				]
 
-	veh2_obj = "BuessingLinie"
+	veh2_obj = "*BuessingLinie"
 
 	//Script
 	//----------------------------------------------------------------------------------
 	comm_script = false
 
-	sc_sta1 = "AirStop"
-	sc_sta2 = "Tower1930"
-	sc_dep1 = "1930AirDepot"
-	sc_dep2 = "CarDepot"
+	sc_sta1 = "apron"
+	sc_sta2 = "terminal2_corner"
+	sc_dep1 = "depot_air"
+	sc_dep2 = "depot_road"
 
 
 	function start_chapter()  //Inicia solo una vez por capitulo
@@ -242,7 +242,7 @@ class tutorial.chapter_06 extends basic_chapter
 					local coorb = coord3d(tb.x, tb.y, tb.z)
 					local wt = gl_wt
 					local name_list = [obj1_way_name]
-					local dir = 4
+					local dir = c1_track.dir
 					local fullway = check_way(coora, coorb, wt, name_list, dir)
 					if (fullway.result){
 						c_way =  coord(0,0)
@@ -264,7 +264,7 @@ class tutorial.chapter_06 extends basic_chapter
 					local coorb = coord3d(tb.x, tb.y, tb.z)
 					local wt = gl_wt
 					local name_list = [obj1_way_name, obj2_way_name]
-					local dir = 2
+					local dir = c2_track.dir
 					local fullway = check_way(coora, coorb, wt, name_list, dir)
 					if (fullway.result){
 						c_way = coord(0,0)
@@ -280,6 +280,8 @@ class tutorial.chapter_06 extends basic_chapter
 					local tile = my_tile(st1_pos)
 					local way = tile.find_object(mo_way)
 					local buil = tile.find_object(mo_building)
+					local name = translate("Build here")
+					public_label(tile, name)
 					if(way && buil){
 						pot2 = 1
 					}
@@ -289,6 +291,8 @@ class tutorial.chapter_06 extends basic_chapter
 				else if (pot2==1 && pot3==0){
 					local tile = my_tile(st2_pos)
 					local buil = tile.find_object(mo_building)
+					local name = translate("Build here")
+					public_label(tile, name)
 					if(buil){
 						pot3 = 1
 					}
@@ -299,13 +303,15 @@ class tutorial.chapter_06 extends basic_chapter
 					local tile = my_tile(c_dep1)
 					local way = tile.find_object(mo_way)
 					local depot = tile.find_object(mo_depot_air)
+					local name = translate("Build here")
+					public_label(tile, name)
 					if(way && depot){
 						pot4 = 1
 					}
 					return 25
 				}
-				else if (pot5==1 && pot6==0){
-					this.next_step()
+				else if (pot4==1 && pot5==0){
+					//this.next_step()
 				}
 
 				break;
@@ -546,6 +552,7 @@ class tutorial.chapter_06 extends basic_chapter
 					else return translate("Build here") + ": ("+c_dep1.tostring()+")!."
 				}
 				else if (pot4==1 && pot5==0){
+					return "End script"
 					if(pos.x == st1_pos.x && pos.y == st1_pos.y){
 						if(tool_id == tool_make_stop_public){
 							if(buil){
@@ -1040,18 +1047,22 @@ class tutorial.chapter_06 extends basic_chapter
 		    rules.forbid_tool(pl, tool_id)
 	}
 
-
+	//case 1:  //y--
+	//case 2:  //x++
+	//case 4:  //y++
+	//case 8:  //x--
 	function check_way(coora, coorb, wt, name_list, dir = false)
 	{
 		local sve_coord = coora
 		local tile_start =  tile_x(coora.x, coora.y, coora.z)
 		local way_start = tile_start.find_object(mo_way)
+		local name = translate("Build here")
 		if(way_start){
 			way_start.mark()
-			tile_start.mark()
+			public_label(tile_start, name)
 			local start_wt = way_start.get_waytype()
 			if(start_wt != wt) {
-				tile_start.mark()
+				public_label(tile_start, name)
 				return {c = coora, result = false}
 			}
 			local start_name = way_start.get_name()
@@ -1060,7 +1071,7 @@ class tutorial.chapter_06 extends basic_chapter
 					break
 				}
 				if(j == name_list.len()-1) {
-					tile_start.mark()
+					public_label(tile_start, name)
 					return {c = coora, result = false}
 				}
 			}
@@ -1108,7 +1119,7 @@ class tutorial.chapter_06 extends basic_chapter
 			}
 
 			way_start.unmark()
-			tile_start.unmark()
+			tile_start.remove_object(player_x(1), mo_label)
 
 			while(true){
 				local current_dir = 0
@@ -1116,12 +1127,10 @@ class tutorial.chapter_06 extends basic_chapter
 				local way = tile.find_object(mo_way)
 				if(way){
 					way.unmark()
-					tile.unmark()
-
 					local current_wt = way.get_waytype()
 					if(current_wt != wt){
 						way.mark()
-						tile.mark()
+						public_label(tile_start, name)
 						return {c = coora, result = false}
 					}
 
@@ -1166,7 +1175,7 @@ class tutorial.chapter_06 extends basic_chapter
 					}
 					if ((current_dir==1)||(current_dir==2)||(current_dir==4)||(current_dir==8)){
 						way.mark()
-						tile.mark()
+						public_label(tile_start, name)
 						return {c = coora, result = false}					
 					}
 					else if(dir_start == 1){ //y--
@@ -1243,15 +1252,28 @@ class tutorial.chapter_06 extends basic_chapter
 					}
 				}
 				else {
-					tile.mark()
+					public_label(tile_start, name)
 					return {c = coora, result = false}
 				}
 			}
 		}
 		else {
-			tile_start.mark()
+			public_label(tile_start, name)
 			return {c = coora, result = false}
 		}
+	}
+	function public_label(t, name)
+	{
+		if(t.is_marked())
+			t.remove_object(player_x(1), mo_label)
+
+		local label = t.find_object(mo_label)
+		local cursor = t.find_object(mo_pointer)
+
+		if(!label && !t.is_marked() && !cursor)
+			label_x.create(t, player_x(1), name)
+
+		return null
 	}
 
 }        // END of class

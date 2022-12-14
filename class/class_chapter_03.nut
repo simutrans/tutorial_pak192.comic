@@ -257,6 +257,10 @@ class tutorial.chapter_03 extends basic_chapter
 		if(buil) {
 			fac_1.c_list = buil.get_tile_list()
 			fac_1.name = translate(buil.get_name())
+			local fields = buil.get_factory().get_fields_list()
+			foreach(t in fields){
+				fac_1.c_list.push(t)
+			}
 		}
 
 		t = my_tile(fac_2.c)
@@ -264,6 +268,10 @@ class tutorial.chapter_03 extends basic_chapter
 		if(buil) {
 			fac_2.c_list = buil.get_tile_list()
 			fac_2.name = translate(buil.get_name())
+			local fields = buil.get_factory().get_fields_list()
+			foreach(t in fields){
+				fac_2.c_list.push(t)
+			}
 		}
 
 		t = my_tile(fac_3.c)
@@ -271,6 +279,10 @@ class tutorial.chapter_03 extends basic_chapter
 		if(buil) {
 			fac_3.c_list = buil.get_tile_list()
 			fac_3.name = translate(buil.get_name())
+			local fields = buil.get_factory().get_fields_list()
+			foreach(t in fields){
+				fac_3.c_list.push(t)
+			}
 		}
 
 		cy1.name = get_city_name(cy1.c)
@@ -1529,25 +1541,9 @@ class tutorial.chapter_03 extends basic_chapter
 								return null
 							}
 						}
-						list = factory_x(fac_2.c.x, fac_2.c.y).get_fields_list()
-
-						foreach(t in list){
-							if(pos.x == t.x && pos.y == t.y) {
-								pot0 = 1
-								return null
-							}
-						}
 					}
 					else if (pot1==1){
 						local list = fac_1.c_list
-						foreach(t in list){
-							if(pos.x == t.x && pos.y == t.y) {
-								pot2 = 1
-								return null
-							}
-						}
-						list = factory_x(fac_1.c.x, fac_1.c.y).get_fields_list()
-
 						foreach(t in list){
 							if(pos.x == t.x && pos.y == t.y) {
 								pot2 = 1

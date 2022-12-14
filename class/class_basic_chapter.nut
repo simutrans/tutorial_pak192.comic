@@ -2536,10 +2536,10 @@ class basic_chapter
 			local name = list[j].name
 			local good = list[j].good
 			local t = my_tile(c)
-			local label = tile.find_object(mo_label)
-			local way = tile.find_object(mo_way)
-			local buil = tile.find_object(mo_building)
-			local halt = tile.get_halt()
+			local label = t.find_object(mo_label)
+			local way = t.find_object(mo_way)
+			local buil = t.find_object(mo_building)
+			local halt = t.get_halt()
 
 			//gui.add_message("b"+glsw[j]+" "+j)
 
