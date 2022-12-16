@@ -3238,6 +3238,20 @@ class basic_chapter
 				
 		}
 	}
+
+	function public_label(t, name)
+	{
+		if(t.is_marked())
+			t.remove_object(player_x(1), mo_label)
+
+		local label = t.find_object(mo_label)
+		local cursor = t.find_object(mo_pointer)
+
+		if(!label && !t.is_marked() && !cursor)
+			label_x.create(t, player_x(1), name)
+
+		return null
+	}
 }
 
 // END OF FILE

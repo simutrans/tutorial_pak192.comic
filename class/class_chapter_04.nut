@@ -502,7 +502,7 @@ class tutorial.chapter_04 extends basic_chapter
 		}
 		local result = translate("Action not allowed")		// null is equivalent to 'allowed'
 		//glbpos = coord3d(pos.x,pos.y,pos.y)
-		gltool = tool_id			
+		gltool = tool_id
 		switch (this.step) {
 			case 1:
 				if (tool_id == 4096){

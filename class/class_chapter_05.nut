@@ -1142,7 +1142,7 @@ class tutorial.chapter_05 extends basic_chapter
                     local station = false
 
 					for(local j=0;j<c_list.len();j++){
-						local tile = my_tile(c_list[j])
+						local tile = my_tile(c_list[j].c)
 						local is_obj = tile.find_object(obj)
 						local halt = tile.get_halt()
 						if (is_obj){

@@ -22,7 +22,8 @@ Las líneas se pueden gestionar desde la ventana <em>Administración de lineas</em
 <em>[2]</em> Selecciona la parada {st2} y <st>deja todo como está</st>.<br>
 <em>[3]</em> Seleccione la parada {st3} y <st>deja todo como esta</st>.<br>
 <em>[4]</em> Seleccione la parada {st4} y <st>deja todo como esta</st>.<br>
-<em>[5]</em> Seleccione la parada {st5} y <st>deja todo como esta</st>.
+<em>[5]</em> Seleccione la parada {st5} y <st>deja todo como esta</st>.<br>
+<em>[6]</em> Seleccione la parada {st6} y <st>deja todo como esta</st>.
 </p>
 <p>
 <h1>Pasos finales:</h1>

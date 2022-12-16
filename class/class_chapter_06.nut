@@ -226,10 +226,8 @@ class tutorial.chapter_06 extends basic_chapter
 	
 	function is_chapter_completed(pl) {
 		local percentage=0
-
 		save_glsw()
 		save_pot()
-
 		switch (this.step) {
 			case 1:
 				if (pot0==0){
@@ -1262,20 +1260,6 @@ class tutorial.chapter_06 extends basic_chapter
 			return {c = coora, result = false}
 		}
 	}
-	function public_label(t, name)
-	{
-		if(t.is_marked())
-			t.remove_object(player_x(1), mo_label)
-
-		local label = t.find_object(mo_label)
-		local cursor = t.find_object(mo_pointer)
-
-		if(!label && !t.is_marked() && !cursor)
-			label_x.create(t, player_x(1), name)
-
-		return null
-	}
-
 }        // END of class
 
 // END OF FILE

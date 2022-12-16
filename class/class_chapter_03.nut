@@ -194,7 +194,7 @@ class tutorial.chapter_03 extends basic_chapter
 						{a = coord3d(92,166,7), b = coord3d(92,211,7)},
 						{b = coord3d(93,211,7), a = coord3d(93,166,7)},
 						{b = coord3d(93,166,7), a = coord3d(93,143,7)},
-						{b = coord3d(93,143,7), a = coord3d(93,110,8)},
+						{b = coord3d(96,143,7), a = coord3d(93,110,8)},
 						{b = coord3d(93,110,8), a = coord3d(93,76,0)}
 					]
 
@@ -208,7 +208,7 @@ class tutorial.chapter_03 extends basic_chapter
     tem_pass = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 	loc3_name_obj = "OBB_4010_Triebkopf_1"
 	loc4_name_obj = "OBB_4010_Mittelwagen"
-	loc5_name_obj = "OBB_4010_Triebkopf_2"
+	loc5_name_obj = "OBB_4010_Steuerwagen_2"
 	loc3_tile = 4
 	loc3_load = 100
 	loc3_wait = 25369
@@ -1038,33 +1038,27 @@ class tutorial.chapter_03 extends basic_chapter
 
 				//Para la pendiente recta
 				else if (pot0==1 && pot1==0){
-					local tile1 = my_tile(slope1.c)
-					local slope = tile1.get_slope()
-					local c_z = tile1.z
-					if (!tile1.find_object(mo_label))
-						label_x.create(slope1.c, player_x(1), translate("Straight slope here!."))
+					local t = my_tile(slope1.c)
+					local slope = t.get_slope()
 
-					if (c_z != slope1.c_z){
+					public_label(t, translate("Straight slope here!."))
+
+					if (t.z != slope1.c_z){
 						return 6
 					}
-					if (get_corret_slope(slope, slope1.dir))
+					if (get_corret_slope(slope, slope1.dir)){
+						t.remove_object(player_x(1), mo_label)
 						pot1=1
+					}
 				}
 				//Para la ladera plana
 				else if(pot1==1 && pot2==0){
-					local tile1 = my_tile(slope1.c)
-					if (tile1.find_object(mo_label))
-						tile1.remove_object(player_x(1), mo_label)
-
-					local c_z = tile1.z
-					local tile2 = my_tile(slope2.c)
-					local slope = tile2.get_slope()
-					
-					if (get_corret_slope(slope, slope2.dir) && c_z == slope1.c_z){
+					local t = my_tile(slope2.c)
+					local slope = t.get_slope()
+					public_label(t, translate("Flat slope here!."))
+					if (get_corret_slope(slope, slope2.dir) && t.z == slope2.c_z){
+						t.remove_object(player_x(1), mo_label)
 						pot2=1
-					}
-					else if (!tile2.find_object(mo_label)){
-						label_x.create(slope2.c, player_x(1), translate("Flat slope here!."))
 					}
 				}
 				//Para el tunel
@@ -1401,8 +1395,9 @@ class tutorial.chapter_03 extends basic_chapter
 						tile.remove_object(player_x(pl), mo_label)
 						pot2=1
 					}
+					return 96
 				}
-				if (pot2==1 && pot3==0){
+				else if (pot2==1 && pot3==0){
 					this.next_step()
 				}
 				return 97
@@ -1481,10 +1476,15 @@ class tutorial.chapter_03 extends basic_chapter
 				break
 
 			case 12:
+				reset_stop_flag()
+				this.next_step()
+				return 90
+				break
+
+			case 13:
 				this.step=1
 				persistent.step=1
 				persistent.status.step = 1
-				reset_stop_flag()
 				return 100
 				break
 		}
@@ -1727,7 +1727,6 @@ class tutorial.chapter_03 extends basic_chapter
 				if (pot0==1 && pot1==0){ 
 					if ((pos.x==slope1.c.x)&&(pos.y==slope1.c.y)){
 						if (tool_id==4100){
-							my_tile(slope1.c).remove_object(player_x(1), mo_label)
 							return null
 						}
 						else if ((tool_id==tool_build_tunnel)||(tool_id==tool_build_way))
@@ -1739,7 +1738,6 @@ class tutorial.chapter_03 extends basic_chapter
 					if((pos.x==slope2.c.x)&&(pos.y==slope2.c.y)){
 						if ((tool_id==4100)){
 							if (pos.z<slope2.c_z){
-								my_tile(slope2.c).remove_object(player_x(1), mo_label)
 								return null
 							}
 							else
@@ -2050,8 +2048,7 @@ class tutorial.chapter_03 extends basic_chapter
 				if (pot0==0){
 		            for(local j=0;j<c_cate_lim1.len();j++){
 		               if(pos.x>=c_cate_lim1[j].a.x && pos.y>=c_cate_lim1[j].a.y && pos.x<=c_cate_lim1[j].b.x && pos.y<=c_cate_lim1[j].b.y){
-		                                   
-		                    if(tool_id == 4114){
+		                    if(tool_id == tool_build_wayobj){
 								return null
 		                    }
 		               }
@@ -2059,11 +2056,11 @@ class tutorial.chapter_03 extends basic_chapter
 		                    result =  translate("Connect the Track here")+" ("+r_way.c.tostring()+")."
 		               }
 		            }
-					if ((tool_id == 4114)&&(pos.x==c_dep3.x)&&(pos.y==c_dep3.y)) return null
+					if ((tool_id == tool_build_wayobj)&&(pos.x==c_dep3.x)&&(pos.y==c_dep3.y)) return null
 				}
 				else if (pot0==1 && pot1==0){
 					if (pos.x>=c_dep3_lim.a.x && pos.y>=c_dep3_lim.a.y && pos.x<=c_dep3_lim.b.x && pos.y<=c_dep3_lim.b.y){
-						if (tool_id==4114){
+						if (tool_id==tool_build_wayobj){
 							return null
 						}					
 							

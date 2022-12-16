@@ -16,5 +16,8 @@ Now you may assemble a convoy that can transport {good1} to {f2}.<br/>
 It takes to the next step when the {f2} receive <em>{t_reach}t</em> of <em>{good1}</em>.
 </p>
 <p>
+<em>Tip:</em> Press the <em>"W" (capital letter)</em> key to activate fast forward.
+</p>
+<p>
 <em>Received amount:</em> <st>{reached}t</st>
 </p>
