@@ -77,7 +77,7 @@ class tutorial.chapter_05 extends basic_chapter
 					{c = coord(91,70), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(97,76), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(91,65), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(92,55), name = "extension_postoffice", good = good_alias.mail}, 
+					{c = coord(91,55), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(99,58), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(95,54), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(102,52), name = "extension_postoffice", good = good_alias.mail},
@@ -381,7 +381,7 @@ class tutorial.chapter_05 extends basic_chapter
         text.f1 = fab_list[0].c.href(""+translate(fab_list[0].name)+" ("+fab_list[0].c.tostring()+")")+""
 	    text.f2 = fab_list[1].c.href(""+translate(fab_list[1].name)+" ("+fab_list[1].c.tostring()+")")+""
 	    text.f3 = fab_list[2].c.href(""+translate(fab_list[2].name)+" ("+fab_list[2].c.tostring()+")")+""
-	    text.f5 = fab_list[3].c.href(""+translate(fab_list[3].name)+" ("+fab_list[3].c.tostring()+")")+""
+	    text.f4 = fab_list[3].c.href(""+translate(fab_list[3].name)+" ("+fab_list[3].c.tostring()+")")+""
 
 		text.tool1 = tool_alias.inspe
 		text.tool2 = tool_alias.road
@@ -1346,19 +1346,19 @@ class tutorial.chapter_05 extends basic_chapter
     function delete_objet(player, c_list, obj, lab_name, station = false)
     {
         for(local j=0;j<c_list.len();j++){
-            local tile = my_tile(c_list[j].c)
-            local is_obj = tile.find_object(obj)
-            local halt = tile.get_halt()
+            local t = my_tile(c_list[j].c)
+            local is_obj = t.find_object(obj)
+            local halt = t.get_halt()
             if (is_obj){
                 if (!halt){
-                    tile.remove_object(player, obj)
+                    t.remove_object(player, obj)
                 }
                 else if (station){
-                    tile.remove_object(player, obj)
+                    t.remove_object(player, obj)
                 }
             }
-            if (tile.is_empty())
-                label_x.create(c_list[j].c, player, lab_name)
+            if (t.is_empty())
+				public_label(t, lab_name)
         }
         return null
     }

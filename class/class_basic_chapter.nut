@@ -2543,9 +2543,6 @@ class basic_chapter
 
 			//gui.add_message("b"+glsw[j]+" "+j)
 
-			if(t.is_marked())
-				t.remove_object(player, mo_label)
-
 			if(buil && halt){
 				local desc = buil.get_desc()
 				local g_list = get_build_load_type(desc)
@@ -2572,8 +2569,8 @@ class basic_chapter
 				if(way){
 					way.mark()
 				}
-				else if (!label && !t.is_marked()) {
-					label_x.create(c, player, lab_name)
+				else{
+					public_label(t, lab_name)
 				}
 			}
 		}
@@ -3247,9 +3244,10 @@ class basic_chapter
 		local label = t.find_object(mo_label)
 		local cursor = t.find_object(mo_pointer)
 
-		if(!label && !t.is_marked() && !cursor)
+		if(!label && !t.is_marked() && !cursor){
 			label_x.create(t, player_x(1), name)
-
+			label_x(t.x, t.y, t.z).mark()
+		}
 		return null
 	}
 }

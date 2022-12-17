@@ -1,5 +1,5 @@
 <p>
-{tx} In the <em>{toolbar}</em> menu use the <em>{powerline_tool}</em> tool to connect all the factories to an electrical network from the {f5}:
+{tx} In the <em>{toolbar}</em> menu use the <em>{powerline_tool}</em> tool to connect all the factories to an electrical network from the {f4}:
 </p>
 <p>
 {tran}

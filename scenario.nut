@@ -643,7 +643,7 @@ function resume_game()
 {
 	//Mark all text labels
 	foreach(label in world.get_label_list()){
-		if(label.get_text() == "X")
+		if(label.get_owner().nr == 1)
 			label.mark()
 	}
 	//Check version and pakset name
