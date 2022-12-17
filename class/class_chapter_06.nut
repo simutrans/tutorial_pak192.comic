@@ -277,6 +277,7 @@ class tutorial.chapter_06 extends basic_chapter
 					local name = translate("Build here")
 					public_label(tile, name)
 					if(way && depot){
+						tile.remove_object(player_x(1), mo_label)
 						pot4 = 1
 					}
 					return 25
