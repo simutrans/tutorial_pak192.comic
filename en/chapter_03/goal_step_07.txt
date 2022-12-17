@@ -20,5 +20,8 @@ Then select the station in {f3} and click on <em>Start</em>.
 It takes to the next step when the {f3} receive <em>{t_reach}t</em> of <em>{good2}</em> ({good3}).
 </p>
 <p>
+<em>Tip:</em> Press the <em>"W" (capital letter)</em> key to activate fast forward.
+</p>
+<p>
 <em>Received amount:</em> <st>{reached}t</st>
 </p>
