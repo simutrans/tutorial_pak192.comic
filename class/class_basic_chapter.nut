@@ -366,14 +366,6 @@ class basic_chapter
 				else if (this.step != 3) step_nr(3)
 				return null
 			}
-			else if (current_cov>ch6_cov_lim3.a && current_cov<ch6_cov_lim3.b){
-				if(persistent.chapter != 6) {
-					load_chapter2(6,pl)
-					step_nr(4)
-				}
-				else if (this.step != 4) step_nr(4)
-				return null
-			}
 		}
 		return null
 	}
@@ -3246,7 +3238,10 @@ class basic_chapter
 
 		if(!label && !t.is_marked() && !cursor){
 			label_x.create(t, player_x(1), name)
-			label_x(t.x, t.y, t.z).mark()
+
+			label = t.find_object(mo_label)
+			if(label)
+				label.mark()
 		}
 		return null
 	}

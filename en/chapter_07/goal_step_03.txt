@@ -1,21 +1,15 @@
 <p>
-This is all for the moment, thank you very much for playing the mythical <em>Simutrans</em>.
+The city {city} needs to design a bus network that allows passengers to move to the train station: {name}.
 </p>
 <p>
-You can follow here: <a>https://www.facebook.com/Simutrans</a><br/>
-Any questions we are here to help in the forum: <a>https://forum.simutrans.com/</a> 
+<em>[1]</em> Place a bus stop in the position {stop}.<br/>
+<em>[2]</em> Make the stop public in {stop}.<br/>
+<em>[3]</em> Now you are free to build a bus network in the city {city}.<br/>
+<em>[4]</em> Make sure all buses are connected to the station: {name}.
 </p>
 <p>
-Credits to the entire Simutrans community, and especially to:<br/>
-<em>Dwachs</em><br/>
-<em>Prissi</em><br/>
-<em>ny911</em><br/>
-<em>HaydenRead</em><br/>
-<em>Tjoeker</em><br/>
-<em>gauthier</em><br/>
-<em>Andarix</em><br/>
-<em>Roboron</em>
+Progress is made to the next step, when more than <em>{load}</em> passengers are transported to {name} in a month.
 </p>
 <p>
-Regards!! <em>@Yona-TYT</em>.
+<st>Translated this month:</st> <em>{get_load}/{load}</em> 
 </p>

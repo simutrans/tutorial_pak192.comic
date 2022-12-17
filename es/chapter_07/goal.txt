@@ -7,6 +7,10 @@
 {step_02}
 </p>
 <p>
-{txtst_03}Paso C</em> - Fin del Escenario<br>
+{txtst_03}Paso C</em> - Los autobuses de la ciudad III<br>
 {step_03}
+</p>
+<p>
+{txtst_04}Paso D</em> - Fin del Escenario<br>
+{step_04}
 </p>

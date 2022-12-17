@@ -16,7 +16,3 @@ In this chapter is dedicated to air transport, we will build a small airport to 
 {txtst_03}Step C</em> - Airport Bus Line part I<br>
 {step_03}
 </p>
-<p>
-{txtst_04}Step D</em> - Airport Bus Line part II<br>
-{step_04}
-</p>

@@ -7,6 +7,10 @@
 {step_02}
 </p>
 <p>
-{txtst_03}Step C</em> - End Scenario<br/>
+{txtst_03}Step C</em> - The buses of the city III<br/>
 {step_03}
+</p>
+<p>
+{txtst_04}Step D</em> - End Scenario<br/>
+{step_04}
 </p>

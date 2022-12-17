@@ -9,41 +9,34 @@
 class tutorial.chapter_07 extends basic_chapter
 {
 	chapter_name  = "Bus networks"
-	chapter_coord = coord(26,107)
+	chapter_coord = coord(91,144)
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 	load = 0
 
-	cty1 = {c = coord(52,194), name = ""}
+	cty1 = {c = coord(88,143), name = ""}
 	c_cty_lim1 = {a = coord(0,0), b = coord(0,0)}
 
-	cty2 = {c = coord(115,268), name = ""}
+	cty2 = {c = coord(92,169), name = ""}
 	c_cty_lim2 = {a = coord(0,0), b = coord(0,0)}
 
-	cty3 = {c = coord(124,326), name = ""}
+	cty3 = {c = coord(102,208), name = ""}
 	c_cty_lim3 = {a = coord(0,0), b = coord(0,0)}
-
-	cty4 = {c = coord(125,378), name = ""}
-	c_cty_lim4 = {a = coord(0,0), b = coord(0,0)}
 
 	// Step 1
     goal_lod1 = 20
-	st1_c = coord(57,198)
-	stop1 = coord(56,196)
+	st1_c = coord(92,145)
+	stop1 = coord(91,144)
 
 	// Step 2
 	goal_lod2 = 40
-	st2_c = coord(120,267)
-	stop2 = coord(119,266)
+	st2_c = coord(92,169)
+	stop2 = coord(93,171)
 
 	// Step 3
 	goal_lod3 = 80
-	st3_c = coord(120,327)
-	stop3 = coord(122,330)
+	st3_c = coord(92,209)
+	stop3 = coord(93,207)
 
-	// Step 4
-	goal_lod4 = 160
-	st4_c = coord(120,381)
-	stop4 = coord(122,381)
 
 	function start_chapter()  //Inicia solo una vez por capitulo
 	{
@@ -61,10 +54,6 @@ class tutorial.chapter_07 extends basic_chapter
 		cty3.name = get_city_name(cty3.c)
 		local cty_buil3 = my_tile(cty3.c).find_object(mo_building).get_city()
 		c_cty_lim3 = cty_buil3 ? {a = cty_buil3.get_pos_nw(), b = cty_buil3.get_pos_se()} : {a = coord(0,0), b = coord(0,0)}
-
-		cty4.name = get_city_name(cty4.c)
-		local cty_buil4 = my_tile(cty4.c).find_object(mo_building).get_city()
-		c_cty_lim4 = cty_buil4 ? {a = cty_buil4.get_pos_nw(), b = cty_buil4.get_pos_se()} : {a = coord(0,0), b = coord(0,0)}
 
 		return 0
 	}
@@ -101,15 +90,6 @@ class tutorial.chapter_07 extends basic_chapter
     			break
 
 			case 4:
-				local c = st4_c
-				local halt = my_tile(c).get_halt()
-				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
-				text.city = cty4.c.href(""+cty4.name +" ("+cty4.c.tostring()+")")+""
-				text.stop = stop4.href("("+stop4.tostring()+")")+""
-                text.load =  goal_lod4
-    			break
-
-			case 5:
 				break
 			}
 			text.get_load = load

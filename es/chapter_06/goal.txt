@@ -16,7 +16,4 @@ En este capítulo nos dedicamos al transporte aéreo, construiremos un pequeño aer
 {txtst_03}Paso C</em> - Línea de Autobuses del Aeropuerto parte I<br>
 {step_03}
 </p>
-<p>
-{txtst_04}Paso D</em> - Línea de Autobuses del Aeropuerto parte II<br>
-{step_04}
-</p>
+
