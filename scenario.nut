@@ -4,7 +4,7 @@
  
  *  Can NOT be used in network game !
  */
-const version = 1644
+const version = 1650
 map.file = "tutorial192.sve"
 scenario_name             <- "Tutorial Scenario"
 scenario.short_description = scenario_name
@@ -101,9 +101,6 @@ select_option      <- { x = 0, y = 0, z = 1 }	// place of station to control nam
 select_option_halt <- null			// placeholder for halt_x
 tutorial		  <- {}				// placeholder for all chapter CLASS
 
-gl_test_result <- ""
-
-
 //returns pakset name (lower case)
 function get_set_name(name)
 {
@@ -117,18 +114,15 @@ simu_version <- "122.0.1"
 pak_name <- "pak192.comic"
 current_st <- "0"
 current_pak <- "pak"
-gl_correct <- false
 
 function string_analyzer()
 {
 	local result = {pak= false , st = false}
-
 	//Check version and pakset name
 	current_pak = get_set_name(get_pakset_name())
 	current_st = get_version_number()
 
 	local p_siz = {a = current_pak.len(), b = pak_name.len()}
-
 
 	//Pak name analyzer
 	local siz_a = max(p_siz.a, p_siz.a)
@@ -208,6 +202,7 @@ function string_analyzer()
 {
 	//Check version and pakset name
 	resul_version = string_analyzer()
+	include(nut_path+"class_basic_convoys") 		// include class for detect eliminated convoys
 	include(nut_path+"class_basic_chapter") 		// include class for basic chapter structure
 
 }
@@ -277,7 +272,7 @@ function load_chapter(number,pl)
 	}
 }
 
-function load_chapter2(number,pl)
+function load_conv_ch(number, step, pl)
 {
     rules.clear()
 	if (!resul_version.pak || !resul_version.st){
@@ -290,8 +285,11 @@ function load_chapter2(number,pl)
 
 		if ( (number == persistent.chapter) && (chapter.startcash > 0) )  // set cash money here
 			player_x(0).book_cash( (chapter.startcash - player_x(0).get_cash()[0]) * 100)
-			persistent.chapter = number
-			chapter.chap_nr = number
+
+		chapter.step_nr(step)
+		persistent.chapter = number
+		chapter.chap_nr = number
+		chapter.start_chapter()
 	}
 }
 
@@ -437,19 +435,11 @@ function labels_text_debug()
 
 function is_scenario_completed(pl)
 {
-	labels_text_debug()
-	//gui.add_message(""+chapter.step)
-	/*local tile = tile_x(93, 171, 0)
-	local label = tile.find_object(mo_label)
-	if(!label)
-		label_x.create(coord(tile.x, tile.y), player_x(0), "Result: "+ gl_test_result)
-	else
-		label.set_text("Result: "+ gl_test_result)
-	*/
-
+	//labels_text_debug()
 	//gui.add_message(""+glsw[0]+"")
-	//gui.add_message("Persis Step:"+persistent.step+" Status Step:"+persistent.status.step+"  Step:"+chapter.step+"")				
+	//gui.add_message("!!!!!"+persistent.step+" ch a "+st_nr[0]+"  !!!!! "+persistent.status.step+"  -- "+chapter.step+"")				
 	if (pl != 0) return 0			// other player get only 0%
+
 	if (currt_pos){
 		local t = tile_x(currt_pos.x,currt_pos.y,currt_pos.z)
 		local build = t.find_object(mo_building)
@@ -465,8 +455,8 @@ function is_scenario_completed(pl)
 	if(fail_count == null){
 		if (fail_num <= 0){
 			gui.open_info_win_at("goal")
-			//fail_count = 1
-			//fail_num = 20
+			fail_count = 1
+			fail_num = 20
 		}
 		else fail_num--
 	}
@@ -474,33 +464,31 @@ function is_scenario_completed(pl)
 		gui.open_info_win_at("goal")
 		gui_delay = false
 	}
+
 	//gui.add_message(""+current_cov+"  "+gall_cov+"")
 	//Para los convoys ---------------------
-	if (gall_cov != current_cov) chapter.checks_convoy_removed(pl)
-	gall_cov = checks_all_convoys()
-	correct_cov = chapter.correct_cov_list()
+	if (gall_cov != current_cov){
+		basic_convoys().checks_convoy_removed(pl)
+	}
+	
+	gall_cov = basic_convoys().checks_all_convoys()
+	if(!correct_cov && gall_cov==gcov_nr){
+		load_conv_ch(persistent.status.chapter, persistent.status.step, pl)
+	}
+	correct_cov = basic_convoys().correct_cov_list()
 	persistent.gall_cov = gall_cov
 
-	//gui.add_message("gall_cov-> "+gall_cov+":: gcov_nr-> "+gcov_nr+":: current_cov-> "+current_cov+":: correct_cov-> "+correct_cov+"::gcov_id-> "+gcov_id+"::"+cov_sw+"")
-	if (correct_cov) {
-		if (persistent.status.chapter > persistent.chapter){
-			load_chapter2(persistent.status.chapter,pl)
-		}
-		if (persistent.status.step != persistent.step){
-			chapter.step_nr(persistent.status.step)
-		}
-	}
-	else{
+//gui.add_message("gall_cov-> "+gall_cov+":: gcov_nr-> "+gcov_nr+":: current_cov-> "+current_cov+":: Step-> "+chapter.step+":: PersisStep-> "+persistent.step+":: Status->"+persistent.status.step+"")
+
+	if(!correct_cov) {
 		if (!resul_version.pak || !resul_version.st)
 			chapter.step = 1
 
 		else chapter.step = persistent.step
-
 		chapter.start_chapter()
-		return 0
+		return 1
 	}
 
-	//if(cov_delay>0) cov_delay--
 	chapter.step = persistent.step
 	local percentage = chapter.is_chapter_completed(pl)
 	gl_percentage = percentage
@@ -512,6 +500,8 @@ function is_scenario_completed(pl)
 		text.cname = translate(""+chapter.chapter_name+"")
 
 		persistent.chapter++
+		persistent.status.chapter++
+
 		load_chapter(persistent.chapter, pl)
 		chapter.chap_nr = persistent.chapter
 		percentage = chapter.is_chapter_completed(pl)
@@ -529,7 +519,6 @@ function is_scenario_completed(pl)
 	}
 	return percentage
 }
-
 
 function is_work_allowed_here(pl, tool_id, pos)
 {	
@@ -556,7 +545,6 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 function fail_count_message(result, tool_id)
 {
-	//gl_test_result = result
 	//gui.add_message(result+" ")
 	//Desabilitado
 	//if(tool_id != tool_build_tunnel && result != ""){
@@ -597,7 +585,7 @@ function is_convoy_allowed(pl, convoy, depot)
 	if (pause) return translate("Advance is not allowed with the game paused.")
 
 	local result = null
-	chapter.checks_convoy_removed(pl)
+	basic_convoys().checks_convoy_removed(pl)
 	//gui.add_message("Run ->"+current_cov+","+correct_cov+" - "+gall_cov+"")
 	if (pl != 0) return null
 	result = chapter.is_convoy_allowed(pl, convoy, depot)
@@ -641,6 +629,7 @@ convoy_x._save <- function()
 
 function resume_game()
 {
+	basic_convoys().set_convoy_limit()
 	//Mark all text labels
 	foreach(label in world.get_label_list()){
 		if(label.get_owner().nr == 1)
@@ -698,21 +687,6 @@ function resume_game()
 	select_option_halt = tile_x( 0, 0, select_option.z ).find_object(mo_label)
 
     chapter.start_chapter()
-}
-
-function checks_all_convoys()
-{
-	local cov_list = world.get_convoy_list()
-	local cov_nr = 0
-	foreach(cov in cov_list) {
-		local id = cov.id
-		if (id>gcov_id)
-			gcov_id = id
-
-		if (!cov.is_in_depot() && !ignore_save[id])
-			cov_nr++	
-	}	
-	return cov_nr
 }
 
 function get_line_name(halt)

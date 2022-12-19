@@ -2,6 +2,9 @@
 Se necesita transportar <em>pasajeros</em> hacia las zonas turísticas {tur}.
 </p>
 <p>
+Coloca el <em>Astillero</em> aqu¨ª {dep2}.
+</p>
+<p>
 Usa la <em>herramienta de inspección</em> en el <em>Astillero</em> {dep2} y en la pestaña <em>Ferris</em> compra un <em>{ship}</em>.
 </p>
 <p>

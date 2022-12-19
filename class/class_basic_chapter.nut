@@ -119,7 +119,7 @@ class basic_chapter
 				}
 				else {
 					depot.append_vehicle(pl, convoy_x(gcov_id+1), veh_list[j])
-					checks_all_convoys()
+					basic_convoys().checks_all_convoys()
 				}
 				if (depot.get_convoy_list().len()==0)	
 					return false
@@ -136,7 +136,12 @@ class basic_chapter
 		if ( d_nr == 0)
 			return true
 		for (local j = 0;j<d_nr;j++){
-			cov_list[j].destroy(pl)
+ 			try {
+				cov_list[j].destroy(pl)
+			}
+			catch(ev) {
+				continue
+			}
 		}
 		return true
 	}
@@ -149,15 +154,6 @@ class basic_chapter
 		}
 		else{
 			depot.start_convoy(player, cov)
-			/*for(local j = cov_list.len()-1; j>=0;j--){
-				try {
-					cov_list[j].set_line(player, c_line)
-					depot.start_convoy(player, cov_list[j])
-				}
-				catch(ev) {
-					continue
-				}			
-			}*/
 		}
 		return null
 	}
@@ -209,7 +205,7 @@ class basic_chapter
 	function get_convoy_nr(nr, max)
 	{
 		local cov_nr = 0
-		for(local j=1;j<=max;j++){
+		for(local j = 1; j <= max; j++){
 			local result = true
 			try {
 				 cov_save[nr+j].get_pos() 
@@ -223,11 +219,11 @@ class basic_chapter
 					continue
 				else
 					cov_nr++
-				
 			}
 		}
 		return cov_nr
 	}
+
 	function update_convoy_removed(convoy, pl)
 	{
 		cov_save[current_cov]=convoy
@@ -236,153 +232,6 @@ class basic_chapter
 			gcov_nr++
 			persistent.gcov_nr = gcov_nr
 		}
-	}
-	function checks_convoy_removed(pl)
-	{
-		local j = 0
-		local sw = true
-		cov_sw = true
-		for(j;j<gcov_nr;j++){
-			local result = true
-			// cnv - convoy_x instance saved somewhat earlier
-			try {
-				 cov_save[j].get_pos() // will fail if cnv is no longer existent
-				 // do your checks
-			}
-			catch(ev) {
-				result = false
-				cov_save[j] = null
-				if (sw){
-
-				current_cov = j
-				persistent.current_cov = j				
-				}
-				sw = false
-				cov_sw = false
-			}
-			if (result){
-				//gui.add_message(""+convoy_x(id_save[j]).is_in_depot()+"")
-				if (convoy_x(id_save[j]).is_in_depot()){
-					cov_sw = false
-					cov_save[j] = null
-							
-				}
-			}
-		}
-		if (sw){
-			current_cov = j
-			persistent.current_cov = j				
-		}
-		//gui.add_message(""+j+"::"+current_cov+"")
-		if (!correct_cov_list()){
-			//Chapter 2 -----------------------------------------------
-			if (current_cov>ch2_cov_lim1.a && current_cov<ch2_cov_lim1.b){
-				if(persistent.chapter != 2)
-					load_chapter2(2,pl)
-				step_nr(4)
-				return null
-			}
-			else if (current_cov>ch2_cov_lim2.a && current_cov<ch2_cov_lim2.b){
-				if(persistent.chapter != 2)
-					load_chapter2(2,pl)
-				step_nr(6)
-				return null
-			}
-			else if (current_cov>ch2_cov_lim3.a && current_cov<ch2_cov_lim3.b){
-				if(persistent.chapter != 2)
-					load_chapter2(2,pl)
-				step_nr(7)
-				return null
-			}
-			//Chapter 3 -----------------------------------------------
-			else if (current_cov>ch3_cov_lim1.a && current_cov<ch3_cov_lim1.b){
-				if(persistent.chapter != 3)
-					load_chapter2(3,pl)
-				step_nr(5)
-				return null
-			}
-			else if (current_cov>ch3_cov_lim2.a && current_cov<ch3_cov_lim2.b){
-				if(persistent.chapter != 3)
-					load_chapter2(3,pl)
-				step_nr(7)
-				return null
-			}
-			else if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
-				if(persistent.chapter != 3)
-					load_chapter2(3,pl)
-				step_nr(11)
-				return null
-			}
-			//Chapter 4 -----------------------------------------------
-			else if (current_cov>ch4_cov_lim1.a && current_cov<ch4_cov_lim1.b){
-				if(persistent.chapter != 4)
-					load_chapter2(4,pl)
-				step_nr(4)
-				return null
-			}
-			else if (current_cov>ch4_cov_lim2.a && current_cov<ch4_cov_lim2.b){
-				if(persistent.chapter != 4)
-					load_chapter2(4,pl)
-				step_nr(5)
-				return null
-			}
-			else if (current_cov>ch4_cov_lim3.a && current_cov<ch4_cov_lim3.b){
-				if(persistent.chapter != 4)
-					load_chapter2(4,pl)
-				step_nr(7)
-				return null
-			}
-			//Chapter 5 -----------------------------------------------
-			else if (current_cov>ch5_cov_lim1.a && current_cov<ch5_cov_lim1.b){
-				if(persistent.chapter != 5)
-					load_chapter2(5,pl)
-				step_nr(2)
-				return null
-			}
-			else if (current_cov>ch5_cov_lim2.a && current_cov<ch5_cov_lim2.b){
-				if(persistent.chapter != 5)
-					load_chapter2(5,pl)
-				step_nr(4)
-				return null
-			}
-			else if (current_cov>ch5_cov_lim3.a && current_cov<ch5_cov_lim3.b){
-				if(persistent.chapter != 5)
-					load_chapter2(5,pl)
-				step_nr(4)
-				return null
-			}
-			//Chapter 6 -----------------------------------------------
-			else if (current_cov>ch6_cov_lim1.a && current_cov<ch6_cov_lim1.b){
-				if(persistent.chapter != 6)
-					load_chapter2(6,pl)
-				step_nr(2)
-				return null
-			}
-			else if (current_cov>ch6_cov_lim2.a && current_cov<ch6_cov_lim2.b){
-				if(persistent.chapter != 6) {
-					load_chapter2(6,pl)
-					step_nr(3)
-				}
-				else if (this.step != 3) step_nr(3)
-				return null
-			}
-		}
-		return null
-	}
-
-	function correct_cov_list()
-	{
-		if (gall_cov==gcov_nr){
-			if (persistent.step >= persistent.status.step && persistent.chapter >= persistent.status.chapter){
-				//persistent.status.step = persistent.step
-				persistent.status.chapter = persistent.chapter
-			}
-			return true
-		}
-		else{
-			return false
-		}
-		return false
 	}
 
 	function cov_pax(c, wt, good){
@@ -1423,8 +1272,12 @@ class basic_chapter
 			local sq_z = squ.get_ground_tile().z
 
 			if(tun){
-				//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+sq_z+"")
-				if(tile.z != sq_z) {
+				if(tile.z == sq_z){
+					local test = squ.get_tile_at_height(coora.z -1)
+					if(test != null)
+						coora.z--
+				}
+				else  {
 
 					local c_z = coora.z -1
 					for(local j = c_z;j<=(c_z+2);j++){
@@ -1490,7 +1343,7 @@ class basic_chapter
 			if( nw_slp == 0) res.p = 0
 			
 			res.s = nw_slp
-					//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+squ.get_tile_at_height(coora.z)+"")
+			//gui.add_message("way "+coora.x+","+coora.y+","+coora.z+"  - "+squ.get_tile_at_height(coora.z)+"")
 			if(way){
 				if (res.m && t.is_marked() || !res.m && !t.is_marked()){
 					if (count>1){
@@ -1857,12 +1710,9 @@ class basic_chapter
 					if (under_lv != norm_view){
 						local sq = square_x(pos.x,pos.y)
 						local sq_z = sq.get_ground_tile().z
-						local c_test = sq.get_tile_at_height(coor.z)
+						local c_test = sq.get_tile_at_height(coor.z+plus)
 						if((!c_test || !way) && under_lv <= coor.z && pos.z < sq_z){
 							return null
-						//local slope = tile_x(pos.x, pos.y, pos.z).get_slope()
-						//if(slope != 0 || pos.z != (coor.z + plus))
-							//return null
 						}
 					}
 
@@ -2519,7 +2369,7 @@ class basic_chapter
 		return false
 	}
 
-	function is_stop_building_ex(siz, list, lab_name, load)
+	function is_stop_building_ex(siz, list, lab_name)
 	{
 		local player = player_x(1)
 		local count = 0

@@ -5,26 +5,25 @@
  *  Can NOT be used in network game !
  */
 
-// Step 3 =====================================================================================
-ch2_cov_lim1 <- {a = (-1), b = 1}
-
-// Step 5 =====================================================================================
-ch2_cov_lim2 <- {a = 0, b = 4}
-
-// Step 6 =====================================================================================
-ch2_cov_lim3 <- {a = 3, b = 5}
-	
 class tutorial.chapter_02 extends basic_chapter
 {
 	chapter_name  = "Ruling the Roads"
 	chapter_coord = coord(92,65)
 
 	startcash     = 800000	   				// pl=0 startcash; 0=no reset
-	comm_script = false
 	stop_mark = false 
 
 	gltool = null
 	gl_wt = wt_road
+
+	// Step 4 =====================================================================================
+	ch2_cov_lim1 = {a = 0, b = 0}
+
+	// Step 6 =====================================================================================
+	ch2_cov_lim2 = {a = 0, b = 0}
+
+	// Step 7 =====================================================================================
+	ch2_cov_lim3 = {a = 0, b = 0}
 
 	//Limites para las ciudades
 	city1_lim = {a = coord(84,48), b = coord(105,78)}
@@ -64,7 +63,7 @@ class tutorial.chapter_02 extends basic_chapter
 	brdg1 = coord(93,62)
 	brdg2 = coord(93,59)
 
-	c_brdg1 = {a = coord3d(93,64,0), b = coord3d(93,58,0)}
+	c_brdg1 = {a = coord3d(93,64,0), b = coord3d(93,58,0), dir = 2}		//Inicio, Fin de la via y direccion(fullway)
 	c_brdg_limi1 = {b = coord(93,63), a = coord(93,59)}
 
 	// Step 6 =====================================================================================
@@ -105,6 +104,15 @@ class tutorial.chapter_02 extends basic_chapter
 	{
 		rules.clear()
 		set_all_rules(0)
+
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch2_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch2_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
+		ch2_cov_lim3 = {a = cv_lim[lim_idx+2].a, b = cv_lim[lim_idx+2].b}
+
+		dep_cnr1 = get_dep_cov_nr(ch2_cov_lim1.a,ch2_cov_lim1.b)
+		dep_cnr2 = get_dep_cov_nr(ch2_cov_lim2.a,ch2_cov_lim2.b)
+		dep_cnr3 = get_dep_cov_nr(ch2_cov_lim3.a,ch2_cov_lim3.b)
 
 		cty1.name = get_city_name(cty1.c)
 		cty2.name = get_city_name(cty2.c)
@@ -485,11 +493,13 @@ class tutorial.chapter_02 extends basic_chapter
 				return 50
 				break
 			case 5:
-				local t = my_tile(brdg1)
-				local label = t.find_object(mo_label)
+				local t_label = my_tile(brdg1)
+				local label = t_label.find_object(mo_label)
 				local c_lim = {a = c_brdg_limi1.a, b = c_brdg_limi1.b}
 				local next_mark = true
 				if (pot0==0){
+					if(!label)
+						label_x.create(brdg1, player_x(pl), translate("Build a Bridge here!."))
 					try {
 						 next_mark = delay_mark_tile(c_lim.a, c_lim.b, 0)
 					}
@@ -511,11 +521,11 @@ class tutorial.chapter_02 extends basic_chapter
 					//Comprueba la conexion de la via
 					local coora = coord3d(c_brdg1.a.x, c_brdg1.a.y, c_brdg1.a.z)
 					local coorb = coord3d(c_brdg1.b.x, c_brdg1.b.y, c_brdg1.b.z)
-					local dir = 2
+					local dir = c_brdg1.dir
 					local obj = false		
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
-						t.remove_object(player_x(1), mo_label)
+						t_label.remove_object(player_x(1), mo_label)
 						this.next_step()
 					}
 				}
@@ -981,13 +991,6 @@ class tutorial.chapter_02 extends basic_chapter
 		switch (this.step) {
 			case 4:
 				if (current_cov>ch2_cov_lim1.a && current_cov<ch2_cov_lim1.b){
-					/*if (comm_script){
-						cov_save[current_cov]=convoy
-						id_save[current_cov]=convoy.id
-						gcov_nr++
-						persistent.gcov_nr = gcov_nr
-						return null
-					}*/
 					local cov = 1
 					local veh = 1
 					local good_list = [good_desc_x (good_alias.passa).get_catg_index()] 	 //Passengers

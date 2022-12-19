@@ -5,16 +5,6 @@
  *  Can NOT be used in network game !
  */
 
-//Step 4 =====================================================================================
-ch4_cov_lim1 <- {a = 9, b = 15}
-
-//Step 5 =====================================================================================
-ch4_cov_lim2 <- {a = 14, b = 20}
-
-//Step 7 =====================================================================================
-ch4_cov_lim3 <- {a = 19, b = 21}
-
-
 class tutorial.chapter_04 extends basic_chapter
 {
 	chapter_name  = "Setting Sail"
@@ -22,6 +12,15 @@ class tutorial.chapter_04 extends basic_chapter
 
 	startcash     = 1000000	   				// pl=0 startcash; 0=no reset
 	gl_wt = wt_water
+
+	//Step 4 =====================================================================================
+	ch4_cov_lim1 = {a = 0, b = 0}
+
+	//Step 5 =====================================================================================
+	ch4_cov_lim2 = {a = 0, b = 0}
+
+	//Step 7 =====================================================================================
+	ch4_cov_lim3 = {a = 0, b = 0}
 
 	cov_cir = 0
 
@@ -83,6 +82,11 @@ class tutorial.chapter_04 extends basic_chapter
 	{		
 		rules.clear()
 		set_all_rules(0)
+
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch4_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch4_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
+		ch4_cov_lim3 = {a = cv_lim[lim_idx+2].a, b = cv_lim[lim_idx+2].b}
 
 		d1_cnr = get_dep_cov_nr(ch4_cov_lim1.a,ch4_cov_lim1.b)
 		d2_cnr = get_dep_cov_nr(ch4_cov_lim2.a,ch4_cov_lim2.b)
@@ -202,7 +206,7 @@ class tutorial.chapter_04 extends basic_chapter
 			text.w1 = c1.href(" ("+c1.tostring()+")")+""
 			text.w2 = c2.href(" ("+c2.tostring()+")")+""
 			text.dock = sch_list2[1].href("("+sch_list2[1].tostring()+")")+""
-			text.all_cov = d1_cnr
+			text.all_cov = d2_cnr
 			text.load = ship1_load
 			text.wait = get_wait_time_text(ship1_wait)
 			
@@ -253,7 +257,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 		}
 		text.dep1 = c_dep1.href("("+c_dep1.tostring()+")")+""
-		text.dep2 = c_dep1.href("("+c_dep1.tostring()+")")+""
+		text.dep2 = c_dep2.href("("+c_dep2.tostring()+")")+""
 		text.sh = translate(ship1_name_obj)
 		text.cir = cov_cir
 		text.f1 = fac_1.c.href(""+translate(fac_1.name)+" ("+fac_1.c.tostring()+")")+""
@@ -855,9 +859,7 @@ class tutorial.chapter_04 extends basic_chapter
 					}
 					local convoy = false
 					local all = true
-					comm_start_convoy(player, convoy, depot, all)	
-					gall_cov = checks_all_convoys()
-					current_cov = gall_cov						
+					comm_start_convoy(player, convoy, depot, all)						
 				}
 				return null
 				break;
@@ -931,8 +933,6 @@ class tutorial.chapter_04 extends basic_chapter
 					local convoy = false
 					local all = true
 					comm_start_convoy(player, convoy, depot, all)	
-					gall_cov = checks_all_convoys()
-					current_cov = gall_cov
 				}
 				return null
 				break;

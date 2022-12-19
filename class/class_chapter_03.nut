@@ -6,17 +6,6 @@
  *  Can NOT be used in network game !
  */
 
-//Step 5 =====================================================================================
-ch3_cov_lim1 <- {a = 4, b = 6}
-
-//Step 7 =====================================================================================
-ch3_cov_lim2 <- {a = 5, b = 7}
-
-//Step 11 =====================================================================================
-ch3_cov_lim3 <- {a = 6, b = 10}
-
-//----------------------------------------------------------------
-
 class tutorial.chapter_03 extends basic_chapter
 {
 	chapter_name  = "Riding the Rails"
@@ -24,6 +13,15 @@ class tutorial.chapter_03 extends basic_chapter
 	startcash     = 50000000
 
 	gl_wt = wt_rail
+
+	//Step 5 =====================================================================================
+	ch3_cov_lim1 = {a = 0, b = 0}
+
+	//Step 7 =====================================================================================
+	ch3_cov_lim2 = {a = 0, b = 0}
+
+	//Step 11 =====================================================================================
+	ch3_cov_lim3 = {a = 0, b = 0}
 
 	cy1 = {c = coord(94,69), name = ""}
 	cy2 = {c = coord(88,143), name = ""}
@@ -160,7 +158,7 @@ class tutorial.chapter_03 extends basic_chapter
 	c_way_list1 = 	[	{a = coord3d(92,147,7), b = coord3d(92,166,7), tunn = false}, 
 						{a = coord3d(93,166,7), b = coord3d(93,147,7), tunn = false}, 
 						{a = coord3d(92,171,7), b = coord3d(92,206,7), tunn = true}, 
-						{a = coord3d(93,171,7), b = coord3d(93,206,7), tunn = true}
+						{b = coord3d(93,171,7), a = coord3d(93,206,7), tunn = true}
 					]
 
 	c_way_lim1 =	[	{a = coord(92,147), b = coord(92,166)}, {a = coord(93,147), b = coord(93,166)},
@@ -222,12 +220,11 @@ class tutorial.chapter_03 extends basic_chapter
 					coord3d(92,77,0), coord3d(92,145,7), coord3d(92,169,7), coord3d(92,209,7),
 					coord3d(93,169,7), coord3d(93,145,7)
 				]
-	d3_cnr = 3
+	dep_cnr3 = null //auto started
 	tmp_d3_cnr = 0
 
 	//Script
 	//----------------------------------------------------------------------------------
-	comm_script = false
 	sc_way1_name = "narrowgauge_160"
 	sc_way2_name = "track_4"
 	sc_tunn1_name = "NarrowgaugeTunnel_1"
@@ -249,6 +246,13 @@ class tutorial.chapter_03 extends basic_chapter
 	function start_chapter(){  //Inicia solo una vez por capitulo
 		rules.clear()
 		set_all_rules(0)
+
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch3_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch3_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
+		ch3_cov_lim3 = {a = cv_lim[lim_idx+2].a, b = cv_lim[lim_idx+2].b}
+
+		dep_cnr3 = get_dep_cov_nr(ch3_cov_lim3.a,ch3_cov_lim3.b)
 
 		gl_wt = this.step < 8 ? wt_rail : wt_narrowgauge
 
@@ -660,7 +664,7 @@ class tutorial.chapter_03 extends basic_chapter
 				text.loc5 = name3
 				text.load = loc3_load
 				text.wait = get_wait_time_text(loc3_wait)
-				text.cnr = d3_cnr
+				text.cnr = dep_cnr3
 				text.tile = loc3_tile
 				text.wag = sc_wag3_nr
 
@@ -1426,7 +1430,7 @@ class tutorial.chapter_03 extends basic_chapter
 				    local cov_list = depot.get_convoy_list()
 				    local cov_nr = cov_list.len()
                     local all_nr = cov_nr + cir_nr	//get_convoy_number(st1, wt_rail)                   
-					tmp_d3_cnr = d3_cnr - cir_nr 	//get_convoy_number(st1, wt_rail)
+					tmp_d3_cnr = dep_cnr3 - cir_nr 	//get_convoy_number(st1, wt_rail)
                     cov = tmp_d3_cnr
 			    }
 
@@ -1890,6 +1894,10 @@ class tutorial.chapter_03 extends basic_chapter
 					local count_tunn = count_tunnel(pos, max)
 					if (tool_id==tool_remover){
 						if (pos.x>=c_tunn2_lim.a.x && pos.y>=c_tunn2_lim.a.y && pos.x<=c_tunn2_lim.b.x && pos.y<=c_tunn2_lim.b.y){
+							//El Tunel ya tiene la altura correcta
+							if (r_way.c.z == c_tunn1.b.z) {
+								return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
+							}
 							if(!count_tunn && slope==0 && way && way.is_marked())
 								return null
 							if(count_tunn && pos.z!=end_lvl_z)
@@ -2168,14 +2176,6 @@ class tutorial.chapter_03 extends basic_chapter
 		local result = translate("It is not allowed to start vehicles.")
 		switch (this.step) {
 			case 5:
-				if (comm_script){
-					cov_save[current_cov]=convoy
-					id_save[current_cov]=convoy.id
-					gcov_nr++
-					persistent.gcov_nr = gcov_nr
-					return null
-				}
-
 				local wt = gl_wt
 				if ((depot.x != c_dep1.x)||(depot.y != c_dep1.y))
 					return 0
@@ -2204,14 +2204,6 @@ class tutorial.chapter_03 extends basic_chapter
 			break
 
 			case 7:
-				if (comm_script){
-					cov_save[current_cov]=convoy
-					id_save[current_cov]=convoy.id
-					gcov_nr++
-					persistent.gcov_nr = gcov_nr
-					return null
-				}
-
 				local wt = gl_wt
 				if ((depot.x != c_dep2.x)||(depot.y != c_dep2.y))
 					return translate("You must select the deposit located in")+" ("+c_dep2.tostring()+")."	
@@ -2238,22 +2230,12 @@ class tutorial.chapter_03 extends basic_chapter
 			break
 
 			case 11:
-				if (comm_script){
-					cov_save[current_cov]=convoy
-					id_save[current_cov]=convoy.id
-					gcov_nr++
-					persistent.gcov_nr = gcov_nr
-					current_cov++
-					gall_cov++
-					return null
-				}
-
-				local wt = gl_wt
+			if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
 				if ((depot.x != c_dep3.x)||(depot.y != c_dep3.y))
 					return translate("You must select the deposit located in")+" ("+c_dep3.tostring()+")."	
-				local cov = d3_cnr
+				local cov = dep_cnr3
 				local veh = 8
-				local good_list = [good_desc_x(good_alias.passa).get_catg_index()] //Passengers
+				local good_list = [good_desc_x (good_alias.passa).get_catg_index()] 	 //Passengers
 				local name = loc3_name_obj
 				local st_tile = loc3_tile
 				local is_st_tile = true
@@ -2261,26 +2243,29 @@ class tutorial.chapter_03 extends basic_chapter
 				//Para arracar varios vehiculos
 				local id_start = ch3_cov_lim3.a
 				local id_end = ch3_cov_lim3.b
-				local cir_nr = get_convoy_number_exp(sch_list[0], depot, id_start, id_end)
+				local c_list = sch_list
+				local cir_nr = get_convoy_number_exp(c_list[0], depot, id_start, id_end)
 				local cov_list = depot.get_convoy_list()
 				cov -= cir_nr
-				result = is_convoy_correct(depot, cov, veh, good_list, name, st_tile, is_st_tile)
 
+				result = is_convoy_correct(depot,cov,veh,good_list,name, st_tile, is_st_tile)
 				if (result!=null){
+					reset_tmpsw()
 					local good = translate(good_alias.passa)
 					return train_result_message(result, translate(name), good, veh, cov, st_tile)
 				}
 
-			if (current_cov>ch3_cov_lim3.a && current_cov<ch3_cov_lim3.b){
-					local selc = 0
-					local load = loc3_load
-					local time = loc3_wait
-					local c_list = sch_list
-					local siz = c_list.len()
-					return set_schedule_convoy(result, pl, cov, convoy, selc, load, time, c_list, siz)
-				}
-			break
+				local selc = 0
+				local load = loc3_load
+				local time = loc3_wait
+				local siz = c_list.len()
 
+				result = set_schedule_convoy(result, pl, cov, convoy, selc, load, time, c_list, siz)
+				if(result == null)
+					reset_tmpsw()
+				return result
+			}
+			break
 		}
 		return result = translate("It is not allowed to start vehicles.")
 	}
@@ -2575,7 +2560,6 @@ class tutorial.chapter_03 extends basic_chapter
 					pot1=1
 				}
 				if(pot1==1 && pot2==0){
-					comm_script = true
 					local wt = wt_rail
 					if (current_cov>ch3_cov_lim2.a && current_cov<ch3_cov_lim2.b){
 						local c_depot = my_tile(c_dep2)
@@ -2740,19 +2724,19 @@ class tutorial.chapter_03 extends basic_chapter
 						}
 		            }
 				}
-				if (pot0==1 && pot1==0){
+				if (pot1==0){
 					local way = my_tile(c_dep3).find_object(mo_way)
 					way.unmark()
 					local t = command_x(tool_build_wayobj)		
 					local err = t.work(player_x(1), my_tile(c_dep3), my_tile(c_dep3), sc_caten_name)
-					pot1 = 1
+
 				}
-				if (pot1==1 && pot2==0){
+				if (pot2==0){
 					local tile = my_tile(c_dep3)
 					tile.remove_object(player_x(0), mo_label) //Elimina texto label
 					local t = command_x(tool_build_depot)
 					local err = t.work(player_x(0), tile, sc_dep2_name)
-					pot2=1
+
 				}
 				return null
 				break
@@ -2779,7 +2763,7 @@ class tutorial.chapter_03 extends basic_chapter
 					}
 					local c_line = comm_get_line(player, gl_wt, sched)
 
-					local cov_nr = d3_cnr
+					local cov_nr = dep_cnr3
 					local name = loc3_name_obj
 					local wag_name = loc4_name_obj
 					local cab_name = loc5_name_obj
@@ -2800,8 +2784,6 @@ class tutorial.chapter_03 extends basic_chapter
 					local convoy = false
 					local all = true
 					comm_start_convoy(player, convoy, depot, all)	
-					gall_cov = checks_all_convoys()
-					current_cov = gall_cov
 				}
 
 				return null

@@ -5,22 +5,22 @@
  *  Can NOT be used in network game !
  */
 
-//Step 2 =====================================================================================
-ch5_cov_lim1 <- {a = 20 , b = 31}
-
-//Step 4 =====================================================================================
-ch5_cov_lim2 <- {a = 30 , b = 33}
-ch5_cov_lim3 <- {a = 32 , b = 34}
-
-//Step 5 =====================================================================================
-ch5_cov_lim4 <- {a = 33 , b = 35}
-
-
 class tutorial.chapter_05 extends basic_chapter
 {
 	chapter_name  = "Industrial Efficiency"
 	chapter_coord = coord(61,72)
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
+
+	//Step 2 =====================================================================================
+	ch5_cov_lim1 = {a = 0 , b = 0}
+
+	//Step 4 =====================================================================================
+	ch5_cov_lim2 = {a = 0 , b = 0}
+	ch5_cov_lim3 = {a = 0 , b = 0}
+
+	//Step 4 =====================================================================================
+	ch5_cov_lim4 = {a = 0 , b = 0}
+
 	cov_cir = 0
 	sch_cov_correct = false
 
@@ -76,6 +76,7 @@ class tutorial.chapter_05 extends basic_chapter
 					{c = coord(87,71), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(91,70), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(97,76), name = "extension_postoffice", good = good_alias.mail},
+					{c = coord(91,76), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(91,65), name = "extension_postoffice", good = good_alias.mail},
 					{c = coord(91,55), name = "extension_postoffice", good = good_alias.mail}, 
 					{c = coord(99,58), name = "extension_postoffice", good = good_alias.mail},
@@ -145,6 +146,12 @@ class tutorial.chapter_05 extends basic_chapter
 	{
 		rules.clear()
 		set_all_rules(0)
+
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch5_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch5_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
+		ch5_cov_lim3 = {a = cv_lim[lim_idx+2].a, b = cv_lim[lim_idx+2].b}
+		ch5_cov_lim4 = {a = cv_lim[lim_idx+3].a, b = cv_lim[lim_idx+3].b}
 
 		d1_cnr = get_dep_cov_nr(ch5_cov_lim1.a,ch5_cov_lim1.b)
 		d2_cnr = get_dep_cov_nr(ch5_cov_lim2.a,ch5_cov_lim2.b)
@@ -248,7 +255,7 @@ class tutorial.chapter_05 extends basic_chapter
 		    }
 			break
 			case 4:
-		    if (pot0==1 && pot1==0){
+			if (pot0==1 && pot1==0){
 				text = ttextfile("chapter_05/04_1-3.txt")
 				text.tx="<em>[1/3]</em>"
 				text.toolbar = toolbar
@@ -266,7 +273,7 @@ class tutorial.chapter_05 extends basic_chapter
 				}
 				text.st = st_tx
 			}
-		    if (pot1==1 && pot2==0 || !correct_cov){
+			else if (pot1==1 && pot2==0 || (current_cov> ch5_cov_lim2.a && current_cov< ch5_cov_lim2.b)){
 				text = ttextfile("chapter_05/04_2-3.txt")
 				text.tx = "<em>[2/3]</em>"
 				local list_tx = ""
@@ -300,7 +307,7 @@ class tutorial.chapter_05 extends basic_chapter
 				text.wait = get_wait_time_text(veh2_wait)
 				text.nr = siz
 			}
-		    if (pot2==1 && pot3==0 || !correct_cov){
+			else if (pot2==1 && pot3==0 || (current_cov> ch5_cov_lim3.a && current_cov< ch5_cov_lim3.b)){
 				text = ttextfile("chapter_05/04_3-3.txt")
 				text.tx = "<em>[3/3]</em>"
 				local list_tx = ""
@@ -556,7 +563,6 @@ class tutorial.chapter_05 extends basic_chapter
 				return 0
 			break;
 			case 4:
-
 				if (pot0==0){
                     local player = player_x(1)
                     local list = obj_list1
@@ -570,10 +576,10 @@ class tutorial.chapter_05 extends basic_chapter
 				if (pot0==1 && pot1==0){
 				    local list = obj_list1
 					local nr = list.len()
-                    local load = good_alias.mail
                     local lab_name = translate("Mail Extension Here!.")
-				    local all_stop = is_stop_building_ex(nr, list, lab_name, load)
+				    local all_stop = is_stop_building_ex(nr, list, lab_name)
 				    if (all_stop && pot1==0){
+						gui.add_message("??")
 					    pot1=1
 					    reset_glsw()
 				    }
@@ -794,9 +800,9 @@ class tutorial.chapter_05 extends basic_chapter
 					
 					//Permite eliminar paradas
 					if (tool_id==4097){
-						local nr = obj_list1.len()
-						local c_list = obj_list1
-						return delete_stop_ex(nr, c_list, pos)
+						local list = obj_list1
+						local nr = list.len()
+						return delete_stop_ex(nr, list, pos)
 					}
                 }
                 if (pot1==1 && pot2==0){
@@ -1137,20 +1143,20 @@ class tutorial.chapter_05 extends basic_chapter
 			case 4:
 				if (pot0==0){
                     local pl = 0
-                    local c_list = obj_list1
+                    local list = obj_list1
                     local obj = mo_building
                     local station = false
 
-					for(local j=0;j<c_list.len();j++){
-						local tile = my_tile(c_list[j].c)
+					for(local j=0;j<list.len();j++){
+						local tile = my_tile(list[j].c)
 						local is_obj = tile.find_object(obj)
 						local halt = tile.get_halt()
 						if (is_obj){
 						    if (!halt){
-						        tile.remove_object(player_x(pl), obj)
+						        tile.remove_object(player_x(1), obj)
 						    }
 						    else if (station){
-						        tile.remove_object(player_x(pl), obj)
+						        tile.remove_object(player_x(1), obj)
 						    }
 						}
 					}
@@ -1238,9 +1244,6 @@ class tutorial.chapter_05 extends basic_chapter
 					local conv = depot.get_convoy_list()
 					conv[0].set_line(player, c_line)
 					comm_start_convoy(player, conv[0], depot)
-
-					gall_cov = checks_all_convoys()
-					current_cov = gall_cov
 				}
                 
 				return null
@@ -1274,9 +1277,6 @@ class tutorial.chapter_05 extends basic_chapter
 					local conv = depot.get_convoy_list()
 					conv[0].set_line(player, c_line)
 					comm_start_convoy(player, conv[0], depot)
-
-					gall_cov = checks_all_convoys()
-					current_cov = gall_cov	
 				}
 		}
 		return null
@@ -1343,10 +1343,10 @@ class tutorial.chapter_05 extends basic_chapter
 		}
 	}
 
-    function delete_objet(player, c_list, obj, lab_name, station = false)
+    function delete_objet(player, list, obj, lab_name, station = false)
     {
-        for(local j=0;j<c_list.len();j++){
-            local t = my_tile(c_list[j].c)
+        for(local j=0;j<list.len();j++){
+            local t = my_tile(list[j].c)
             local is_obj = t.find_object(obj)
             local halt = t.get_halt()
             if (is_obj){

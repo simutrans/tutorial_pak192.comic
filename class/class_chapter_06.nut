@@ -5,15 +5,6 @@
  *  Can NOT be used in network game !
  */
 
-//Step 2 =====================================================================================
-ch6_cov_lim1 <- {a = 34, b = 36}
-
-//Step 3 =====================================================================================
-ch6_cov_lim2 <- {a = 35, b = 40}
-
-//Step 4 =====================================================================================
-//ch6_cov_lim3 <- {a = 37, b = 43}
-
 class tutorial.chapter_06 extends basic_chapter
 {
 	chapter_name  = "The forgotten Air transport"
@@ -21,6 +12,12 @@ class tutorial.chapter_06 extends basic_chapter
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 
 	gl_wt = wt_air
+
+	//Step 2 =====================================================================================
+	ch6_cov_lim1 = {a = 0, b = 0}
+
+	//Step 3 =====================================================================================
+	ch6_cov_lim2 = {a = 0, b = 0}
 
 	c_way = coord(0,0)
 
@@ -94,6 +91,10 @@ class tutorial.chapter_06 extends basic_chapter
 	{
 		rules.clear()
 		set_all_rules(0)
+
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch6_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch6_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
 
 		d1_cnr = get_dep_cov_nr(ch6_cov_lim1.a,ch6_cov_lim1.b)
 		d2_cnr = get_dep_cov_nr(ch6_cov_lim2.a,ch6_cov_lim2.b)
@@ -209,12 +210,10 @@ class tutorial.chapter_06 extends basic_chapter
 
 					local ta = my_tile(c1_track.a)
 					local tb = my_tile(c1_track.b)
-					local coora = coord3d(ta.x, ta.y, ta.z)
-					local coorb = coord3d(tb.x, tb.y, tb.z)
 					local wt = gl_wt
 					local name_list = [obj1_way_name]
 					local dir = c1_track.dir
-					local fullway = check_way(coora, coorb, wt, name_list, dir)
+					local fullway = check_way(ta, tb, wt, name_list, dir)
 					if (fullway.result){
 						c_way =  coord(0,0)
 						pot0=1
@@ -231,12 +230,10 @@ class tutorial.chapter_06 extends basic_chapter
 
 					local ta = my_tile(c2_track.a)
 					local tb = my_tile(c2_track.b)
-					local coora = coord3d(ta.x, ta.y, ta.z)
-					local coorb = coord3d(tb.x, tb.y, tb.z)
 					local wt = gl_wt
 					local name_list = [obj1_way_name, obj2_way_name]
 					local dir = c2_track.dir
-					local fullway = check_way(coora, coorb, wt, name_list, dir)
+					local fullway = check_way(ta, tb, wt, name_list, dir)
 					if (fullway.result){
 						c_way = coord(0,0)
 						pot1=1
@@ -885,7 +882,8 @@ class tutorial.chapter_06 extends basic_chapter
 
 		local forbid =	[	4134,4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_roadsign, tool_restoreslope,
 							tool_plant_tree, tool_set_marker, tool_add_city, 4137, tool_stop_mover, tool_buy_house, tool_build_wayobj,
-      						tool_remove_wayobj, tool_build_tunnel, tool_build_transformer, tool_build_bridge, tool_remove_way
+      						tool_remove_wayobj, tool_build_tunnel, tool_build_transformer, tool_build_bridge, tool_remove_way,
+							tool_make_stop_public
 						]
 
 		foreach (tool_id in forbid)
