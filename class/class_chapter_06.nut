@@ -107,6 +107,8 @@ class tutorial.chapter_06 extends basic_chapter
 		//Schedule list form current convoy
 		if(this.step == 3){
 			local t = this.my_tile(c_dep2)
+			local c_list = sch_list2
+			start_sch_tmpsw(pl, t, c_list)
 			local depot = t.find_object(mo_depot_road)
 			if(depot) {
 				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
@@ -116,15 +118,7 @@ class tutorial.chapter_06 extends basic_chapter
 				}
 				local all_result = checks_convoy_schedule(convoy, pl)
 				sch_cov_correct = all_result.res == null ? true : false
-				}
-		}
-
-		local pl = 0
-		//Schedule list form current convoy
-		if(this.step == 3){
-            local c_dep = this.my_tile(c_dep2)
-			local c_list = sch_list2
-			start_sch_tmpsw(pl,c_dep, c_list)
+			}
 		}
 		else if(this.step == 4){
             local c_dep = this.my_tile(c_dep3)
@@ -204,6 +198,7 @@ class tutorial.chapter_06 extends basic_chapter
 		save_pot()
 		switch (this.step) {
 			case 1:
+				local name = translate("Build here")
 				if (pot0==0){
 					local tile = my_tile(c1_start)	
 					c1_is_way = tile.find_object(mo_way)
@@ -248,7 +243,6 @@ class tutorial.chapter_06 extends basic_chapter
 					local tile = my_tile(st1_pos)
 					local way = tile.find_object(mo_way)
 					local buil = tile.find_object(mo_building)
-					local name = translate("Build here")
 					public_label(tile, name)
 					if(way && buil){
 						pot2 = 1
@@ -259,7 +253,6 @@ class tutorial.chapter_06 extends basic_chapter
 				else if (pot2==1 && pot3==0){
 					local tile = my_tile(st2_pos)
 					local buil = tile.find_object(mo_building)
-					local name = translate("Build here")
 					public_label(tile, name)
 					if(buil){
 						pot3 = 1
@@ -271,7 +264,6 @@ class tutorial.chapter_06 extends basic_chapter
 					local tile = my_tile(c_dep1)
 					local way = tile.find_object(mo_way)
 					local depot = tile.find_object(mo_depot_air)
-					local name = translate("Build here")
 					public_label(tile, name)
 					if(way && depot){
 						tile.remove_object(player_x(1), mo_label)
@@ -782,12 +774,9 @@ class tutorial.chapter_06 extends basic_chapter
 				return null
 			break;
 			case 2:
-				//gui.add_message(""+current_cov+" -- "+ch6_cov_lim1.a +" -- "+ ch6_cov_lim1.b)
 				if (current_cov> ch6_cov_lim1.a && current_cov< ch6_cov_lim1.b){
-
 					local pl = player
 					local c_depot = my_tile(c_dep1)
-
 					try {
 						comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
 					}
@@ -825,7 +814,6 @@ class tutorial.chapter_06 extends basic_chapter
 					pot0=1
 				}
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
-				//gui.add_message(""+current_cov+" -- "+ch6_cov_lim2.a +" -- "+ ch6_cov_lim2.b)
 				if (current_cov>ch6_cov_lim2.a && current_cov<ch6_cov_lim2.b){
 					local c_list = sch_list2
 					local sch_siz = c_list.len()

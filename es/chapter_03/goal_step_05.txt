@@ -16,5 +16,8 @@ Ahora debe elegir un vehículo adecuado para transportar {good1} hasta {f2}.<br>
 Se avanza al siguiente paso cuando {f2} reciba <em>{t_reach}t</em> de <em>{good1}</em>.
 </p>
 <p>
+<em>Consejo:</em> Pulse la tecla<em> "W" (letra may¨²scula)</em> para activar el avance r¨¢pido.
+</p>
+<p>
 <em>Cantidad recibida:</em> <st>{reached}t</st>
 </p>

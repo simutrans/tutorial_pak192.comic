@@ -48,7 +48,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 	//Step 5 =====================================================================================
 	//Para el canal acuatico
-	c1_way = {a = coord3d(112,79,-2), b = coord3d(97,77,-1)}
+	c1_way = {a = coord3d(112,79,-2), b = coord3d(97,77,-1), dir = 6}
 	c1_way_lim = {a = coord(96,75), b = coord(113,83)}
 
 	//Consumidor Final
@@ -333,7 +333,7 @@ class tutorial.chapter_04 extends basic_chapter
 					label_x.create(c_dep1, player_x(pl), translate("Build Shipyard here!."))
 				}
 				else{
-					t1.remove_object(player_x(pl), mo_label)
+					t1.remove_object(player_x(1), mo_label)
 					pot0=1
 				}
 				if (pot1==1){
@@ -382,7 +382,7 @@ class tutorial.chapter_04 extends basic_chapter
 					local coora = {x = c1_way.a.x, y = c1_way.a.y, z = c1_way.a.z }
 					local coorb = {x = c1_way.b.x, y = c1_way.b.y, z = c1_way.b.z }
 					local obj = false
-					local dir = 6
+					local dir = c1_way.dir
 					wayend = coorb
 					r_way = get_fullway(coora, coorb, dir, obj)
 
@@ -398,7 +398,7 @@ class tutorial.chapter_04 extends basic_chapter
 						label_x.create(sch_list2[1], player_x(pl), translate("Build a Dock here!."))
 					}
 					else{
-						t.remove_object(player_x(pl), mo_label)
+						t.remove_object(player_x(1), mo_label)
 						if (is_station_build(0, sch_list2[1], good_alias.goods)==null)
 							pot1=1
 					}
@@ -412,7 +412,7 @@ class tutorial.chapter_04 extends basic_chapter
 						label_x.create(c_dep1, player_x(pl), translate("Build Shipyard here!."))
 					}
 					else{
-						t1.remove_object(player_x(pl), mo_label)
+						t1.remove_object(player_x(1), mo_label)
 						pot2=1
 					}
 				}
@@ -453,7 +453,7 @@ class tutorial.chapter_04 extends basic_chapter
 						label_x.create(c_dep2, player_x(pl), translate("Build Shipyard here!."))
 					}
 					else{
-						t1.remove_object(player_x(pl), mo_label)
+						t1.remove_object(player_x(1), mo_label)
 						pot0=1
 					}
 				}
@@ -822,7 +822,7 @@ class tutorial.chapter_04 extends basic_chapter
 				//Para Astillero
 				local t1 = my_tile(c_dep1)
 				local label = t1.find_object(mo_label)
-				t1.remove_object(player, mo_label)
+				t1.remove_object(player_x(1), mo_label)
 	
 				local tool = command_x(tool_build_depot)			
 				local err = tool.work(player, t1, sc_dep_name)
@@ -887,7 +887,7 @@ class tutorial.chapter_04 extends basic_chapter
 					local coora = c1_way.a
 					local coorb = c1_way.b
 					local t = command_x(tool_build_way)	
-					local err = t.work(player_x(0), coora, coorb, sc_way_name)
+					local err = t.work(player, coora, coorb, sc_way_name)
 				}
 				//Para el cuarto muelle
 				if (pot1==0){
@@ -905,7 +905,7 @@ class tutorial.chapter_04 extends basic_chapter
 					local label = t1.find_object(mo_label)
 
 					if (label){
-						t1.remove_object(player, mo_label)
+						t1.remove_object(player_x(1), mo_label)
 					}
 					local tool = command_x(tool_build_depot)			
 					local err = tool.work(player, t1, sc_dep_name)
@@ -964,7 +964,7 @@ class tutorial.chapter_04 extends basic_chapter
 					//Para Astillero
 					local t1 = my_tile(c_dep2)
 					local label = t1.find_object(mo_label)
-					t1.remove_object(player, mo_label)
+					t1.remove_object(player_x(1), mo_label)
 		
 					local tool = command_x(tool_build_depot)			
 					local err = tool.work(player, t1, sc_dep_name)

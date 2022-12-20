@@ -95,6 +95,9 @@ good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "
 // table containing all system_types
 all_systemtypes <- [st_flat, st_elevated, st_runway, st_tram]
 
+// Complemento para obtener tiempo de espera
+tick_wait <- 16
+
 chapter            <- null			// used later for class
 chapter_max        <- 7				// amount of chapter
 select_option      <- { x = 0, y = 0, z = 1 }	// place of station to control name

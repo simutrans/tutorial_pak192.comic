@@ -126,20 +126,48 @@ class tutorial.chapter_02 extends basic_chapter
 
 		local pl = 0
 		//Schedule list form current convoy
+		local t = this.my_tile(c_dep)
 		if(this.step == 4){
-            local c_dep = this.my_tile(c_dep)
 			local c_list = sch_list1
-			start_sch_tmpsw(pl,c_dep, c_list)		
+			start_sch_tmpsw(pl, t, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
 		else if(this.step == 6){
-            local c_dep = this.my_tile(c_dep)
 			local c_list = sch_list2
 			start_sch_tmpsw(pl,c_dep, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
 		else if(this.step == 7){
-            local c_dep = this.my_tile(c_dep)
 			local c_list = sch_list3
-			start_sch_tmpsw(pl,c_dep, c_list)
+			start_sch_tmpsw(pl, t, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
 
 	}
@@ -237,7 +265,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 				break
 			case 7:
-				if (!cov_sw){
+				if (!correct_cov){
 					local a = 3
 					local b = 3
 					text = ttextfile("chapter_02/07_"+a+"-"+b+".txt")
@@ -396,7 +424,6 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				else if ((way)&&(way.get_owner().nr==pl)){
 					if(next_mark ){
-						tile.remove_object(player_x(pl), mo_label)
 						this.next_step()
 					}
 				}
@@ -413,9 +440,11 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				//Para el deposito
 				local tile = my_tile(c_dep)
+				local label = tile.find_object(mo_label)
 				local waydepo = tile.find_object(mo_way)
 				if (!tile.find_object(mo_depot_road)){
-					label_x.create(c_dep, player_x(pl), translate("Build a Depot here!."))
+					if(label)
+						label.set_text(translate("Build a Depot here!."))
 				}
 				else if (next_mark){
 					tile.remove_object(player_x(pl), mo_label)
@@ -1160,7 +1189,6 @@ class tutorial.chapter_02 extends basic_chapter
 				break
 
 			case 6:
-				//gui.add_message(""+current_cov+"  "+ch2_cov_lim2.b+"")
 				local player = player_x(pl)
 				local c_depot = my_tile(c_dep)
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
