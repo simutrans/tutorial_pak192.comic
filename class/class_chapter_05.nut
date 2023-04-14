@@ -646,6 +646,14 @@ class tutorial.chapter_05 extends basic_chapter
 		local bridge = t.find_object(mo_bridge)
 		local label = t.find_object(mo_label)
 		local building = t.find_object(mo_building)
+		if(building){
+			/*local fact = building.get_factory().get_desc()
+			local input_list = fact.get_inputs()
+			foreach(input in input_list){
+				local good = input.good
+				gui.add_message(""+good.get_name())
+			}*/
+		}
 		local sign = t.find_object(mo_signal)
 		local roadsign = t.find_object(mo_roadsign)
 		/*if (way){

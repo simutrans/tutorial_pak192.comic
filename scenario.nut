@@ -89,7 +89,7 @@ tool_alias  <-	{	inspe = translate("Abfrage"), road= translate("ROADTOOLS"), rai
 					ship = translate("SHIPTOOLS"), land = translate("SLOPETOOLS"), spec = translate("SPECIALTOOLS")
 				}
 
-good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "Kohle",
+good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "coal",
 					flour = "flour", deliv = "Crates Deliverables", oel = "oil", gas = "fuel", wood = "logs", plan = "boards"
 				}
 // table containing all system_types
