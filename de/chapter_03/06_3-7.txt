@@ -1,7 +1,0 @@
-<p>
-You need to transport <em>{good2}</em> from {f2} to {f3} in <em>{cy3}</em>.
-</p>
-<p>
-{tx} Use the up flat slope tool to lift the ground at {slpe2}.
-</p>
-<em>State of the ground:</em><br> {slope_t}<br>

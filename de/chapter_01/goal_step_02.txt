@@ -1,18 +1,16 @@
 <p>
-It is recommended to turn on the grid for this tutorial by using the <em>"#" key</em>.
-In addition, it is highly recommended that Trees are set to transparent, either through the settings menu, or by pressing the <em>"%" key</em>.
+Nachdem Sie nun wissen, wie Sie sich auf der Karte bewegen können, müssen Sie im nächsten Schritt Informationen von Objekten auf der Karte abrufen.
 </p>
 <p>
-You can <em>zoom</em> in and out using either the Mouse wheel, or by using the <em>"Page Up/Page Down Keys"</em>.
+Dies kann mit dem <em>Abfragewerkzeug</em> durchgeführt werden. Dieses Werkzeug sollte standardmäßig ausgewählt sein. Ist dies nicht der Fall, kann es im Hauptmenü oben (Lupen-Button) oder durch Drücken der Taste <it>[a]</it> ausgewählt werden.
 </p>
 <p>
-You can <em>move</em> about the map either by holding down the Right Mouse button and dragging, using the Arrow Keys or the number pad.</p>
-<p>
-You can <em>rotate</em> the map by pressing <em>"[Shift]+r" (Capital "R")</em> or in from toolbar select <em>Rotate Map</em> tool.
+Ein weiteres zu beachtendes Element ist die <em>Objektposition</em> auf der Karte, die rechts in der Statuszeile am unteren Rand des Bildschirms im Format (x, y, z) angezeigt wird.<br/> Achtung: Diese Koordinaten entsprechen immer der Position ausgehend von der oberen linken Ecke der Karte. Wird die Karte gedreht, dann ändern sich diese Koordinaten der aktuellen Position.
 </p>
 <p>
-Try zooming in and out and moving about the map.
+<strong>Um mit dem nächsten Schritt fortzufahren,</strong> klicken Sie mit dem <em>Abfragewerkzeug</em> auf die Statue an der Position {pos}. Nachdem Sie auf die Position geklickt haben, können Sie das angezeigte Informationsfenster schließen, indem Sie oben links auf <em>X</em> klicken. Sie können das aktive Fenster auch mit der Taste <it>[Esc]</it> schließen. 
 </p>
 <p>
-<st>To proceed to the next step</st>, rotate the map.
+<strong>Hinweis:</strong> Um alle Fenster zu schließen, drücken sie die <it>Löschen [<--]</it> Taste.<br/> 
+Wurde das <em>Missionsfenster</em> geschlossen, kann dieses über <em>Einstellungen >> Missionsstatus</em> wieder geöffnet werden. 
 </p>

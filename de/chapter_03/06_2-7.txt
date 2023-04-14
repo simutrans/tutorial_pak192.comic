@@ -1,7 +1,0 @@
-<p>
-You need to transport <em>{good2}</em> from {f2} to {f3} in <em>{cy3}</em>.
-</p>
-<p>
-{tx} Use the slope tools in the <em>'{tool3}'</em> toolbar, then you must build an artificial slope that I pointed northeast in the position: {slpe1}
-</p>
-<em>State of the ground:</em><br> {slope_t}<br>

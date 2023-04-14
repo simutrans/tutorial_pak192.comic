@@ -1,3 +1,3 @@
 <p>
-The chapter aims to reach {ratio_chapter}% .
+Das Kapitel ist zu {ratio_chapter}% erreicht.
 </p>
