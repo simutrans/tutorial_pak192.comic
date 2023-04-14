@@ -595,7 +595,7 @@ class basic_chapter
 			local good = cov_list[cov_nr-1].get_goods_catg_index()
 			local good_count=0	
 			for(local j=0;j<good.len();j++){
-				gui.add_message("a = "+good[j]+", b = "+good_list[j]+"")
+				//gui.add_message("a = "+good[j]+", b = "+good_list[j]+"")
 				for(local i=0;i<good_list.len();i++){
 					if(good[j]==good_list[i])
 						good_count++
