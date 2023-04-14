@@ -1,23 +1,22 @@
-<br/>
-<h1>Simutrans Tutorial</h1>
 <p>
-In diesem Tutorial werden die ersten Schritte zum Einrichten Ihres Transportimperiums in Simutrans erläutert. Der Fokus liegt auf den notwendigen Aktionen rund um Transportketten in Simutrans.
+<h1>Simutrans Tutorial</h1><br>
+In this tutorial, the first steps in setting up your transportation empire in Simutrans are explained. The focus is on the necessary actions around transportation chains in Simutrans.
 </p>
 <p>
-Das Tutorial besteht aus mehreren <it>Kapiteln</it>, die jeweils eine Reihe von <it>Schritten</it> enthalten, um das Zielkapitel zu vervollständigen.
+The tutorial consists of several <b>Chapters</b>  each having a number of <b>Steps</b> included in order to complete the target chapter.
 </p>
 <p>
-Wirtschaftliche Belange werden im Tutorial nur kurz behandelt.
+Economic concerns are only briefly covered in the Tutorial
 </p>
 <p>
 {list_of_chapters}
 </p>
 <p>
-Weitere Hilfe erhalten Sie durch Drücken der Taste <it>F1</it> in Bezug auf die verschiedenen Werkzeuge, Funktionen und Logik in Simutrans.
+Further help can be found by pressing the "F1" key in regards to the various tools, functions, and logic in Simutrans.
 </p>
 <p>
 {first_link}
 </p>
 <p>
-<strong>HINWEIS: In einigen Fällen kann es bis zu 15 Sekunden dauern, bis die Anweisungen für den nächsten Schritt aktualisiert werden.</strong>
+<st>Note:</st> In some cases it can take up to 15 seconds from completing the required actions, before the Tutorial will update to the next step.
 </p>

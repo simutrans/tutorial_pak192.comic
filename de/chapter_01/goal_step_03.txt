@@ -1,16 +1,25 @@
 <p>
-Die folgenden Fenster werden ihnen helfen, sich in der Welt von Simutrans zu informieren.
+Now that you know how to move around the map, the next step is to retrieve information about items on the map.
 </p>
 <p>
-Die <em>Reliefkarte</em> kann durch Drücken der Taste <it>[m]</it> angezeigt werden.<br/>
-Das Fenster <em>Finanzen</em> kann durch Drücken der Taste <it>[f]</it> angezeigt werden.<br/>
-Das <em>Nachrichtencenter</em> kann durch Drücken von <it>[Shift] + [b]</it> (großes B) angezeigt werden.<br/>
-<strong>Hinweis:</strong> Bei den meisten Grafiksets gibt es für diese Fenster auch Buttons im Hauptmenü am oberen Bildrand.
+<h1>Inspection Tool</h1>
+This is the main tool of the game, it is completely free for all players and allows to display the information window on any object on the map. It is also selected by default, if not it can be selected from the menu bar (the magnifying glass icon) or by pressing the <em>"A" key</em>.
 </p>
 <p>
-Detaillierte Informationen zu Städten erhalten Sie, indem Sie mit dem <em>Abfragewerkzeug</em> auf das <em>Rathaus</em> der jeweiligen Stadt klicken.<br/>
-<strong>Hinweis:</strong> Am schnellsten geht das durch anklicken des Stadtnamens in der <em>Städteliste</em> <it>[Shift] + [t]</it> (großes T).
+Another item to note is the world position listed at the bottom of the screen in (x,y,z) format. Warning: these coordinates depends on the current rotation of the map.
 </p>
 <p>
-<strong>Um zum nächsten Kapitel zu gelangen</strong>, klicken Sie auf {pos2} von {town}.
+To proceed first click on the {pos} <em>(the statue of the legendary Isaac)</em> with the <em>'{tool1}'</em>. After clicking on the location, you may close the information window that displays by clicking the <em>"[X]"</em> in the top left corner, pressing <em>"[Escape]"</em> to close the top most window, or press <em>"[Backspace]"</em> to close all open windows.
+</p>
+<p>
+Lastly use the <em>'{tool1}'</em> in the {buld_name} and close the info window.
+</p>
+<p>
+<em>Tip:</em> You can click on the preview of the object in the pop-up information windows, this will take you directly to its location on the map.
+</p>
+<p>
+<st>Note:</st> By pressing the <em>"[Backspace]"</em> key, all windows are closed, including the current scenario window.
+</p>
+<p>
+<st>To proceed to the next step</st>, click on the {pos} and then on {buld_name} with the <em>'{tool1}'</em>.
 </p>
