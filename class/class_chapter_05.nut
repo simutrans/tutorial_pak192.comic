@@ -1287,7 +1287,7 @@ class tutorial.chapter_05 extends basic_chapter
 
 		switch (this.step) {
 			case 1:
-				local forbid =	[	4097,4134,4135,tool_lower_land,tool_raise_land,tool_restoreslope,tool_build_way,
+				local forbid =	[	4136,4140,4126,4103,4097,4134,4135,tool_lower_land,tool_raise_land,tool_restoreslope,tool_build_way,
 									tool_make_stop_public,tool_build_transformer,tool_build_station,
 									tool_build_bridge,tool_build_depot,tool_remove_way,tool_build_tunnel
 								]
