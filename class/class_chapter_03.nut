@@ -337,7 +337,7 @@ class tutorial.chapter_03 extends basic_chapter
 				text.w2 = c2.href("("+c2.tostring()+")")
 				text.w3 = c3.href("("+c3.tostring()+")")
 				text.w4 = c4.href("("+c4.tostring()+")")
-				text.tile = loc2_tile
+				text.tile = loc1_tile
 				break
 			case 3:
 				if (pot0==0){
@@ -452,6 +452,7 @@ class tutorial.chapter_03 extends basic_chapter
 				text.w2 = c2.href("("+c2.tostring()+")")
 				text.w3 = c3.href("("+c3.tostring()+")")
 				text.w4 = c4.href("("+c4.tostring()+")")
+    				text.tile = loc2_tile
 
 				if (r_way.r)
 					text.cbor = "<em>" + translate("Ok") + "</em>"
