@@ -2510,7 +2510,7 @@ class tutorial.chapter_03 extends basic_chapter
 				glresult = null
 				local passa = good_alias.passa
 				local mail = good_alias.mail
-				if (pot4==0){
+				if (pot5==0){
 					//Estaciones de la Fabrica
 					for(local j=0;j<st4_list.len();j++){
 						local tile = my_tile(st4_list[j])
@@ -2523,7 +2523,7 @@ class tutorial.chapter_03 extends basic_chapter
 						}
 					}
      				}				
-	 			if (pot5==0){
+	 			if (pot6==0){
 					//Estaciones del Productor
 					for(local j=0;j<st3_list.len();j++){
 						local tile = my_tile(st3_list[j])
