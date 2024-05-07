@@ -1302,7 +1302,7 @@ class tutorial.chapter_02 extends basic_chapter
 			}
         }
 
-		forbid =	[	4134,4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_transformer,
+		forbid =	[	4136, 4140, 4126, 4103, 4134, 4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_transformer,
                			tool_restoreslope, tool_plant_tree, tool_set_marker, tool_add_city, 4137, tool_stop_mover, tool_buy_house
 					]
 
