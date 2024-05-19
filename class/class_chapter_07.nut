@@ -13,6 +13,8 @@ class tutorial.chapter_07 extends basic_chapter
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 	load = 0
 
+	compass_nr = 0
+
 	cty1 = {c = coord(88,143), name = ""}
 	c_cty_lim1 = {a = coord(0,0), b = coord(0,0)}
 
@@ -37,23 +39,53 @@ class tutorial.chapter_07 extends basic_chapter
 	st3_c = coord(92,209)
 	stop3 = coord(93,207)
 
+	function load_limits(city)  //Load all limits for citys
+	{
+		local list = []
+		local c_nw = city.get_pos_nw()
+		local c_se = city.get_pos_se()
+
+		list.push({a = c_nw, b = c_se})											// N
+		list.push({a =  coord(c_nw.x, c_se.y), b = coord(c_se.x, c_nw.y)})		// W
+		list.push({a = c_se, b = c_nw})											// S
+		list.push({a =  coord(c_se.x, c_nw.y), b = coord(c_nw.x, c_se.y)})		// E
+
+		return list
+	}
 
 	function start_chapter()  //Inicia solo una vez por capitulo
 	{
 		rules.clear()
 		set_all_rules(0)
 
+
 		cty1.name = get_city_name(cty1.c)
 		local cty_buil1 = my_tile(cty1.c).find_object(mo_building).get_city()
-		c_cty_lim1 = cty_buil1 ? {a = cty_buil1.get_pos_nw(), b = cty_buil1.get_pos_se()} : {a = coord(0,0), b = coord(0,0)}
+		c_cty_lim1 = load_limits(cty_buil1)
 
 		cty2.name = get_city_name(cty2.c)
 		local cty_buil2 = my_tile(cty2.c).find_object(mo_building).get_city()
-		c_cty_lim2 = cty_buil2 ? {a = cty_buil2.get_pos_nw(), b = cty_buil2.get_pos_se()} : {a = coord(0,0), b = coord(0,0)}
+		c_cty_lim2 = load_limits(cty_buil2)
 
 		cty3.name = get_city_name(cty3.c)
 		local cty_buil3 = my_tile(cty3.c).find_object(mo_building).get_city()
-		c_cty_lim3 = cty_buil3 ? {a = cty_buil3.get_pos_nw(), b = cty_buil3.get_pos_se()} : {a = coord(0,0), b = coord(0,0)}
+		c_cty_lim3 = load_limits(cty_buil3)
+
+		compass_nr = my_compass()
+
+		/*
+		//Debug ---------------------------------------------------------------
+		local opt = 0
+		local del = false
+		local text = "X"
+		local nr = my_compass()
+
+		my_tile(c_cty_lim1[nr].a).mark()
+		my_tile(c_cty_lim1[nr].b).mark()
+
+		label_bord(c_cty_lim1[nr].a, c_cty_lim1[nr].b, opt, del, text)
+		//---------------------------------------------------------------
+		*/
 
 		return 0
 	}
@@ -281,12 +313,13 @@ class tutorial.chapter_07 extends basic_chapter
 		local result=null	// null is equivalent to 'allowed'
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local way = t.find_object(mo_way)
+		local nr = compass_nr
 		switch (this.step) {
 			case 1:
 				if (tool_id==4096)
 					return null
 			
-				if ((pos.x>=c_cty_lim1.a.x-(1))&&(pos.y>=c_cty_lim1.a.y-(1))&&(pos.x<=c_cty_lim1.b.x+(1))&&(pos.y<=c_cty_lim1.b.y+(1))){
+				if ((pos.x>=c_cty_lim1[nr].a.x-(1))&&(pos.y>=c_cty_lim1[nr].a.y-(1))&&(pos.x<=c_cty_lim1[nr].b.x+(1))&&(pos.y<=c_cty_lim1[nr].b.y+(1))){
 					if (way){
 						if(pot0==0){
 							if(tool_id==4115){
@@ -330,7 +363,7 @@ class tutorial.chapter_07 extends basic_chapter
 				if (tool_id==4096)
 					return null
 			
-				if ((pos.x>=c_cty_lim2.a.x-(1))&&(pos.y>=c_cty_lim2.a.y-(1))&&(pos.x<=c_cty_lim2.b.x+(1))&&(pos.y<=c_cty_lim2.b.y+(1))){
+				if ((pos.x>=c_cty_lim2[nr].a.x-(1))&&(pos.y>=c_cty_lim2[nr].a.y-(1))&&(pos.x<=c_cty_lim2[nr].b.x+(1))&&(pos.y<=c_cty_lim2[nr].b.y+(1))){
 					if (way){
 						if(pot0==0){
 							if(tool_id==4115){
@@ -374,7 +407,7 @@ class tutorial.chapter_07 extends basic_chapter
 				if (tool_id==4096)
 					return null
 			
-				if ((pos.x>=c_cty_lim3.a.x-(1))&&(pos.y>=c_cty_lim3.a.y-(1))&&(pos.x<=c_cty_lim3.b.x+(1))&&(pos.y<=c_cty_lim3.b.y+(1))){
+				if ((pos.x>=c_cty_lim3[nr].a.x-(1))&&(pos.y>=c_cty_lim3[nr].a.y-(1))&&(pos.x<=c_cty_lim3[nr].b.x+(1))&&(pos.y<=c_cty_lim3[nr].b.y+(1))){
 					if (way){
 						if(pot0==0){
 							if(tool_id==4115){
@@ -418,7 +451,7 @@ class tutorial.chapter_07 extends basic_chapter
 				if (tool_id==4096)
 					return null
 			
-				if ((pos.x>=c_cty_lim4.a.x-(1))&&(pos.y>=c_cty_lim4.a.y-(1))&&(pos.x<=c_cty_lim4.b.x+(1))&&(pos.y<=c_cty_lim4.b.y+(1))){
+				if ((pos.x>=c_cty_lim4[nr].a.x-(1))&&(pos.y>=c_cty_lim4[nr].a.y-(1))&&(pos.x<=c_cty_lim4[nr].b.x+(1))&&(pos.y<=c_cty_lim4[nr].b.y+(1))){
 					if (way){
 						if(pot0==0){
 							if(tool_id==4115){
