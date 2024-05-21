@@ -34,7 +34,7 @@ class tutorial.chapter_06 extends basic_chapter
 	c1_track = {a = coord(100,49), b = coord(102,49), dir = 2}
 	c1_start = coord(100,49)
 	c1_is_way = null
-	obj1_way_name = "rw_plate"
+	obj1_way_name = ""
 
 	// Pista de maniobras --------------------------
 	c2_track = {b = coord(101,51), a = coord(101,49), dir = 4}
@@ -82,7 +82,7 @@ class tutorial.chapter_06 extends basic_chapter
 	//Script
 	//----------------------------------------------------------------------------------
 	sc_sta1 = "apron"
-	sc_sta2 = "terminal2_corner"
+	sc_sta2 = ""
 	sc_dep1 = "depot_air"
 	sc_dep2 = "depot_road"
 
@@ -102,6 +102,24 @@ class tutorial.chapter_06 extends basic_chapter
 
 		cty1.name = get_city_name(cty1.c)
 		cty2.name = get_city_name(cty2.c)
+
+		//Step 1 =====================================================================================
+		// Get extension_postoffice Name -----------------------------------
+		local kh = 60
+		local wt = wt_air 
+		local st = st_runway
+		obj1_way_name = get_way_name(kh, wt, st)
+
+		st = st_flat
+		obj2_way_name = get_way_name(kh, wt, st)
+
+		
+		local siz = null  //siz = null for all build siz
+		local desc = building_desc_x.station_extension
+		local freight = good_alias.passa
+		local wt = wt_air
+		sc_sta2 = get_build_name(siz, desc, freight, wt)
+		//===============================================================================================
 
 		local pl = 0
 		//Schedule list form current convoy

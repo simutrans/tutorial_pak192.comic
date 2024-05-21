@@ -67,22 +67,9 @@ class tutorial.chapter_05 extends basic_chapter
 				]
 
 	//Step 4 =====================================================================================
-    st_name = "extension_postoffice"
-    obj_list1 = [
-					{c = coord(87,71), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(91,70), name = "extension_postoffice", good = good_alias.mail}, 
-					{c = coord(97,76), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(91,76), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(91,65), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(91,55), name = "extension_postoffice", good = good_alias.mail}, 
-					{c = coord(99,58), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(95,54), name = "extension_postoffice", good = good_alias.mail}, 
-					{c = coord(102,52), name = "extension_postoffice", good = good_alias.mail},
-					{c = coord(108,72), name = "", good = [good_alias.mail, good_alias.passa]},
-					{c = coord(103,75), name = "", good = [good_alias.passa]},
-					{c = coord(102,74), name = "", good = [good_alias.mail]},
-					{c = coord(84,96), name = "", good = [good_alias.mail, good_alias.passa]}
-				]
+	
+	st_name = ""
+    obj_list1 = []
 
 	//Para el Camion
     veh2_obj = "road_truck_post_1967_t2"
@@ -140,7 +127,6 @@ class tutorial.chapter_05 extends basic_chapter
 	{
 		rules.clear()
 		set_all_rules(0)
-
 		local lim_idx = cv_list[(persistent.chapter - 2)].idx
 		ch5_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
 		ch5_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
@@ -151,6 +137,32 @@ class tutorial.chapter_05 extends basic_chapter
 		d2_cnr = get_dep_cov_nr(ch5_cov_lim2.a,ch5_cov_lim2.b)
 		d3_cnr = get_dep_cov_nr(ch5_cov_lim3.a,ch5_cov_lim3.b)
 		d4_cnr = get_dep_cov_nr(ch5_cov_lim4.a,ch5_cov_lim4.b)
+
+		//Step 4 =====================================================================================
+		// Get extension_postoffice Name -----------------------------------
+		local siz = coord(1,1)  //siz = null for all build siz
+		local desc = building_desc_x.station_extension
+		local freight = good_alias.mail
+		local wt = wt_all
+		st_name = get_build_name(siz, desc, freight, wt)
+		//-------------------------------------------------------------------
+		
+		obj_list1 = [
+						{c = coord(87,71), name = st_name, good = good_alias.mail},
+						{c = coord(91,70), name = st_name, good = good_alias.mail}, 
+						{c = coord(97,76), name = st_name, good = good_alias.mail},
+						{c = coord(91,76), name = st_name, good = good_alias.mail},
+						{c = coord(91,65), name = st_name, good = good_alias.mail},
+						{c = coord(91,55), name = st_name, good = good_alias.mail}, 
+						{c = coord(99,58), name = st_name, good = good_alias.mail},
+						{c = coord(95,54), name = st_name, good = good_alias.mail}, 
+						{c = coord(102,52), name = st_name, good = good_alias.mail},
+						{c = coord(108,72), name = "", good = [good_alias.mail, good_alias.passa]},
+						{c = coord(103,75), name = "", good = [good_alias.passa]},
+						{c = coord(102,74), name = "", good = [good_alias.mail]},
+						{c = coord(84,96), name = "", good = [good_alias.mail, good_alias.passa]}
+					]
+		//===============================================================================================
 		
 		local list = fab_list
 		for(local j = 0; j<list.len(); j++){
@@ -188,7 +200,7 @@ class tutorial.chapter_05 extends basic_chapter
 	{
 		local ok_tx =  translate("Ok")
 		local trf_name = translate("Build drain")    //Aufspanntransformator 
-		local toolbar = translate("SPECIALTOOLS")
+		local toolbar = translate("BUILDINGS")
 		
 		switch (this.step) {
 			case 1:
