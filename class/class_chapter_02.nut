@@ -513,8 +513,8 @@ class tutorial.chapter_02 extends basic_chapter
 					this.next_step()
 				}
 				if (current_cov == ch2_cov_lim1.b){
-					local conv = my_tile(sch_list1[0]).find_object(mo_car)
-					if (conv) {						
+					local conv = convoy_x(ch2_cov_lim1.b)
+					if (conv && conv.is_followed()) {						
 						pot2=1
 
 					}
