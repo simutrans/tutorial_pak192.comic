@@ -162,7 +162,7 @@ class tutorial.chapter_03 extends basic_chapter
 					]
 
 	c_way_lim1 =	[	{a = coord(92,147), b = coord(92,166)}, {a = coord(93,147), b = coord(93,166)},
-						{a = coord(90,171), b = coord(92,207)}, {a = coord(93,171), b = coord(95,207)}
+						{a = coord3d(90,171,7), b = coord3d(92,207,7)}, {a = coord(93,171), b = coord(95,207)}
 					]
 	
 	//Para las señales de paso
@@ -533,8 +533,8 @@ class tutorial.chapter_03 extends basic_chapter
 						local c_a = c_way_lim1[j].a
 						local c_b = c_way_lim1[j].b
 						if (glsw[j]==0){
-							local link1 = "<a href=\"("+c_a.x+","+c_a.y+")\">("+c_a.tostring()+")</a>"
-							local link2 = " --> <a href=\"("+c_b.x+","+c_b.y+")\">("+c_b.tostring()+")</a><br>"
+							local link1 = c_a.href("("+c_a.tostring()+")")
+							local link2 = " --> "+c_b.href("("+c_b.tostring()+")")
 							way_list += ttext("<st>" + format("--> [%d]</st> %s", j+1, link1 + link2))
 							w_nr = j
 							break
