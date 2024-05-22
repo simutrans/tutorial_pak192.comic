@@ -529,9 +529,9 @@ class tutorial.chapter_03 extends basic_chapter
 					text = ttextfile("chapter_03/09_1-2.txt")
 					text.tx = ttext("<em>[1/2]</em>")
 					local w_nr = 0
-					for(local j=0;j<c_way_lim1.len();j++){
-						local c_a = c_way_lim1[j].a
-						local c_b = c_way_lim1[j].b
+					for(local j=0;j<c_way_list1.len();j++){
+						local c_a = c_way_list1[j].a
+						local c_b = c_way_list1[j].b
 						if (glsw[j]==0){
 							local link1 = c_a.href("("+c_a.tostring()+")")
 							local link2 = " --> "+c_b.href("("+c_b.tostring()+")")
@@ -546,8 +546,8 @@ class tutorial.chapter_03 extends basic_chapter
 						}
 					}
 					text.list = way_list
-					text.w2 = c_way_lim1[w_nr].a.href("("+c_way_lim1[w_nr].a.tostring()+")")
-				 	text.w1 = c_way_lim1[w_nr].b.href("("+c_way_lim1[w_nr].b.tostring()+")")
+					text.w2 = c_way_list1[w_nr].a.href("("+c_way_list1[w_nr].a.tostring()+")")
+				 	text.w1 = c_way_list1[w_nr].b.href("("+c_way_list1[w_nr].b.tostring()+")")
 				}
 
 				else if (pot1==0){
