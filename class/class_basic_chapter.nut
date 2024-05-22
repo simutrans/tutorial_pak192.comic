@@ -2589,7 +2589,7 @@ class basic_chapter
 				return way.get_name()
 			}
 		}
-		return "No have build!"
+		return "No have way!"
 	}
 
 	function build_stop_ex(nr, list, tile)

@@ -507,7 +507,6 @@ class tutorial.chapter_02 extends basic_chapter
 					local all_result = checks_convoy_schedule(convoy, pl)
 
 					sch_cov_correct = all_result.res == null ? true : false
-
 				}
 				if (pot2 == 1 ){
 					this.next_step()
@@ -516,7 +515,6 @@ class tutorial.chapter_02 extends basic_chapter
 					local conv = convoy_x(ch2_cov_lim1.b)
 					if (conv && conv.is_followed()) {						
 						pot2=1
-
 					}
 				}
 				return 50

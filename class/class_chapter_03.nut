@@ -524,8 +524,8 @@ class tutorial.chapter_03 extends basic_chapter
 
 			case 9:
 
-				local way_list = ""
 				if (pot0==0){
+					local way_list = ""
 					text = ttextfile("chapter_03/09_1-2.txt")
 					text.tx = ttext("<em>[1/2]</em>")
 					local w_nr = 0

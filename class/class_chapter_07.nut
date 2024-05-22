@@ -58,7 +58,6 @@ class tutorial.chapter_07 extends basic_chapter
 		rules.clear()
 		set_all_rules(0)
 
-
 		cty1.name = get_city_name(cty1.c)
 		local cty_buil1 = my_tile(cty1.c).find_object(mo_building).get_city()
 		c_cty_lim1 = load_limits(cty_buil1)
@@ -137,20 +136,18 @@ class tutorial.chapter_07 extends basic_chapter
                    return 0
 
 				if (pot0==0){
-					local tile = my_tile(stop1)
-					local buld = tile.find_object(mo_building)
+					local buld = stop1.find_object(mo_building)
 					if(buld){
-						local halt = tile.get_halt()
+						local halt = stop1.get_halt()
 						if(halt)
 							pot0 = 1
 						
 					}
 				}
 				else if (pot0==1 && pot1==0){
-					local tile = my_tile(stop1)
-					local buld = tile.find_object(mo_building)
+					local buld = stop1.find_object(mo_building)
 					if(buld){
-						local halt = tile.get_halt()
+						local halt = stop1.get_halt()
 						if(halt){
 							if(halt.get_owner().nr==1)
 								pot1 = 1
@@ -179,20 +176,18 @@ class tutorial.chapter_07 extends basic_chapter
                    return 0
 
 				if (pot0==0){
-					local tile = stop2
-					local buld = tile.find_object(mo_building)
+					local buld = stop2.find_object(mo_building)
 					if(buld){
-						local halt = tile.get_halt()
+						local halt = stop2.get_halt()
 						if(halt)
 							pot0 = 1
 						
 					}
 				}
 				else if (pot0==1 && pot1==0){
-					local tile = stop2
-					local buld = tile.find_object(mo_building)
+					local buld = stop2.find_object(mo_building)
 					if(buld){
-						local halt = tile.get_halt()
+						local halt = stop2.get_halt()
 						if(halt){
 							if(halt.get_owner().nr==1)
 								pot1 = 1
@@ -221,20 +216,18 @@ class tutorial.chapter_07 extends basic_chapter
                    return 0
 
 				if (pot0==0){
-					local tile = stop3
-					local buld = tile.find_object(mo_building)
+					local buld = stop3.find_object(mo_building)
 					if(buld){
-						local halt = tile.get_halt()
+						local halt = stop3.get_halt()
 						if(halt)
 							pot0 = 1
 						
 					}
 				}
 				else if (pot0==1 && pot1==0){
-					local tile = stop3
-					local buld = tile.find_object(mo_building)
+					local buld = stop3.find_object(mo_building)
 					if(buld){
-						local halt = tile.get_halt()
+						local halt = stop3.get_halt()
 						if(halt){
 							if(halt.get_owner().nr==1)
 								pot1 = 1
@@ -259,7 +252,6 @@ class tutorial.chapter_07 extends basic_chapter
 				break;
 
 			case 4:
-				reset_stop_flag()
 		        return 90
 				break;
 			}
@@ -402,7 +394,7 @@ class tutorial.chapter_07 extends basic_chapter
 						return translate("You can only use this tool on a road.")
 				}
 				else
-					return translate("You can only use this tool in the city")+cty2.name.tostring()+" ("+cty2.c.tostring()+")."	
+					return translate("You can only use this tool in the city")+cty3.name.tostring()+" ("+cty3.c.tostring()+")."	
 			break;
 
 			case 4:
@@ -446,14 +438,13 @@ class tutorial.chapter_07 extends basic_chapter
 						return translate("You can only use this tool on a road.")
 				}
 				else
-					return translate("You can only use this tool in the city")+cty2.name.tostring()+" ("+cty2.c.tostring()+")."	
+					return translate("You can only use this tool in the city")+cty4.name.tostring()+" ("+cty4.c.tostring()+")."	
 			break;
 
 		}
 		if (tool_id==4096)
 			return null
 		return tool_id
-
 	}
 	
 	function is_schedule_allowed(pl, schedule) {
