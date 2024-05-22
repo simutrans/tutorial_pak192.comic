@@ -95,32 +95,29 @@ class tutorial.chapter_07 extends basic_chapter
 		switch (this.step) {
 			case 1:
 				local t = st1_c
-				local c = coord3d(t.x, t.y, t.z)
 				local halt = t.get_halt()
-				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
+				text.name = t.href(""+halt.get_name()+" ("+coord3d_to_string(t)+")")+""
 				text.city = cty1.c.href(""+cty1.name +" ("+cty1.c.tostring()+")")+""
-				text.stop = stop1.href("("+stop1.tostring()+")")+""
+				text.stop = stop1.href("("+coord3d_to_string(stop1)+")")+""
                 text.load = goal_lod1
 
 				break
 
 			case 2:
 				local t = st2_c
-				local c = coord3d(t.x, t.y, t.z)
 				local halt = t.get_halt()
-				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
+				text.name = t.href(""+halt.get_name()+" ("+coord3d_to_string(t)+")")+""
 				text.city = cty2.c.href(""+cty2.name +" ("+cty2.c.tostring()+")")+""
-				text.stop = stop2.href("("+stop2.tostring()+")")+""
+				text.stop = stop2.href("("+coord3d_to_string(stop2)+")")+""
                 text.load =  goal_lod2
     			break
 
 			case 3:
 				local t = st3_c
-				local c = coord3d(t.x, t.y, t.z)
 				local halt = t.get_halt()
-				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
+				text.name = t.href(""+halt.get_name()+" ("+coord3d_to_string(t)+")")+""
 				text.city = cty3.c.href(""+cty3.name +" ("+cty3.c.tostring()+")")+""
-				text.stop = stop3.href("("+stop3.tostring()+")")+""
+				text.stop = stop3.href("("+coord3d_to_string(stop3)+")")+""
                 text.load =  goal_lod3
     			break
 
