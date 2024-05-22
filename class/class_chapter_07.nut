@@ -26,18 +26,18 @@ class tutorial.chapter_07 extends basic_chapter
 
 	// Step 1
     goal_lod1 = 20
-	st1_c = coord(92,145)
-	stop1 = coord(91,144)
+	st1_c = tile_x(92,145,7)
+	stop1 = tile_x(91,144,7)
 
 	// Step 2
 	goal_lod2 = 40
-	st2_c = coord(92,169)
-	stop2 = coord(93,171)
+	st2_c = tile_x(92,169,7)
+	stop2 = tile_x(93,171,9)
 
 	// Step 3
 	goal_lod3 = 80
-	st3_c = coord(92,209)
-	stop3 = coord(93,207)
+	st3_c = tile_x(92,209,7)
+	stop3 = tile_x(93,207,9)
 
 	function load_limits(city)  //Load all limits for citys
 	{
@@ -94,8 +94,9 @@ class tutorial.chapter_07 extends basic_chapter
 
 		switch (this.step) {
 			case 1:
-				local c = st1_c
-				local halt = my_tile(c).get_halt()
+				local t = st1_c
+				local c = coord3d(t.x, t.y, t.z)
+				local halt = t.get_halt()
 				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
 				text.city = cty1.c.href(""+cty1.name +" ("+cty1.c.tostring()+")")+""
 				text.stop = stop1.href("("+stop1.tostring()+")")+""
@@ -104,8 +105,9 @@ class tutorial.chapter_07 extends basic_chapter
 				break
 
 			case 2:
-				local c = st2_c
-				local halt = my_tile(c).get_halt()
+				local t = st2_c
+				local c = coord3d(t.x, t.y, t.z)
+				local halt = t.get_halt()
 				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
 				text.city = cty2.c.href(""+cty2.name +" ("+cty2.c.tostring()+")")+""
 				text.stop = stop2.href("("+stop2.tostring()+")")+""
@@ -113,8 +115,9 @@ class tutorial.chapter_07 extends basic_chapter
     			break
 
 			case 3:
-				local c = st3_c
-				local halt = my_tile(c).get_halt()
+				local t = st3_c
+				local c = coord3d(t.x, t.y, t.z)
+				local halt = t.get_halt()
 				text.name = c.href(""+halt.get_name()+" ("+c.tostring()+")")+""
 				text.city = cty3.c.href(""+cty3.name +" ("+cty3.c.tostring()+")")+""
 				text.stop = stop3.href("("+stop3.tostring()+")")+""
@@ -164,7 +167,7 @@ class tutorial.chapter_07 extends basic_chapter
 				else if (pot1==1 && pot2==0){
 					local wt = wt_road
 					local good = 0 //Passengers
-					local pass = cov_pax(my_tile(stop1), wt, good)
+					local pass = cov_pax(stop1, wt, good)
 					load = pass
 					if(pass>goal_lod1){
 						load = 0
@@ -179,7 +182,7 @@ class tutorial.chapter_07 extends basic_chapter
                    return 0
 
 				if (pot0==0){
-					local tile = my_tile(stop2)
+					local tile = stop2
 					local buld = tile.find_object(mo_building)
 					if(buld){
 						local halt = tile.get_halt()
@@ -189,7 +192,7 @@ class tutorial.chapter_07 extends basic_chapter
 					}
 				}
 				else if (pot0==1 && pot1==0){
-					local tile = my_tile(stop2)
+					local tile = stop2
 					local buld = tile.find_object(mo_building)
 					if(buld){
 						local halt = tile.get_halt()
@@ -206,7 +209,7 @@ class tutorial.chapter_07 extends basic_chapter
 				else {
 					local wt = wt_road
 					local good = 0 //Passengers
-					local pass = cov_pax(my_tile(stop2), wt, good)
+					local pass = cov_pax(stop2, wt, good)
 					load = pass
 					if(pass>goal_lod2){
 						load = 0
@@ -221,7 +224,7 @@ class tutorial.chapter_07 extends basic_chapter
                    return 0
 
 				if (pot0==0){
-					local tile = my_tile(stop3)
+					local tile = stop3
 					local buld = tile.find_object(mo_building)
 					if(buld){
 						local halt = tile.get_halt()
@@ -231,7 +234,7 @@ class tutorial.chapter_07 extends basic_chapter
 					}
 				}
 				else if (pot0==1 && pot1==0){
-					local tile = my_tile(stop3)
+					local tile = stop3
 					local buld = tile.find_object(mo_building)
 					if(buld){
 						local halt = tile.get_halt()
@@ -248,7 +251,7 @@ class tutorial.chapter_07 extends basic_chapter
 				else {
 					local wt = wt_road
 					local good = 0 //Passengers
-					local pass = cov_pax(my_tile(stop3), wt, good)
+					local pass = cov_pax(stop3, wt, good)
 					load = pass
 					if(pass>goal_lod3){
 						load = 0
@@ -259,49 +262,7 @@ class tutorial.chapter_07 extends basic_chapter
 				break;
 
 			case 4:
-                if (!correct_cov)
-                   return 0
-
-				if (pot0==0){
-					local tile = my_tile(stop4)
-					local buld = tile.find_object(mo_building)
-					if(buld){
-						local halt = tile.get_halt()
-						if(halt)
-							pot0 = 1
-						
-					}
-				}
-				else if (pot0==1 && pot1==0){
-					local tile = my_tile(stop4)
-					local buld = tile.find_object(mo_building)
-					if(buld){
-						local halt = tile.get_halt()
-						if(halt){
-							if(halt.get_owner().nr==1)
-								pot1 = 1
-						}
-						else
-							backward_pot(0)
-					}
-					else
-						backward_pot(0)
-				}
-				else {
-					local wt = wt_road
-					local good = 0 //Passengers
-					local pass = cov_pax(my_tile(stop4), wt, good)
-					load = pass
-					if(pass>goal_lod4){
-						this.next_step()
-					}
-				}
-				return 50
-				break;
-
-			case 5:
 				reset_stop_flag()
-				persistent.point = null
 		        return 90
 				break;
 			}
