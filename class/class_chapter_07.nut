@@ -486,7 +486,7 @@ class tutorial.chapter_07 extends basic_chapter
 			}
 
 		// tool "climate zones" = 4135
-		local forbid = [4134,4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_roadsign,
+		local forbid = [4116, 4136, 4140, 4126, 4103, 4134, 4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_roadsign,
         tool_restoreslope, tool_plant_tree, tool_set_marker, tool_stop_mover, tool_buy_house, tool_build_wayobj,
         tool_remove_wayobj, tool_build_tunnel, tool_build_transformer, tool_build_bridge, tool_build_way,tool_remove_way]
 

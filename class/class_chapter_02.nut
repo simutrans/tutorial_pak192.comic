@@ -1300,7 +1300,7 @@ class tutorial.chapter_02 extends basic_chapter
 			}
         }
 
-		forbid =	[	4136, 4140, 4126, 4103, 4134, 4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_transformer,
+		forbid =	[	4116, 4136, 4140, 4126, 4103, 4134, 4135, tool_lower_land, tool_raise_land, tool_setslope, tool_build_transformer,
                			tool_restoreslope, tool_plant_tree, tool_set_marker, tool_add_city, 4137, tool_stop_mover, tool_buy_house
 					]
 
@@ -1382,10 +1382,14 @@ class tutorial.chapter_02 extends basic_chapter
 
 			case 7:
 				local forbid =	[	tool_remove_wayobj,tool_build_tunnel,tool_build_depot,
-									tool_build_roadsign,tool_build_wayobj
+									tool_build_roadsign,tool_build_wayobj,tool_make_stop_public
 								]
-					foreach (tool_id in forbid)
-						rules.forbid_way_tool(pl, tool_id, wt_road)
+				foreach (tool_id in forbid)
+					rules.forbid_way_tool(pl, tool_id, wt_road)
+
+				local forbid = [tool_make_stop_public]
+				foreach (tool_id in forbid)
+					rules.forbid_tool(pl, tool_id )	
 				break
 
 			case 8:
@@ -1397,7 +1401,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 				local forbid = [tool_build_station,tool_remover]
 				foreach (tool_id in forbid)
-				rules.forbid_tool(pl, tool_id )	
+					rules.forbid_tool(pl, tool_id )	
 				break	
 		}
 	}

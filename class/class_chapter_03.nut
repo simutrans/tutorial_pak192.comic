@@ -41,7 +41,7 @@ class tutorial.chapter_03 extends basic_chapter
 	st1_way_lim = {a = coord(76,102), b = coord(76,107)}				//Limites de la via para la estacion
 	bord1_lim = {a = coord(74,107), b = coord(90,114)}					//Marca area con "X"
 	label1_lim = coord(76,107)											//Indica el final de un tramo
-	c_way1 = {a = coord3d(76,102,8), b = coord3d(90,109,9), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
+	c_way1 = {a = coord3d(76,102,8), b = coord3d(90,109,10), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
 
 	//Estaciones del Productor
 	st1_list = [coord(76,102), coord(76,103), coord(76,104), coord(76,105)]
@@ -50,7 +50,8 @@ class tutorial.chapter_03 extends basic_chapter
 	//Para el puente
 	//------------------------------------------------------------------------------------------
 	c_bway_lim2 = {b = coord(95,109), a = coord(90,109)}
-	c_brge2 = {a = coord3d(91,109,8), b = coord3d(94,109,10)}
+	c_brge2 = {a = coord3d(90,109,10), b = coord3d(94,109,10)}
+	labe_brge = coord(91,109)
 	//-------------------------------------------------------------------------------------------
 
 	//Segundo tramo de rieles
@@ -58,7 +59,7 @@ class tutorial.chapter_03 extends basic_chapter
 	st2_way_lim = {a = coord(114,113), b = coord(118,113)}				//Limites de la via para la estacion
 	bord2_lim = {a = coord(94,106), b = coord(113,118)}					//Marca area con "X"
 	label2_lim = coord(113,113)											//Indica el final de un tramo
-	c_way2 = {a = coord3d(95,109,9), b = coord3d(118,113,1), dir = 5}	//Inicio, Fin de la via y direcion (fullway)
+	c_way2 = {a = coord3d(95,109,10), b = coord3d(118,113,1), dir = 5}	//Inicio, Fin de la via y direcion (fullway)
 
 	//Estaciones de la Fabrica
 	st2_list = [coord(118,113), coord(117,113), coord(116,113), coord(115,113)]
@@ -815,11 +816,11 @@ class tutorial.chapter_03 extends basic_chapter
 
 					local tile = my_tile(c_brge2.a)
 					if ((!tile.find_object(mo_bridge))){
-						label_x.create(c_brge2.a, player_x(pl), translate("Build a Bridge here!."))
+						label_x.create(labe_brge, player_x(pl), translate("Build a Bridge here!."))
 						//r_way.c = 	coord3d(tile.x, tile.y, tile.z)
 					}
 					if(r_way.r){
-						tile.remove_object(player_x(1), mo_label)
+						my_tile(labe_brge).remove_object(player_x(1), mo_label)
 
 						if (my_tile(c_brge2.b).find_object(mo_bridge)){
 							pot1=1
@@ -828,9 +829,9 @@ class tutorial.chapter_03 extends basic_chapter
 				}
 				//Segundo tramo de rieles
 				else if (pot1==1 && pot2==0){
-					local limi = label2_lim
+					local limi = my_tile(label2_lim)
 					local tile1 = my_tile(limi)
-					if (r_way.c.x < limi.x){
+					if (r_way.c.x < limi.x && !limi.find_object(mo_way)){
 						local label = tile1.find_object(mo_label)
 						if(label)
 							label.set_text(translate("Build Rails form here"))
@@ -840,18 +841,18 @@ class tutorial.chapter_03 extends basic_chapter
 						local opt = 0
 						local del = false
 						local text = "X"
-						label_bord(bord2_lim.a, bord2_lim.b, opt, del, text)
+						label_bord(bord2_lim.a, bord2_lim.b, opt, del, text)						
 					}
 					else {
 						local label = tile1.find_object(mo_label)
 						if(label)
-							label.set_text("")
+							tile1.remove_object(player_x(1), mo_label)//label.set_text("")
 						//elimina el cuadro label
 						local opt = 0
 						local del = true
 						local text = "X"
 						label_bord(bord2_lim.a, bord2_lim.b, opt, del, text)
-						if (!tile1.find_object(mo_label))
+						//if (!tile1.find_object(mo_label))
 							label_x.create(st2_list[0], player_x(pl), translate("Build Rails form here"))
 					}
 						
@@ -1589,16 +1590,14 @@ class tutorial.chapter_03 extends basic_chapter
 				//Construye un puente
 				else if (pot0==1 && pot1==0){
 					if (pos.x>=c_bway_lim2.a.x && pos.y>=c_bway_lim2.a.y && pos.x<=c_bway_lim2.b.x && pos.y<=c_bway_lim2.b.y){
-						//return 0
 						if(tool_id==tool_build_way){
+							if(pos.z < c_brge2.a.z && slope ==0) return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
 							return null
 						}
 						if(tool_id==tool_build_bridge){
 
 							if((t.find_object(mo_pointer) && slope == 0) || (pos.x>c_brge2.b.x))
-								return ""
-
-							
+								return ""				
 							return null
 						}
 						else return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
@@ -2781,14 +2780,17 @@ class tutorial.chapter_03 extends basic_chapter
 	}
 	
 	function set_all_rules(pl) {
-		local forbid =	[	4129,tool_build_way,tool_build_bridge,tool_build_tunnel,tool_build_station,
+		local forbid =	[	tool_remove_wayobj, tool_build_way,tool_build_bridge,tool_build_tunnel,tool_build_station,
 							tool_remove_way,tool_build_depot,tool_build_roadsign,tool_build_wayobj
 						]
-		foreach(wt in all_waytypes)
+		foreach(wt in all_waytypes) {
 			if (wt != (this.step < 8 ? wt_rail : wt_narrowgauge)){
-				foreach (tool_id in forbid)
+				foreach (tool_id in forbid) {
+					//gui.add_message(""+tool_id)
 					rules.forbid_way_tool(pl, tool_id, wt )
+				}
 			}
+		}
 		if (this.step!=6 && this.step!=8){
 			local forbid = [tool_setslope]
 			foreach (tool_id in forbid)
@@ -2804,7 +2806,7 @@ class tutorial.chapter_03 extends basic_chapter
 		switch (this.step) {
 			case 1:
 				local forbid=	[	4129,tool_build_way,tool_build_bridge,tool_build_tunnel,tool_build_station,
-									tool_remove_way,tool_build_depot,tool_build_roadsign,tool_build_wayobj
+									tool_remove_way,tool_build_depot,tool_build_roadsign,tool_build_wayobj,tool_remove_wayobj
 								]
 				foreach (tool_id in forbid)
 					rules.forbid_way_tool(pl, tool_id, wt_rail)

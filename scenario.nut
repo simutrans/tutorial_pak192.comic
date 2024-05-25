@@ -646,12 +646,32 @@ function is_convoy_allowed(pl, convoy, depot)
 
 function is_tool_allowed(pl, tool_id, wt)
 {
+	if(persistent.chapter == 3){
+		if (tool_id == 0x800c) return false //Others Tools
+		else if (tool_id == 0x8004) return false //Tramsway Tools
+		if(persistent.step == 9){
+			if (tool_id == 0x8006) return false //Narrowgauge Tools
+			else if (tool_id == 0x1014) return true //Signals ¿?
+		}
+	}
+	else if(persistent.chapter == 5){
+		if(persistent.step == 4){
+			if (tool_id == 0x800c) return false //Others Tools
+			else if (tool_id == 0x800b) return true //Extender Build
+		}
+	}
 	//if (tool_id == 0x2000) return false // prevent players toggling pause mode
 	if (tool_id == 0x2005) return false 
 	else if (tool_id == 0x4006) return false 
 	else if (tool_id == 0x4029) return false 
 	else if (tool_id == 0x401c) return false 
-
+	else if (tool_id == 0xffff) return false //Decoration
+	else if (tool_id == 0x401b) return false //Setting Map
+	else if (tool_id == 0x2007) return false //Acelerrate/decelerate Time
+	else if (tool_id == 0x800b) return false //Extender Build
+	else if (tool_id == 0x1017) return false //Signals
+	else if (tool_id == 0x1014) return false //Signals ¿?
+	else if (tool_id == 0x8010) return false //Extender Terain tools
     return true
 }
 
