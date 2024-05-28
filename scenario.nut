@@ -665,7 +665,7 @@ function is_tool_allowed(pl, tool_id, wt)
 	else if (tool_id == 0x4006) return false 
 	else if (tool_id == 0x4029) return false 
 	else if (tool_id == 0x401c) return false 
-	//else if (tool_id == 0xffff) return false //Decoration
+	else if (tool_id == 0xffff) return false //Decoration
 	else if (tool_id == 0x401b) return false //Setting Map
 	else if (tool_id == 0x2007) return false //Acelerrate/decelerate Time
 	else if (tool_id == 0x800b) return false //Extender Build
