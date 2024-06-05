@@ -153,25 +153,31 @@ function string_analyzer()
 
 	local s_siz = {a = simu_version.len(), b = current_st.len()}
 
-	local nr_a = 0
-	local nr_b = 0
-
 	local val_a = []
 	local val_b = []
 
 	// Analyzer scenario simutrans version -----------------------------------------------------------------------------------------
 	local value_a = ""
-	for(local j=nr_a;j<s_siz.a;j++){
+	for(local j=0;j<s_siz.a;j++){
 		local tx = format("%c",simu_version[j])
-		if(tx=="."){
-			nr_a = j+1
-			val_a.push(value_a)
-			value_a = ""
-			continue
+		local result = get_integral(tx)
+		if(result.res){
+			value_a += tx
+			if(j == s_siz.a-1) {
+				val_a.push(value_a.tointeger())
+				continue
+			}
 		}
-		value_a += tx
-		if(j == s_siz.a-1) {
-			val_a.push(value_a)
+		else {
+			if(j == s_siz.a-1) {
+				val_a.push(value_a.tointeger())
+				continue
+			}
+			if(result.val == "."){
+				val_a.push(value_a.tointeger())
+				value_a = ""
+				continue
+			}
 		}
 	}
 	//-------Debug ====================================
@@ -187,25 +193,27 @@ function string_analyzer()
 
 	// Analyzer current simutrans version -------------------------------------------------------------------------------------
 	local value_b = ""
-	for(local j=nr_b;j<s_siz.b;j++){
+	for(local j=0;j<s_siz.b;j++){
 		local tx = format("%c",current_st[j])
-		if(j == s_siz.b-1) {
-			val_b.push(value_b)
+		local result = get_integral(tx)
+		if(result.res){
+			value_b += tx
+			if(j == s_siz.b-1) {
+				val_b.push(value_b.tointeger())
+				continue
+			}
 		}
-		try {
-			tx.tointeger()
-		}
-		catch(ev) {
-			if(tx=="."){
-				nr_b = j+1
-				val_b.push(value_b)
+		else {
+			if(j == s_siz.b-1) {
+				val_b.push(value_b.tointeger())
+				continue
+			}
+			if(result.val == "."){
+				val_b.push(value_b.tointeger())
 				value_b = ""
 				continue
 			}
-			nr_b++
-			continue
 		}
-		value_b += tx
 	}
 	//-------Debug ====================================
 	/*
@@ -222,10 +230,11 @@ function string_analyzer()
 	local siz_va = val_a.len()
 	local siz_vb = val_b.len()
 	local siz_min = min(siz_va, siz_vb)
-	for(local i = 0; i < siz_va && i < siz_vb; i++ ) {
+	for(local i = 0; i < siz_min; i++ ) {
 		local num_a = val_a[i]
 		local num_b = val_b[i]
-		//gui.add_message("Array test -- val_a "+num_a+"  value_b "+num_b+" -- siz_A "+siz_va+" siz_B "+siz_vb)
+		//gui.add_message("Array test -- val_a "+num_a+"  val_b "+num_b+" -- siz_A "+siz_va+" siz_B "+siz_vb)
+		//gui.add_message("Val type -- val_a "+type(num_a)+"  val_b "+type(num_b)+"")
 		if(num_a < num_b) {
 			result.st = true
 			return result
@@ -247,6 +256,27 @@ function string_analyzer()
 	}
 	//-------------------------------------------------------------------------------------------------------------------------------
 	//gui.add_message("result st: "+result.st+"  result pak:" +result.pak)
+	return result
+}
+
+function get_integral(tx)
+{
+	local result = {val = null, res = false}
+	local evet = false
+	try {
+		tx.tointeger()
+	}
+	catch(ev) {
+		evet = true
+	}
+	if(evet){
+		result.val = tx
+		result.res = false
+	}
+	else{
+		result.val = tx.tointeger()
+		result.res = true
+	}
 	return result
 }
 
