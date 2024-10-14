@@ -92,6 +92,14 @@ tool_alias  <-	{	inspe = translate("Abfrage"), road= translate("ROADTOOLS"), rai
 good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "coal",
 					flour = "flour", deliv = "Crates Deliverables", oel = "oil", gas = "fuel", wood = "logs", plan = "boards"
 				}
+
+// placeholder for some menus icon
+t_icon <-	{	
+				road = 0x8003, rail = 0x8005, ship = 0x8007, plane = 0x8008, other = 0x800c, slope = 0x8002,
+				tram = 0x8004, narr = 0x8006, magl = 0x800a, wremo = 0x800d, exte = 0x800b, trkplus = 0x8011, 
+				siga = 0x8012, sigb = 0x8013, sigc = 0x1017, sigd = 0x1014, gobj = 0x102c,  rotobj = 0x1028
+			}
+
 // table containing all system_types
 all_systemtypes <- [st_flat, st_elevated, st_runway, st_tram]
 
@@ -676,33 +684,29 @@ function is_convoy_allowed(pl, convoy, depot)
 
 function is_tool_allowed(pl, tool_id, wt)
 {
-	if(persistent.chapter == 3){
-		if (tool_id == 0x800c) return false //Others Tools
-		else if (tool_id == 0x8004) return false //Tramsway Tools
-		if(persistent.step == 9){
-			if (tool_id == 0x8006) return false //Narrowgauge Tools
-			else if (tool_id == 0x1014) return true //Signals ¿?
-		}
-	}
-	else if(persistent.chapter == 5){
-		if(persistent.step == 4){
-			if (tool_id == 0x800c) return false //Others Tools
-			else if (tool_id == 0x800b) return true //Extender Build
-		}
-	}
-	//if (tool_id == 0x2000) return false // prevent players toggling pause mode
+	local result = true
+
 	if (tool_id == 0x2005) return false 
 	else if (tool_id == 0x4006) return false 
 	else if (tool_id == 0x4029) return false 
 	else if (tool_id == 0x401c) return false 
-	//else if (tool_id == 0xffff) return false //Decoration
+
 	else if (tool_id == 0x401b) return false //Setting Map
 	else if (tool_id == 0x2007) return false //Acelerrate/decelerate Time
-	else if (tool_id == 0x800b) return false //Extender Build
-	else if (tool_id == 0x1017) return false //Signals
-	else if (tool_id == 0x1014) return false //Signals ¿?
+
 	else if (tool_id == 0x8010) return false //Extender Terain tools
-    return true
+
+
+	result = chapter.is_tool_allowed(pl, tool_id, wt)
+	return result
+}
+
+function is_tool_active(pl, tool_id, wt)
+{
+	local result = true
+	if (pl != 0) return false
+	result = chapter.is_tool_active(pl, tool_id, wt)
+	return result
 }
 
 function jump_to_link_executed(pos)

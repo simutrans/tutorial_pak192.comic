@@ -494,6 +494,31 @@ class tutorial.chapter_07 extends basic_chapter
 		    rules.forbid_tool(pl, tool_id)
 	}
 
+	
+	function is_tool_active(pl, tool_id, wt) {
+		local result = true
+		return result
+	}
+
+	function is_tool_allowed(pl, tool_id, wt){
+
+		local gt_list =	[
+							t_icon.rail, t_icon.other, t_icon.slope, t_icon.tram, t_icon.exte, t_icon.plane
+							t_icon.narr, t_icon.magl, t_icon.ship, t_icon.wremo, t_icon.gobj, t_icon.rotobj
+						]
+		foreach (id in gt_list){
+			if(id == tool_id)
+				return false
+		}
+
+		local result = true
+		local t_list = [0] // 0 = all tools allowed
+		local wt_list = [wt_road, 0] 
+		local res = update_tools(t_list, tool_id, wt_list, wt)
+		result = res.result
+		if(res.ok)  return result
+		return result
+	}
 }        // END of class
 
 // END OF FILE
