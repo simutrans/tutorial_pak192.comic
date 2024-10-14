@@ -262,6 +262,14 @@ class tutorial.chapter_01 extends basic_chapter
 	}
 
 	function is_tool_allowed(pl, tool_id, wt){
+		local gt_list =	[
+							t_icon.rail, t_icon.ship, t_icon.plane, t_icon.slope, t_icon.tram,
+							t_icon.narr, t_icon.magl, t_icon.exte, t_icon.wremo, t_icon.other, t_icon.road
+						]
+		foreach (id in gt_list){
+			if(id == tool_id)
+				return false
+		}
 		local result = true
 		return result
 	}
