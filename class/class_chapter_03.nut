@@ -697,9 +697,9 @@ class tutorial.chapter_03 extends basic_chapter
 		else
 			text.cbor = coord(r_way.c.x, r_way.c.y).href("("+r_way.c.tostring()+")")
 
-		text.tool1 = tool_alias.inspe
-		text.tool2 = tool_alias.rail
-		text.tool3 = tool_alias.land
+		text.tool1 = translate(tool_alias.inspe)
+		text.tool2 = translate(tool_alias.rail)
+		text.tool3 = translate(tool_alias.land)
 
 		text.good1 = translate(fac_1.good)
 		text.good2 = translate(fac_2.good)
