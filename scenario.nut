@@ -613,7 +613,7 @@ function is_scenario_completed(pl)
 function is_work_allowed_here(pl, tool_id, name, pos, tool)
 {	
 	local pause = debug.is_paused()
-	if (pause) return translate("Advance is not allowed with the game paused.")
+	//if (pause) return translate("Advance is not allowed with the game paused.")
 
 	//return tile_x(pos.x,pos.y,pos.z).find_object(mo_way).get_dirs()
 	if (pl != 0) return null

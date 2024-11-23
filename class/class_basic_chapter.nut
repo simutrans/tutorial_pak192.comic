@@ -1382,7 +1382,16 @@ class basic_chapter
 					}
 				}
 			}
+			if(squ.get_tile_at_height(coora.z) == null){
+				coora.z--
+				if(squ.get_tile_at_height(coora.z) == null){
+					coora.z--
+					if(squ.get_tile_at_height(coora.z) == null){
+						coora.z +=3
+					}
+				}
 
+			}
 			r_way_list[coord3d_to_key(coora)] <- coora
 			persistent.r_way_list = r_way_list
 			res.c = coora
@@ -1737,6 +1746,7 @@ class basic_chapter
 						return null
 						break
 					}
+					//gui.add_message("key: "+key+" ckey: "+cur_key)
 				}
 				return result
 			}
@@ -1779,6 +1789,9 @@ class basic_chapter
 				return translate("Action not allowed")+" ("+pos.tostring()+")."
 		}
 		else{
+			if (tool_id==tool_build_bridge)
+				return translate("Connect the Track here")+" ("+coord3d(coor.x, coor.y, coor.z).tostring()+")."
+
 			if (tool_id==tool_build_way || tool_id==tool_build_tunnel){
 				local way_desc =  way_desc_x.get_available_ways(wt, st_flat)
 				foreach(desc in way_desc){
@@ -1810,14 +1823,20 @@ class basic_chapter
 
 	function bridge_control(way, tool_id){
 
-		if (tool_id==4111 && way ) { bridge_sw = true}
+		if (tool_id == tool_build_bridge && way ) {
+			bridge_sw = true
+		}
 		if (bridge_count >2){
 			bridge_count = 0
 			bridge_sw = false
 		}
-		if (bridge_sw && tool_id==4110){bridge_count++}
+		if (bridge_sw && tool_id == tool_build_way){
+			bridge_count++
+		}
 
-		else if (bridge_sw && !way){bridge_count = 0}
+		else if (bridge_sw && !way){
+			bridge_count = 0
+		}
 
 		return null
 	}

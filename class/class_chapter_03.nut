@@ -14,6 +14,8 @@ class tutorial.chapter_03 extends basic_chapter
 
 	gl_wt = wt_rail
 
+	prev_drag = false
+
 	//Step 5 =====================================================================================
 	ch3_cov_lim1 = {a = 0, b = 0}
 
@@ -50,7 +52,7 @@ class tutorial.chapter_03 extends basic_chapter
 	//Para el puente
 	//------------------------------------------------------------------------------------------
 	c_bway_lim2 = {b = coord(95,109), a = coord(90,109)}
-	c_brge2 = {a = coord3d(90,109,10), b = coord3d(94,109,10)}
+	c_brge2 = {a = coord3d(90,109,10), b = coord3d(94,109,8), dir = 5}
 	labe_brge = coord(91,109)
 	//-------------------------------------------------------------------------------------------
 
@@ -828,7 +830,7 @@ class tutorial.chapter_03 extends basic_chapter
 				else if (pot0==1 && pot1==0){
 					local coora = coord3d(c_brge2.a.x, c_brge2.a.y, c_brge2.a.z)
 					local coorb = coord3d(c_brge2.b.x, c_brge2.b.y, c_brge2.b.z)
-					local dir = 5
+					local dir = c_brge2.dir
 					local obj = false
 					local wt = gl_wt
 
@@ -1521,7 +1523,8 @@ class tutorial.chapter_03 extends basic_chapter
 		}
 		return percentage
 	}
-		
+	
+
 	function is_work_allowed_here(pl, tool_id, name, pos, tool) {
 		glpos = coord3d(pos.x, pos.y, pos.z)
 		local t = tile_x(pos.x, pos.y, pos.z)
@@ -1613,14 +1616,82 @@ class tutorial.chapter_03 extends basic_chapter
 				//Construye un puente
 				else if (pot0==1 && pot1==0){
 					if (pos.x>=c_bway_lim2.a.x && pos.y>=c_bway_lim2.a.y && pos.x<=c_bway_lim2.b.x && pos.y<=c_bway_lim2.b.y){
+	/*						if(tool.is_drag_tool){
+								prev_drag = true
+								local c = tool.start_pos
+								local t = tile_x(c.x, c.y, c.z)
+		
+								local slp = t.get_slope()
+					
+								if(t.find_object(mo_pointer) && pos.x == c.x && pos.y == c.y){
+									return null
+								}
+								if(slp == 0){
+									return 	 translate("Click aqui para liberar el puntero")+" ("+c.tostring()+")."
+								}
+
+							}
+							else{
+								gui.add_message(""+pos.tostring())
+								if(prev_drag && !t.find_object(mo_pointer)){
+									return null
+								}
+
+								prev_drag = false
+								if(t.find_object(mo_pointer) && slope == 0){
+ 
+									return "41"
+								}
+								if(slope != 0){
+ 									prev_drag = true
+									return null
+								}
+								else{
+									return "14"
+								}
+							}*/
+
 						if(tool_id==tool_build_way){
-							if(pos.z < c_brge2.a.z && slope ==0) return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)
+							if(pos.z < c_brge2.a.z && slope ==0){
+								return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)
+							}
 							return null
 						}
 						if(tool_id==tool_build_bridge){
-
+							if(tool.is_drag_tool){
+								//gui.add_message("1:: "+pos.tostring())
+								prev_drag = true
+								local c = tool.start_pos
+								local t = tile_x(c.x, c.y, c.z)
+		
+								local slp = t.get_slope()
+					
+								if(pos.x == c.x && pos.y == c.y){
+									return null
+								}
+								if(slp == 0){
+									return 	 translate("Click aqui para liberar el puntero")+" ("+c.tostring()+")."
+								}
+							}
+							else{
+								//gui.add_message("2:: "+pos.tostring())
+								if(prev_drag && !t.find_object(mo_pointer)){
+									return null
+								}
+								prev_drag = false
+								if(t.find_object(mo_pointer) && slope == 0){
+									return ""
+								}
+								if(slope != 0){
+ 									prev_drag = true
+									return null
+								}
+								else{
+									return translate("Construya el puente aqui")+" ("+c_brge2.a.tostring()+")."
+								}
+							}
 							if((t.find_object(mo_pointer) && slope == 0) || (pos.x>c_brge2.b.x))
-								return ""				
+								return "Tamaño del puente incorrecto"				
 							return null
 						}
 						else return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)
