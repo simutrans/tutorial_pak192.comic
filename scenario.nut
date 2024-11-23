@@ -623,14 +623,14 @@ function is_work_allowed_here(pl, tool_id, name, pos, tool)
 	}
 	local result = translate("Action not allowed")
 	if (correct_cov){
-		result = chapter.is_work_allowed_here(pl, tool_id, pos)
+		result = chapter.is_work_allowed_here(pl, tool_id, name, pos, tool)
 		return fail_count_message(result, tool_id, tool)
 	}
 	else {
 		if (tool_id==4108 || tool_id==4096)
 			result = null
 	}
-	return fail_count_message(result, tool_id, tool)
+	return fail_count_message(result, tool_id, name, pos, tool)
 }
 
 function fail_count_message(result, tool_id, tool)

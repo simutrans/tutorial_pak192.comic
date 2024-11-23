@@ -718,7 +718,7 @@ class tutorial.chapter_02 extends basic_chapter
 		percentage=(this.step-1)+1
 		return percentage
 	}
-	function is_work_allowed_here(pl, tool_id, pos) {		
+	function is_work_allowed_here(pl, tool_id, name, pos, tool) {		
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local ribi = 0
 		local slope = t.get_slope()

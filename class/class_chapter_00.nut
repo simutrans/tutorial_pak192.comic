@@ -40,7 +40,7 @@ class tutorial.chapter_00 extends basic_chapter
 		
 	}
 	
-	function is_work_allowed_here(pl, tool_id, pos, tool) {
+	function is_work_allowed_here(pl, tool_id, name, pos, tool) {
 		local label = tile_x(pos.x,pos.y,pos.z).find_object(mo_label)
 		local result=null	// null is equivalent to 'allowed'
 		

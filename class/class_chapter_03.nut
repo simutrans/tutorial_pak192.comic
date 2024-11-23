@@ -1522,7 +1522,7 @@ class tutorial.chapter_03 extends basic_chapter
 		return percentage
 	}
 		
-	function is_work_allowed_here(pl, tool_id, pos) {
+	function is_work_allowed_here(pl, tool_id, name, pos, tool) {
 		glpos = coord3d(pos.x, pos.y, pos.z)
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local ribi = 0

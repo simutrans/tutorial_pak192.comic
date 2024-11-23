@@ -349,7 +349,7 @@ class tutorial.chapter_06 extends basic_chapter
 			return percentage
 	}
 	
-	function is_work_allowed_here(pl, tool_id, pos) {
+	function is_work_allowed_here(pl, tool_id, name, pos, tool) {
 		local result = null	// null is equivalent to 'allowed'
 
 		result = translate("Action not allowed")

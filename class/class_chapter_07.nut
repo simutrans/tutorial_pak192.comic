@@ -259,7 +259,7 @@ class tutorial.chapter_07 extends basic_chapter
 			return percentage
 	}
 	
-	function is_work_allowed_here(pl, tool_id, pos) {
+	function is_work_allowed_here(pl, tool_id, name, pos, tool) {
 		local result=null	// null is equivalent to 'allowed'
 		local t = tile_x(pos.x, pos.y, pos.z)
 		local way = t.find_object(mo_way)
