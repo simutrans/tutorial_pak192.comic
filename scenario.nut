@@ -624,31 +624,30 @@ function is_work_allowed_here(pl, tool_id, name, pos, tool)
 	local result = translate("Action not allowed")
 	if (correct_cov){
 		result = chapter.is_work_allowed_here(pl, tool_id, pos)
-		return fail_count_message(result, tool_id)
+		return fail_count_message(result, tool_id, tool)
 	}
 	else {
 		if (tool_id==4108 || tool_id==4096)
 			result = null
 	}
-	return fail_count_message(result, tool_id)
+	return fail_count_message(result, tool_id, tool)
 }
 
-function fail_count_message(result, tool_id)
+function fail_count_message(result, tool_id, tool)
 {
 	//gui.add_message(result+" ")
-	//Desabilitado
-	//if(tool_id != tool_build_tunnel && result != ""){
+	if(result != "" && !tool.is_drag_tool){
 		//gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
 		if (fail_count && result != null){
 			fail_count++
 			if (fail_count >= fail_num){
-				true//fail_count = null
-				//return translate("Are you lost ?, see the instructions shown below.")
+				fail_count = null
+				return translate("Are you lost ?, see the instructions shown below.")
 			}
 		}
 		else if (result == null)
-			true//fail_count = 1
-	//}
+			fail_count = 1
+	}
 	return result
 }
 
