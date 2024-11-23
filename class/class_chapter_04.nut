@@ -1008,7 +1008,7 @@ class tutorial.chapter_04 extends basic_chapter
 		foreach(wt in all_waytypes)
 			if (wt != wt_water){
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt )
+					rules.forbid_way_tool(pl, tool_id, wt, "")
 				}
 
 		local forbid = [tool_setslope]
@@ -1030,7 +1030,7 @@ class tutorial.chapter_04 extends basic_chapter
 									tool_remove_way, tool_build_tunnel, tool_build_roadsign, tool_build_wayobj, tool_remove_wayobj
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )	
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")	
 				break
 
 			case 2:
@@ -1039,7 +1039,7 @@ class tutorial.chapter_04 extends basic_chapter
 									tool_build_roadsign, tool_build_wayobj, tool_remove_wayobj
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )		
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")		
 				break
 
 			case 3:
@@ -1048,7 +1048,7 @@ class tutorial.chapter_04 extends basic_chapter
 									tool_remove_wayobj, tool_build_wayobj
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")
 				break
 
 			case 4:
@@ -1057,25 +1057,25 @@ class tutorial.chapter_04 extends basic_chapter
 									tool_build_wayobj, tool_remove_wayobj
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")
 				break
 
 			case 5:
 				local forbid =	[	tool_build_bridge, tool_build_tunnel, tool_build_roadsign, tool_build_wayobj, tool_remove_wayobj	]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")
 				break
 
 			case 6:
 				local forbid =	[	tool_build_bridge, tool_build_tunnel, tool_build_roadsign, tool_build_wayobj, tool_remove_wayobj	]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")
 				break
 
 			case 7:
 				local forbid =	[	tool_build_bridge, tool_build_tunnel, tool_build_roadsign, tool_build_wayobj, tool_remove_wayobj	]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, gl_wt )
+					rules.forbid_way_tool(pl, tool_id, gl_wt, "")
 				break
 		}
 	}

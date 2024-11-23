@@ -2811,7 +2811,7 @@ class tutorial.chapter_03 extends basic_chapter
 			if (wt != (this.step < 8 ? wt_rail : wt_narrowgauge)){
 				foreach (tool_id in forbid) {
 					//gui.add_message(""+tool_id)
-					rules.forbid_way_tool(pl, tool_id, wt )
+					rules.forbid_way_tool(pl, tool_id, wt, "")
 				}
 			}
 		}
@@ -2834,67 +2834,67 @@ class tutorial.chapter_03 extends basic_chapter
 									tool_remove_way, tool_build_depot, tool_build_roadsign, tool_build_wayobj, tool_remove_wayobj
 								]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail)
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 2:
 				local forbid = [tool_remove_wayobj, tool_build_station, tool_build_depot, tool_build_roadsign, tool_build_wayobj, tool_build_tunnel]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )			
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")			
 				break
 
 			case 3:
 				local forbid = [tool_remove_wayobj, tool_build_depot, tool_build_roadsign, tool_build_wayobj, tool_build_tunnel]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 4:
 				local forbid = [tool_remove_wayobj, tool_build_roadsign, tool_build_wayobj, tool_build_tunnel]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 5:
 				local forbid = [tool_remove_wayobj, tool_build_roadsign, tool_build_wayobj, tool_build_tunnel]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 6:
 				local forbid = [tool_remove_wayobj, tool_build_roadsign, tool_build_wayobj]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 7:
 				local forbid = [tool_remove_wayobj, tool_build_roadsign, tool_build_wayobj, tool_build_tunnel]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 8:
 				local forbid = [tool_remove_wayobj, tool_build_roadsign, tool_build_wayobj, tool_build_tunnel]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_rail )
+					rules.forbid_way_tool(pl, tool_id, wt_rail, "")
 				break
 
 			case 9:
 				local forbid = [tool_remove_wayobj, tool_build_wayobj]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
+					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge, "")
 				break
 
 			case 10:
 				local forbid = [tool_remove_wayobj]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
+					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge, "")
 				break
 
 			case 11:
 				local forbid = [tool_remove_wayobj]
 				foreach (tool_id in forbid)
-					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge )
+					rules.forbid_way_tool(pl, tool_id, wt_narrowgauge, "")
 				break		
 		}
 	}

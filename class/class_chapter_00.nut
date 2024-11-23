@@ -40,7 +40,7 @@ class tutorial.chapter_00 extends basic_chapter
 		
 	}
 	
-	function is_work_allowed_here(pl, tool_id, pos) {
+	function is_work_allowed_here(pl, tool_id, pos, tool) {
 		local label = tile_x(pos.x,pos.y,pos.z).find_object(mo_label)
 		local result=null	// null is equivalent to 'allowed'
 		
@@ -60,14 +60,14 @@ class tutorial.chapter_00 extends basic_chapter
 						]
 		foreach(wt in all_waytypes)
 			foreach (tool_id in forbid) {
-				rules.forbid_way_tool(pl, tool_id, wt )
+				rules.forbid_way_tool(pl, tool_id, wt, "" )
 			}
 		local forbid =	[	tool_remover,tool_set_marker,tool_add_city,tool_plant_tree,tool_add_citycar,tool_buy_house,
 							tool_change_water_height,tool_set_climate,tool_lower_land,tool_raise_land,tool_setslope, 4137,
 							tool_restoreslope,tool_make_stop_public,tool_stop_mover,tool_build_transformer,tool_build_station
 						]
 		foreach (tool_id in forbid)
-			rules.forbid_tool(pl, tool_id )
+			rules.forbid_tool(pl, tool_id)
 	}
 
 	function is_tool_active(pl, tool_id, wt) {
