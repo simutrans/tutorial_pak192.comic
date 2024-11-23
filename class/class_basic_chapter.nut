@@ -1719,7 +1719,7 @@ class basic_chapter
 		
 	}
 
-	function all_control(result, wt, way, ribi, tool_id, pos, coor, plus = 0){
+	function all_control(result, wt, way, ribi, tool_id, pos, coor, name, plus = 0){
 		if ((tool_id==tool_remove_way)||(tool_id==tool_remover)){
 			if (way && way.get_waytype() != wt)
 				return result
@@ -1752,7 +1752,13 @@ class basic_chapter
 		else if ((pos.x == coor.x && pos.y == coor.y && pos.z == coor.z)||(cursor_sw)){
 			if (tool_id==tool_build_way || tool_id==tool_build_tunnel){
 				if ((ribi==0) || (ribi==1) || (ribi==2) || (ribi==4) || (ribi==8)){
-					return null
+					local way_desc =  way_desc_x.get_available_ways(wt, st_flat)
+					foreach(desc in way_desc){
+						if(desc.get_name() == name){
+							return null
+						}
+					}
+					return translate("Action not allowed")+" ("+pos.tostring()+")."
 				}
 				else{
 					under_lv = settings.get_underground_view_level()
@@ -1773,7 +1779,15 @@ class basic_chapter
 				return translate("Action not allowed")+" ("+pos.tostring()+")."
 		}
 		else{
-			return translate("Connect the Track here")+" ("+coord3d(coor.x, coor.y, coor.z).tostring()+")."
+			if (tool_id==tool_build_way || tool_id==tool_build_tunnel){
+				local way_desc =  way_desc_x.get_available_ways(wt, st_flat)
+				foreach(desc in way_desc){
+					if(desc.get_name() == name){
+						return translate("Connect the Track here")+" ("+coord3d(coor.x, coor.y, coor.z).tostring()+")."
+					}
+				}
+			}
+			return translate("Action not allowed")+" ("+pos.tostring()+")."
 		}
 
 		return ""

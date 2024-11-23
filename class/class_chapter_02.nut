@@ -749,15 +749,20 @@ class tutorial.chapter_02 extends basic_chapter
 			//Construye un tramo de carretera
 			case 1:
 				if (tool_id==tool_build_way){
-					if ((pos.x>=dep_lim1.a.x)&&(pos.y>=dep_lim1.a.y)&&(pos.x<=dep_lim1.b.x)&&(pos.y<=dep_lim1.b.y)){
-						if(!cursor_b)
-							return null
+					local way_desc =  way_desc_x.get_available_ways(gl_wt, st_flat)
+					foreach(desc in way_desc){
+						if(desc.get_name() == name){
+							if ((pos.x>=dep_lim1.a.x)&&(pos.y>=dep_lim1.a.y)&&(pos.x<=dep_lim1.b.x)&&(pos.y<=dep_lim1.b.y)){
+								if(!cursor_b)
+									return null
+							}
+							if ((pos.x>=dep_lim2.a.x)&&(pos.y>=dep_lim2.a.y)&&(pos.x<=dep_lim2.b.x)&&(pos.y<=dep_lim2.b.y)){
+								if(!cursor_a)
+									return null
+							}
+							return translate("Connect the road here")+" ("+c_dep.tostring()+")."
+						}
 					}
-					if ((pos.x>=dep_lim2.a.x)&&(pos.y>=dep_lim2.a.y)&&(pos.x<=dep_lim2.b.x)&&(pos.y<=dep_lim2.b.y)){
-						if(!cursor_a)
-							return null
-					}
-					return translate("Connect the road here")+" ("+c_dep.tostring()+")."
 				}
 				break;
 			//Construye un deposito de carreteras
@@ -888,7 +893,7 @@ class tutorial.chapter_02 extends basic_chapter
 								return null
 						}
 						else
-							return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)
+							return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)
 					}
 				
 				}

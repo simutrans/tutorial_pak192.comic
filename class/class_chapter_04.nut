@@ -576,7 +576,7 @@ class tutorial.chapter_04 extends basic_chapter
 							return result
                     }
 					if (pos.x>=c1_way_lim.a.x && pos.y>=c1_way_lim.a.y && pos.x<=c1_way_lim.b.x && pos.y<=c1_way_lim.b.y){
-						return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c)	
+						return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)	
 					}
 				}
 				//Cuarto muelle
