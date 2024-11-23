@@ -122,7 +122,7 @@ function get_set_name(name)
 	return name
 }
 
-simu_version <- "124.0.1"
+simu_version <- "124.2.3"
 pak_name <- "pak192.comic"
 current_st <- "0"
 current_pak <- "pak"
