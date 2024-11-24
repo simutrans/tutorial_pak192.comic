@@ -2991,21 +2991,17 @@ class basic_chapter
 		}
 	}
 
-    function lock_tile_list(c_list, siz, del, pl, text = "X")
-    {
-        if (!del) {
-	        for (local j = 0 ;j<siz;j++){
-		        label_x.create(c_list[j], player_x(pl), text)
-	        }
-        }
-        else {
-	        for (local j = 0 ;j<siz;j++){
-		        local tile = tile_x(c_list[j].x,c_list[j].y,0)
-		        tile.remove_object(player_x(pl), mo_label)
-
-	        }
-        }
-    }
+	function lock_tile_list(list, del, pl, text = "X")
+	{
+		foreach(t in list){
+ 			if (!del){
+				label_x.create(t, player_x(pl), text)
+			}
+			else{
+				t.remove_object(player_x(pl), mo_label)
+			}
+		}
+	}
 
 	function bus_result_message(nr, name, veh, cov)
 	{
