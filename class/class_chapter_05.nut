@@ -703,7 +703,7 @@ class tutorial.chapter_05 extends basic_chapter
 							if(tool_id==tool_build_way || tool_id==4113 || tool_id==tool_remover)
 								return null	
 						}
-						else return all_control(result, wt_road, way, ribi, tool_id, pos, r_way.c, name)
+						else return all_control(result, wt_road, st_flat, way, ribi, tool_id, pos, r_way.c, name)
 					}
 				}
 				else if(pot0==1 && pot1==0){

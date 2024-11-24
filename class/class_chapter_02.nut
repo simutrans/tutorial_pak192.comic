@@ -15,6 +15,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 	gltool = null
 	gl_wt = wt_road
+	gl_st = st_flat
 
 	// Step 4 =====================================================================================
 	ch2_cov_lim1 = {a = 0, b = 0}
@@ -893,7 +894,7 @@ class tutorial.chapter_02 extends basic_chapter
 								return null
 						}
 						else
-							return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)
+							return all_control(result, gl_wt, gl_st, way, ribi, tool_id, pos, r_way.c, name)
 					}
 				
 				}

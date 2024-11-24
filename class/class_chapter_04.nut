@@ -12,6 +12,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 	startcash     = 1000000	   				// pl=0 startcash; 0=no reset
 	gl_wt = wt_water
+	gl_st = st_flat
 
 	//Step 4 =====================================================================================
 	ch4_cov_lim1 = {a = 0, b = 0}
@@ -576,7 +577,7 @@ class tutorial.chapter_04 extends basic_chapter
 							return result
                     }
 					if (pos.x>=c1_way_lim.a.x && pos.y>=c1_way_lim.a.y && pos.x<=c1_way_lim.b.x && pos.y<=c1_way_lim.b.y){
-						return all_control(result, gl_wt, way, ribi, tool_id, pos, r_way.c, name)	
+						return all_control(result, gl_wt, gl_st, way, ribi, tool_id, pos, r_way.c, name)	
 					}
 				}
 				//Cuarto muelle
