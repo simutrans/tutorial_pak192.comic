@@ -1901,8 +1901,10 @@ class tutorial.chapter_03 extends basic_chapter
 				//Construye Entrada del tunel
 				else if (pot0==1 && pot1==0){
 					if (tool_id==tool_build_tunnel || tool_id==tool_build_way){
-						if (pos.x>=c_tunn1_lim.a.x && pos.y>=c_tunn1_lim.a.y && pos.x<=c_tunn1_lim.b.x && pos.y<=c_tunn1_lim.b.y){
-							return null
+						if(tool.is_ctrl){
+							if (pos.x>=c_tunn1_lim.a.x && pos.y>=c_tunn1_lim.a.y && pos.x<=c_tunn1_lim.b.x && pos.y<=c_tunn1_lim.b.y){
+								return null
+							}
 						}
 						else return translate("Press [Ctrl] to build a tunnel entrance here")+" ("+start_tunn.tostring()+".)"	
 					}

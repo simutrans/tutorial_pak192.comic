@@ -2441,6 +2441,7 @@ class basic_chapter
 				}
 			}
 			else{
+				glsw[j]=0
 				if (way && !way.is_marked()){
 					way.mark()
 				}
