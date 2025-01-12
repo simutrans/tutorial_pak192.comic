@@ -3062,8 +3062,8 @@ class tutorial.chapter_03 extends basic_chapter
 				glsw[j] = 0
 				tile.mark()
 				way.mark()
-				if(j!=0)
-					label_x.create(c_list[j], player_x(pl), format(translate("Build station No.%d here!."),j+1))
+				//if(j!=0)
+					label_x.create(c_list[j], player_x(0), format(translate("Build station No.%d here!."),j+1))
 				sw = false
 			}
 			else {
